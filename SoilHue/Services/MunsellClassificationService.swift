@@ -28,123 +28,150 @@ class MunsellClassificationService: ObservableObject {
     
     /// Colores Munsell comunes para suelos con sus clasificaciones.
     let munsellColors: [MunsellColor] = [
-        // Suelos oscuros (materia orgánica)
+        // Suelos oscuros (materia orgánica) - Histosoles
         MunsellColor(
             notation: "10YR 2/1",
             name: "Black",
-            soilClassification: "Suelo orgánico",
-            soilDescription: "Suelo con alto contenido en materia orgánica, típico de horizontes A o suelos de turba.",
+            soilClassification: "Histosoles",
+            soilDescription: "Suelo orgánico con alto contenido en materia orgánica, típico de suelos de turba y horizontes O.",
             rgbColor: Color(red: 0.1, green: 0.1, blue: 0.1)
         ),
         MunsellColor(
             notation: "10YR 3/1",
             name: "Very Dark Gray",
-            soilClassification: "Suelo orgánico",
-            soilDescription: "Suelo con alto contenido en materia orgánica, típico de horizontes A.",
+            soilClassification: "Histosoles",
+            soilDescription: "Suelo orgánico con alto contenido en materia orgánica, típico de suelos de turba y horizontes O.",
             rgbColor: Color(red: 0.2, green: 0.2, blue: 0.2)
         ),
         
-        // Suelos marrones (materia orgánica y minerales)
+        // Suelos marrones oscuros (materia orgánica y minerales) - Mollisoles
         MunsellColor(
             notation: "10YR 3/2",
             name: "Very Dark Brown",
-            soilClassification: "Suelo orgánico-mineral",
-            soilDescription: "Suelo con contenido moderado-alto en materia orgánica, típico de horizontes A.",
+            soilClassification: "Mollisoles",
+            soilDescription: "Suelo oscuro y fértil, rico en materia orgánica, típico de praderas y horizontes A.",
             rgbColor: Color(red: 0.25, green: 0.2, blue: 0.15)
         ),
         MunsellColor(
             notation: "10YR 4/2",
             name: "Dark Brown",
-            soilClassification: "Suelo orgánico-mineral",
-            soilDescription: "Suelo con contenido moderado en materia orgánica, típico de horizontes A.",
+            soilClassification: "Mollisoles",
+            soilDescription: "Suelo oscuro y fértil, con contenido moderado-alto en materia orgánica, típico de praderas y horizontes A.",
             rgbColor: Color(red: 0.35, green: 0.3, blue: 0.25)
         ),
         MunsellColor(
             notation: "10YR 4/3",
             name: "Brown",
-            soilClassification: "Suelo orgánico-mineral",
-            soilDescription: "Suelo con contenido moderado en materia orgánica, típico de horizontes A.",
+            soilClassification: "Mollisoles",
+            soilDescription: "Suelo oscuro y fértil, con contenido moderado en materia orgánica, típico de praderas y horizontes A.",
             rgbColor: Color(red: 0.4, green: 0.35, blue: 0.3)
         ),
         
-        // Suelos marrones claros (minerales con algo de materia orgánica)
+        // Suelos marrones claros (minerales con algo de materia orgánica) - Alfisoles
         MunsellColor(
             notation: "10YR 5/3",
             name: "Light Brown",
-            soilClassification: "Suelo mineral",
-            soilDescription: "Suelo con bajo contenido en materia orgánica, típico de horizontes B o C.",
+            soilClassification: "Alfisoles",
+            soilDescription: "Suelo con horizonte de arcilla, fértil, típico de regiones forestales y horizontes Bt.",
             rgbColor: Color(red: 0.5, green: 0.45, blue: 0.4)
         ),
         MunsellColor(
             notation: "10YR 5/4",
             name: "Yellowish Brown",
-            soilClassification: "Suelo mineral",
-            soilDescription: "Suelo con bajo contenido en materia orgánica, típico de horizontes B o C.",
+            soilClassification: "Alfisoles",
+            soilDescription: "Suelo con horizonte de arcilla, fértil, típico de regiones forestales y horizontes Bt.",
             rgbColor: Color(red: 0.55, green: 0.5, blue: 0.45)
         ),
         
-        // Suelos rojizos (óxidos de hierro)
+        // Suelos rojizos (óxidos de hierro) - Oxisoles
         MunsellColor(
             notation: "5YR 4/6",
             name: "Reddish Brown",
-            soilClassification: "Suelo con óxidos de hierro",
-            soilDescription: "Suelo con alto contenido en óxidos de hierro, típico de suelos tropicales o suelos muy meteorizados.",
+            soilClassification: "Oxisoles",
+            soilDescription: "Suelo muy meteorizado de regiones tropicales, con alto contenido en óxidos de hierro y aluminio.",
             rgbColor: Color(red: 0.6, green: 0.3, blue: 0.2)
         ),
         MunsellColor(
             notation: "5YR 5/6",
             name: "Red",
-            soilClassification: "Suelo con óxidos de hierro",
-            soilDescription: "Suelo con alto contenido en óxidos de hierro, típico de suelos tropicales o suelos muy meteorizados.",
+            soilClassification: "Oxisoles",
+            soilDescription: "Suelo muy meteorizado de regiones tropicales, con alto contenido en óxidos de hierro y aluminio.",
             rgbColor: Color(red: 0.7, green: 0.4, blue: 0.3)
         ),
         
-        // Suelos amarillentos (minerales arcillosos)
+        // Suelos amarillentos (minerales arcillosos) - Vertisoles
         MunsellColor(
             notation: "2.5Y 6/4",
             name: "Light Yellowish Brown",
-            soilClassification: "Suelo arcilloso",
-            soilDescription: "Suelo con alto contenido en minerales arcillosos, típico de suelos aluviales o suelos de llanura.",
+            soilClassification: "Vertisoles",
+            soilDescription: "Suelo arcilloso que se agrieta, con alto contenido en minerales arcillosos expansivos.",
             rgbColor: Color(red: 0.7, green: 0.65, blue: 0.5)
         ),
         MunsellColor(
             notation: "2.5Y 7/4",
             name: "Pale Yellow",
-            soilClassification: "Suelo arcilloso",
-            soilDescription: "Suelo con alto contenido en minerales arcillosos, típico de suelos aluviales o suelos de llanura.",
+            soilClassification: "Vertisoles",
+            soilDescription: "Suelo arcilloso que se agrieta, con alto contenido en minerales arcillosos expansivos.",
             rgbColor: Color(red: 0.8, green: 0.75, blue: 0.6)
         ),
         
-        // Suelos grises (reducción)
+        // Suelos grises (reducción) - Espodosoles
         MunsellColor(
             notation: "5Y 5/1",
             name: "Gray",
-            soilClassification: "Suelo con reducción",
-            soilDescription: "Suelo con signos de reducción, típico de suelos con drenaje deficiente o suelos hidromórficos.",
+            soilClassification: "Espodosoles",
+            soilDescription: "Suelo ácido con acumulación de hierro y aluminio, típico de regiones forestales húmedas.",
             rgbColor: Color(red: 0.5, green: 0.5, blue: 0.5)
         ),
         MunsellColor(
             notation: "5Y 6/1",
             name: "Light Gray",
-            soilClassification: "Suelo con reducción",
-            soilDescription: "Suelo con signos de reducción, típico de suelos con drenaje deficiente o suelos hidromórficos.",
+            soilClassification: "Espodosoles",
+            soilDescription: "Suelo ácido con acumulación de hierro y aluminio, típico de regiones forestales húmedas.",
             rgbColor: Color(red: 0.6, green: 0.6, blue: 0.6)
         ),
         
-        // Suelos blancos (carbonatos)
+        // Suelos blancos (carbonatos) - Aridisoles
         MunsellColor(
             notation: "10YR 8/1",
             name: "White",
-            soilClassification: "Suelo con carbonatos",
-            soilDescription: "Suelo con alto contenido en carbonatos, típico de suelos calcáreos o suelos con acumulación de sales.",
+            soilClassification: "Aridisoles",
+            soilDescription: "Suelo de regiones áridas, con acumulación de sales y carbonatos en el subsuelo.",
             rgbColor: Color(red: 0.9, green: 0.9, blue: 0.9)
         ),
         MunsellColor(
             notation: "10YR 7/1",
             name: "Light Gray",
-            soilClassification: "Suelo con carbonatos",
-            soilDescription: "Suelo con contenido en carbonatos, típico de suelos calcáreos o suelos con acumulación de sales.",
+            soilClassification: "Aridisoles",
+            soilDescription: "Suelo de regiones áridas, con acumulación de sales y carbonatos en el subsuelo.",
             rgbColor: Color(red: 0.8, green: 0.8, blue: 0.8)
+        ),
+        
+        // Suelos jóvenes - Entisoles
+        MunsellColor(
+            notation: "10YR 6/2",
+            name: "Light Brownish Gray",
+            soilClassification: "Entisoles",
+            soilDescription: "Suelo joven con poco desarrollo de horizontes, típico de depósitos aluviales recientes.",
+            rgbColor: Color(red: 0.6, green: 0.55, blue: 0.5)
+        ),
+        
+        // Suelos poco desarrollados - Inceptisoles
+        MunsellColor(
+            notation: "10YR 6/3",
+            name: "Pale Brown",
+            soilClassification: "Inceptisoles",
+            soilDescription: "Suelo poco desarrollado con horizontes incipientes, típico de regiones montañosas.",
+            rgbColor: Color(red: 0.65, green: 0.6, blue: 0.55)
+        ),
+        
+        // Suelos ácidos - Ultisoles
+        MunsellColor(
+            notation: "7.5YR 5/4",
+            name: "Brown",
+            soilClassification: "Ultisoles",
+            soilDescription: "Suelo ácido, muy meteorizado, con horizonte de arcilla, típico de regiones húmedas.",
+            rgbColor: Color(red: 0.6, green: 0.5, blue: 0.4)
         )
     ]
     
