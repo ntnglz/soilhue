@@ -79,9 +79,7 @@ struct ContentView: View {
                 ImagePicker(image: $selectedImage)
             }
             .sheet(isPresented: $isCameraActive) {
-                CameraView { image in
-                    selectedImage = image
-                }
+                CameraCaptureView(capturedImage: $selectedImage)
             }
         }
     }
