@@ -10,9 +10,22 @@
 		EA42EB012DAC331D003FC91D /* SoilHue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoilHue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		EA42EB632DACED4A003FC91D /* Exceptions for "SoilHue" folder in "SoilHue" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = EA42EB002DAC331D003FC91D /* SoilHue */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		EA42EB032DAC331D003FC91D /* SoilHue */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				EA42EB632DACED4A003FC91D /* Exceptions for "SoilHue" folder in "SoilHue" target */,
+			);
 			path = SoilHue;
 			sourceTree = "<group>";
 		};
@@ -258,8 +271,11 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "$(PRODUCT_BUNDLE_PACKAGE_TYPE)";
+				INFOPLIST_FILE = SoilHue/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "SoilHue necesita acceso a la cámara para capturar imágenes de muestras de suelo";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 Antonio J. González. Todos los derechos reservados.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "SoilHue necesita acceso a tu ubicación para registrar dónde se tomaron las muestras de suelo";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "SoilHue necesita acceso a tu biblioteca de fotos para guardar y acceder a las imágenes de muestras de suelo";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -268,8 +284,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = eu.ajgb.SoilHue;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -286,8 +305,11 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "$(PRODUCT_BUNDLE_PACKAGE_TYPE)";
+				INFOPLIST_FILE = SoilHue/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "SoilHue necesita acceso a la cámara para capturar imágenes de muestras de suelo";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 Antonio J. González. Todos los derechos reservados.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "SoilHue necesita acceso a tu ubicación para registrar dónde se tomaron las muestras de suelo";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "SoilHue necesita acceso a tu biblioteca de fotos para guardar y acceder a las imágenes de muestras de suelo";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -296,8 +318,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = eu.ajgb.SoilHue;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

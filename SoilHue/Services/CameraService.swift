@@ -30,6 +30,23 @@ class CameraService: ObservableObject {
         case invalidDevice
         /// Error durante la configuración de la sesión de captura.
         case configurationError
+        /// La sesión de la cámara no está activa.
+        case sessionNotRunning
+        
+        var localizedDescription: String {
+            switch self {
+            case .permissionDenied:
+                return "No hay acceso a la cámara. Por favor, verifica los permisos en Ajustes."
+            case .captureError:
+                return "Error al capturar la foto."
+            case .invalidDevice:
+                return "No se pudo acceder a la cámara del dispositivo."
+            case .configurationError:
+                return "Error al configurar la cámara."
+            case .sessionNotRunning:
+                return "La sesión de la cámara no está activa."
+            }
+        }
     }
     
     /// El error actual, si existe.
@@ -51,18 +68,28 @@ class CameraService: ObservableObject {
     private var _previewLayer: AVCaptureVideoPreviewLayer?
     
     /// Capa de previsualización accesible públicamente.
-    var previewLayer: AVCaptureVideoPreviewLayer? {
-        return _previewLayer
+    var previewLayer: AVCaptureVideoPreviewLayer {
+        if _previewLayer == nil {
+            let layer = AVCaptureVideoPreviewLayer(session: session)
+            layer.videoGravity = .resizeAspectFill
+            _previewLayer = layer
+        }
+        return _previewLayer!
     }
     
     /// Verifica y solicita los permisos de acceso a la cámara.
     ///
     /// - Returns: `true` si se concedieron los permisos, `false` en caso contrario.
     func checkPermissions() async -> Bool {
-        switch await AVCaptureDevice.requestAccess(for: .video) {
-        case true:
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .authorized:
             return true
-        case false:
+        case .notDetermined:
+            return await AVCaptureDevice.requestAccess(for: .video)
+        case .denied, .restricted:
+            error = .permissionDenied
+            return false
+        @unknown default:
             error = .permissionDenied
             return false
         }
@@ -82,51 +109,68 @@ class CameraService: ObservableObject {
             throw CameraError.permissionDenied
         }
         
+        // Asegurarse de que la sesión no está corriendo
+        if session.isRunning {
+            session.stopRunning()
+        }
+        
+        // Limpiar configuración previa
         session.beginConfiguration()
+        session.inputs.forEach { session.removeInput($0) }
+        session.outputs.forEach { session.removeOutput($0) }
         
-        // Configurar la calidad de la sesión
-        session.sessionPreset = .photo
+        // Configurar calidad
+        if session.canSetSessionPreset(.photo) {
+            session.sessionPreset = .photo
+        }
         
-        // Configurar el dispositivo de entrada
+        // Configurar entrada
         guard let videoDevice = AVCaptureDevice.default(.builtInWideAngleCamera,
                                                        for: .video,
                                                        position: .back) else {
             throw CameraError.invalidDevice
         }
         
-        let videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
-        
-        guard session.canAddInput(videoDeviceInput) else {
+        do {
+            let videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
+            guard session.canAddInput(videoDeviceInput) else {
+                throw CameraError.configurationError
+            }
+            session.addInput(videoDeviceInput)
+            deviceInput = videoDeviceInput
+        } catch {
             throw CameraError.configurationError
         }
         
-        session.addInput(videoDeviceInput)
-        deviceInput = videoDeviceInput
-        
-        // Configurar la salida de fotos
+        // Configurar salida
         guard session.canAddOutput(photoOutput) else {
             throw CameraError.configurationError
         }
-        
         session.addOutput(photoOutput)
         
-        // Configurar la capa de previsualización
-        let previewLayer = AVCaptureVideoPreviewLayer(session: session)
-        previewLayer.videoGravity = .resizeAspectFill
-        _previewLayer = previewLayer
+        // Configurar orientación
+        if let connection = photoOutput.connection(with: .video) {
+            if connection.isVideoOrientationSupported {
+                connection.videoOrientation = .portrait
+            }
+            if connection.isVideoMirroringSupported {
+                connection.isVideoMirrored = false
+            }
+        }
         
         session.commitConfiguration()
     }
     
     /// Inicia la sesión de la cámara.
     ///
-    /// Este método se ejecuta en un hilo en segundo plano para no bloquear la UI.
+    /// Este método se ejecuta en un hilo en segundo plano para evitar
+    /// problemas de rendimiento en la UI.
     func start() {
         guard !session.isRunning else { return }
         
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+        Task.detached(priority: .userInitiated) { [weak self] in
             self?.session.startRunning()
-            DispatchQueue.main.async {
+            await MainActor.run { [weak self] in
                 self?.isRunning = true
             }
         }
@@ -134,15 +178,46 @@ class CameraService: ObservableObject {
     
     /// Detiene la sesión de la cámara.
     ///
-    /// Este método se ejecuta en un hilo en segundo plano para no bloquear la UI.
+    /// Este método se ejecuta en un hilo en segundo plano para evitar
+    /// problemas de rendimiento en la UI.
     func stop() {
         guard session.isRunning else { return }
         
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+        Task.detached(priority: .userInitiated) { [weak self] in
             self?.session.stopRunning()
-            DispatchQueue.main.async {
+            await MainActor.run { [weak self] in
                 self?.isRunning = false
             }
+        }
+    }
+    
+    /// Clase auxiliar para manejar la captura de fotos.
+    private class PhotoCaptureDelegate: NSObject, AVCapturePhotoCaptureDelegate {
+        private let onCapture: (UIImage) -> Void
+        private let onError: (Error) -> Void
+        
+        init(onCapture: @escaping (UIImage) -> Void, onError: @escaping (Error) -> Void) {
+            self.onCapture = onCapture
+            self.onError = onError
+            super.init()
+        }
+        
+        func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+            // Limpiar el delegate asociado
+            objc_setAssociatedObject(output, "delegate", nil, .OBJC_ASSOCIATION_RETAIN)
+            
+            if let error = error {
+                onError(error)
+                return
+            }
+            
+            guard let imageData = photo.fileDataRepresentation(),
+                  let image = UIImage(data: imageData) else {
+                onError(CameraError.captureError)
+                return
+            }
+            
+            onCapture(image)
         }
     }
     
@@ -151,23 +226,23 @@ class CameraService: ObservableObject {
     /// - Returns: Una imagen capturada por la cámara
     /// - Throws: `CameraError.captureError` si hay un problema durante la captura
     func capturePhoto() async throws -> UIImage {
+        guard session.isRunning else {
+            throw CameraError.sessionNotRunning
+        }
+        
         return try await withCheckedThrowingContinuation { continuation in
             let settings = AVCapturePhotoSettings()
             
-            photoOutput.capturePhoto(with: settings) { [weak self] photoData, error in
-                if let error = error {
-                    continuation.resume(throwing: error)
-                    return
-                }
-                
-                guard let photoData = photoData,
-                      let image = UIImage(data: photoData) else {
-                    continuation.resume(throwing: CameraError.captureError)
-                    return
-                }
-                
+            let delegate = PhotoCaptureDelegate { image in
                 continuation.resume(returning: image)
+            } onError: { error in
+                continuation.resume(throwing: error)
             }
+            
+            // Retener el delegate hasta que se complete la captura
+            objc_setAssociatedObject(photoOutput, "delegate", delegate, .OBJC_ASSOCIATION_RETAIN)
+            
+            photoOutput.capturePhoto(with: settings, delegate: delegate)
         }
     }
 }
