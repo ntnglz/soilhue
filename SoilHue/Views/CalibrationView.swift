@@ -1,4 +1,5 @@
 import SwiftUI
+import PDFKit
 
 /// Vista para el proceso de calibración de la cámara.
 ///
@@ -7,12 +8,16 @@ import SwiftUI
 /// - Capturar una imagen de la tarjeta de calibración
 /// - Ver el estado de la calibración
 /// - Reiniciar la calibración si es necesario
+/// - Descargar la tarjeta de calibración
 struct CalibrationView: View {
     /// Servicio de calibración
     @StateObject private var calibrationService = CalibrationService()
     
     /// Servicio de cámara
     @StateObject private var cameraService = CameraService()
+    
+    /// Servicio de tarjeta de calibración
+    private let cardService = CalibrationCardService()
     
     /// Indica si la cámara está activa
     @State private var isCameraActive = false
@@ -23,9 +28,6 @@ struct CalibrationView: View {
     /// Imagen seleccionada para calibración
     @State private var selectedImage: UIImage?
     
-    /// Indica si se debe mostrar la vista de resultados
-    @State private var showResults = false
-    
     /// Indica si se debe mostrar un mensaje de error
     @State private var showError = false
     
@@ -35,157 +37,86 @@ struct CalibrationView: View {
     /// Indica si se debe mostrar un mensaje de éxito
     @State private var showSuccess = false
     
+    /// Indica si se debe mostrar el compartir para el PDF
+    @State private var showShareSheet = false
+    
+    /// URL del PDF generado
+    @State private var pdfURL: URL?
+    
+    /// Imagen generada para compartir
+    @State private var shareImage: UIImage?
+    
+    /// Callback para cuando se completa la calibración
+    var onCalibrationComplete: (() -> Void)?
+    
     var body: some View {
-        NavigationView {
+        ScrollView {
             VStack(spacing: 20) {
-                // Título y descripción
-                VStack(spacing: 10) {
-                    Text("Calibración de la Cámara")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                    
-                    Text("Para obtener resultados precisos, calibra la cámara usando una tarjeta de referencia de color.")
-                        .font(.body)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                }
-                .padding(.top)
-                
                 // Estado de calibración
-                VStack(spacing: 5) {
-                    Text("Estado de Calibración:")
-                        .font(.headline)
-                    
-                    switch calibrationService.calibrationState {
-                    case .notCalibrated:
-                        Text("No calibrado")
-                            .foregroundColor(.red)
-                    case .calibrating:
-                        Text("Calibrando...")
-                            .foregroundColor(.orange)
-                    case .calibrated:
-                        Text("Calibrado")
-                            .foregroundColor(.green)
-                    case .error(let message):
-                        Text("Error: \(message)")
-                            .foregroundColor(.red)
-                    }
-                }
-                .padding()
-                .background(Color(.systemBackground))
-                .cornerRadius(10)
-                .shadow(radius: 2)
+                CalibrationStatusView(state: calibrationService.calibrationState)
                 
-                // Instrucciones
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Instrucciones:")
-                        .font(.headline)
-                    
-                    Text("1. Coloca la tarjeta de calibración en una superficie plana.")
-                    Text("2. Asegúrate de que la iluminación sea uniforme.")
-                    Text("3. Captura una foto de la tarjeta completa.")
-                    Text("4. Verifica que todos los colores sean visibles.")
+                // Imagen capturada
+                if let image = selectedImage {
+                    CapturedImageView(image: image)
                 }
-                .padding()
-                .background(Color(.systemBackground))
-                .cornerRadius(10)
-                .shadow(radius: 2)
-                
-                // Imagen de referencia
-                Image("calibration_card")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 200)
-                    .cornerRadius(10)
-                    .shadow(radius: 2)
-                    .padding(.horizontal)
                 
                 // Botones de acción
-                HStack(spacing: 20) {
-                    Button(action: {
-                        isCameraActive = true
-                    }) {
-                        VStack {
-                            Image(systemName: "camera")
-                                .font(.system(size: 30))
-                            Text("Tomar Foto")
-                                .font(.caption)
-                        }
-                        .frame(width: 100, height: 80)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                    }
-                    
-                    Button(action: {
-                        showImagePicker = true
-                    }) {
-                        VStack {
-                            Image(systemName: "photo.on.rectangle")
-                                .font(.system(size: 30))
-                            Text("Seleccionar")
-                                .font(.caption)
-                        }
-                        .frame(width: 100, height: 80)
-                        .background(Color.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                    }
-                }
-                .padding()
+                ActionButtonsView(
+                    onCameraTap: { isCameraActive = true },
+                    onGalleryTap: { showImagePicker = true }
+                )
                 
-                // Botón para reiniciar calibración
-                if calibrationService.calibrationState == .calibrated {
-                    Button(action: {
-                        calibrationService.resetCalibration()
-                    }) {
-                        Text("Reiniciar Calibración")
-                            .padding()
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                }
+                // Información de calibración
+                CalibrationInfoView()
                 
-                Spacer()
+                // Alternativa para aficionados
+                BasicCalibrationCardView(
+                    onDownloadTap: {
+                        if let image = cardService.generateCalibrationCard() {
+                            shareImage = image
+                            showShareSheet = true
+                        } else {
+                            errorMessage = "Error al generar la tarjeta de calibración"
+                            showError = true
+                        }
+                    }
+                )
             }
             .padding()
-            .navigationBarTitle("Calibración", displayMode: .inline)
-            .navigationBarItems(trailing: Button("Cerrar") {
-                // Cerrar la vista
-            })
-            .sheet(isPresented: $isCameraActive) {
-                CameraCaptureView(capturedImage: $selectedImage)
-                    .onChange(of: selectedImage) { newImage in
-                        if let image = newImage {
-                            processCalibrationImage(image)
-                        }
-                    }
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarItems(trailing: Button("Cerrar") {
+            onCalibrationComplete?()
+        })
+        .sheet(isPresented: $isCameraActive) {
+            CameraCaptureView(capturedImage: $selectedImage)
+        }
+        .sheet(isPresented: $showImagePicker) {
+            ImagePicker(image: $selectedImage)
+        }
+        .sheet(isPresented: $showShareSheet) {
+            if let image = shareImage {
+                ActivityViewController(activityItems: [image])
             }
-            .sheet(isPresented: $showImagePicker) {
-                ImagePicker(image: $selectedImage)
-                    .onChange(of: selectedImage) { newImage in
-                        if let image = newImage {
-                            processCalibrationImage(image)
-                        }
-                    }
+        }
+        .alert("Error", isPresented: $showError) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(errorMessage)
+        }
+        .alert("Calibración Exitosa", isPresented: $showSuccess) {
+            Button("OK", role: .cancel) {
+                onCalibrationComplete?()
             }
-            .alert(isPresented: $showError) {
-                Alert(
-                    title: Text("Error"),
-                    message: Text(errorMessage),
-                    dismissButton: .default(Text("OK"))
-                )
-            }
-            .alert(isPresented: $showSuccess) {
-                Alert(
-                    title: Text("Calibración Exitosa"),
-                    message: Text("La cámara ha sido calibrada correctamente."),
-                    dismissButton: .default(Text("OK"))
-                )
-            }
-            .onAppear {
-                calibrationService.loadCalibrationFactors()
+        } message: {
+            Text("La cámara ha sido calibrada correctamente.")
+        }
+        .onAppear {
+            calibrationService.loadCalibrationFactors()
+        }
+        .onChange(of: selectedImage) { newImage in
+            if let image = newImage {
+                processCalibrationImage(image)
             }
         }
     }
@@ -193,20 +124,168 @@ struct CalibrationView: View {
     /// Procesa la imagen de calibración
     /// - Parameter image: Imagen capturada o seleccionada
     private func processCalibrationImage(_ image: UIImage) {
+        // Mostrar indicador de progreso
         calibrationService.startCalibration()
         
-        // Procesar la imagen de calibración
+        // Procesar la imagen
         calibrationService.processCalibrationImage(image)
         
-        // Verificar el resultado
+        // Manejar el resultado
         switch calibrationService.calibrationState {
         case .calibrated:
             showSuccess = true
+            // Mostrar los factores de calibración en la consola para debug
+            print("Calibración exitosa. Factores: R=\(calibrationService.correctionFactors.red), G=\(calibrationService.correctionFactors.green), B=\(calibrationService.correctionFactors.blue)")
         case .error(let message):
             errorMessage = message
             showError = true
-        default:
+        case .calibrating:
+            // Esperar a que termine la calibración
             break
+        case .notCalibrated:
+            errorMessage = "La calibración no se completó correctamente"
+            showError = true
         }
     }
+}
+
+// MARK: - Vistas de Componentes
+
+/// Vista que muestra el estado actual de la calibración
+struct CalibrationStatusView: View {
+    let state: CalibrationService.CalibrationState
+    
+    var body: some View {
+        Group {
+            switch state {
+            case .notCalibrated:
+                Text("No calibrado")
+                    .foregroundColor(.red)
+            case .calibrating:
+                HStack {
+                    ProgressView()
+                    Text("Calibrando...")
+                }
+            case .calibrated:
+                Text("Calibrado")
+                    .foregroundColor(.green)
+            case .error(let message):
+                Text("Error: \(message)")
+                    .foregroundColor(.red)
+            }
+        }
+        .font(.headline)
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(10)
+    }
+}
+
+/// Vista que muestra la imagen capturada
+struct CapturedImageView: View {
+    let image: UIImage
+    
+    var body: some View {
+        Image(uiImage: image)
+            .resizable()
+            .scaledToFit()
+            .frame(height: 200)
+            .cornerRadius(10)
+    }
+}
+
+/// Vista con los botones de acción
+struct ActionButtonsView: View {
+    let onCameraTap: () -> Void
+    let onGalleryTap: () -> Void
+    
+    var body: some View {
+        HStack(spacing: 20) {
+            Button(action: onCameraTap) {
+                Label("Tomar Foto", systemImage: "camera")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            
+            Button(action: onGalleryTap) {
+                Label("Seleccionar", systemImage: "photo.on.rectangle")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.bordered)
+        }
+        .padding(.horizontal)
+    }
+}
+
+/// Vista con la información de calibración
+struct CalibrationInfoView: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Tarjeta de Calibración")
+                .font(.headline)
+            
+            Text("Se recomienda usar el X-Rite ColorChecker Classic con 24 parches para obtener resultados precisos.")
+                .font(.subheadline)
+            
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Características:")
+                    .font(.subheadline)
+                    .bold()
+                
+                Text("• Colores certificados y estables")
+                Text("• Resistente a UV")
+                Text("• 24 parches de color específicos")
+                Text("• Valores de referencia sRGB precisos")
+            }
+            .font(.subheadline)
+        }
+        .padding()
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(10)
+    }
+}
+
+/// Vista para la tarjeta de calibración básica
+struct BasicCalibrationCardView: View {
+    let onDownloadTap: () -> Void
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Alternativa para Aficionados")
+                .font(.headline)
+            
+            Text("Si no tienes acceso a una tarjeta profesional, puedes usar nuestra tarjeta básica de calibración.")
+                .font(.subheadline)
+            
+            Button(action: onDownloadTap) {
+                Label("Descargar Tarjeta Básica", systemImage: "arrow.down.doc")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.bordered)
+            
+            Text("Nota: La tarjeta básica proporciona una calibración aproximada. Para resultados profesionales, se recomienda usar el ColorChecker certificado.")
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .padding()
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(10)
+    }
+}
+
+// MARK: - Vistas Auxiliares
+
+struct ActivityViewController: UIViewControllerRepresentable {
+    let activityItems: [Any]
+    
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let controller = UIActivityViewController(
+            activityItems: activityItems,
+            applicationActivities: nil
+        )
+        return controller
+    }
+    
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
