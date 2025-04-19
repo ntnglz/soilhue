@@ -89,7 +89,11 @@ struct CalibrationView: View {
             onCalibrationComplete?()
         })
         .sheet(isPresented: $isCameraActive) {
-            CameraCaptureView(capturedImage: $selectedImage)
+            CameraCaptureView(
+                capturedImage: $selectedImage,
+                resolution: .high,
+                showGuide: true
+            )
         }
         .sheet(isPresented: $showImagePicker) {
             ImagePicker(image: $selectedImage)
@@ -114,7 +118,7 @@ struct CalibrationView: View {
         .onAppear {
             calibrationService.loadCalibrationFactors()
         }
-        .onChange(of: selectedImage) { newImage in
+        .onChange(of: selectedImage) { oldImage, newImage in
             if let image = newImage {
                 processCalibrationImage(image)
             }

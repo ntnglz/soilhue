@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AVFoundation
+import UIKit
 
 /// Servicio que maneja la funcionalidad de la cámara del dispositivo.
 ///
@@ -19,9 +20,9 @@ import AVFoundation
 /// El servicio está diseñado para ser usado como un `ObservableObject` en SwiftUI,
 /// permitiendo a las vistas reaccionar a cambios en el estado de la cámara.
 @MainActor
-class CameraService: ObservableObject {
+class CameraService: NSObject, ObservableObject {
     /// Errores específicos que pueden ocurrir durante la operación de la cámara.
-    enum CameraError: Error {
+    enum CameraError: LocalizedError {
         /// El usuario ha denegado los permisos de acceso a la cámara.
         case permissionDenied
         /// Ocurrió un error durante la captura de la foto.
@@ -32,8 +33,16 @@ class CameraService: ObservableObject {
         case configurationError
         /// La sesión de la cámara no está activa.
         case sessionNotRunning
+        /// La resolución seleccionada no está soportada por este dispositivo.
+        case resolutionNotSupported
+        /// No se pudo configurar la resolución deseada.
+        case invalidResolution
+        /// No hay permiso para acceder a la cámara.
+        case noPermission
+        /// Error al configurar la cámara.
+        case setupFailed
         
-        var localizedDescription: String {
+        var errorDescription: String? {
             switch self {
             case .permissionDenied:
                 return "No hay acceso a la cámara. Por favor, verifica los permisos en Ajustes."
@@ -45,6 +54,14 @@ class CameraService: ObservableObject {
                 return "Error al configurar la cámara."
             case .sessionNotRunning:
                 return "La sesión de la cámara no está activa."
+            case .resolutionNotSupported:
+                return "La resolución seleccionada no está soportada por este dispositivo."
+            case .invalidResolution:
+                return "No se pudo configurar la resolución deseada."
+            case .noPermission:
+                return "No hay permiso para acceder a la cámara."
+            case .setupFailed:
+                return "Error al configurar la cámara."
             }
         }
     }
@@ -77,6 +94,31 @@ class CameraService: ObservableObject {
         return _previewLayer!
     }
     
+    /// Configura la resolución de la cámara según los ajustes
+    private func configureResolution(_ resolution: CameraResolution) throws {
+        guard (deviceInput?.device) != nil else {
+            throw CameraError.invalidDevice
+        }
+        
+        let preset: AVCaptureSession.Preset
+        switch resolution {
+        case .low:
+            preset = .vga640x480
+        case .medium:
+            preset = .hd1280x720
+        case .high:
+            preset = .hd1920x1080
+        default:
+            throw CameraError.resolutionNotSupported
+        }
+        
+        guard session.canSetSessionPreset(preset) else {
+            throw CameraError.resolutionNotSupported
+        }
+        
+        session.sessionPreset = preset
+    }
+    
     /// Verifica y solicita los permisos de acceso a la cámara.
     ///
     /// - Returns: `true` si se concedieron los permisos, `false` en caso contrario.
@@ -95,7 +137,7 @@ class CameraService: ObservableObject {
         }
     }
     
-    /// Configura la sesión de la cámara con los ajustes necesarios.
+    /// Configura la sesión de la cámara con los ajustes especificados
     ///
     /// Este método:
     /// 1. Verifica los permisos
@@ -104,49 +146,49 @@ class CameraService: ObservableObject {
     /// 4. Configura la capa de previsualización
     ///
     /// - Throws: `CameraError` si hay algún problema durante la configuración
-    func setup() async throws {
-        guard await checkPermissions() else {
-            throw CameraError.permissionDenied
+    func setup(resolution: CameraResolution) async throws {
+        // Verificar permisos primero
+        let status = AVCaptureDevice.authorizationStatus(for: .video)
+        if status == .notDetermined {
+            let granted = await AVCaptureDevice.requestAccess(for: .video)
+            if !granted {
+                throw CameraError.noPermission
+            }
+        } else if status != .authorized {
+            throw CameraError.noPermission
         }
         
-        // Asegurarse de que la sesión no está corriendo
-        if session.isRunning {
-            session.stopRunning()
-        }
+        // Configurar la sesión
+        session.beginConfiguration()
+        defer { session.commitConfiguration() }
         
         // Limpiar configuración previa
-        session.beginConfiguration()
         session.inputs.forEach { session.removeInput($0) }
         session.outputs.forEach { session.removeOutput($0) }
         
-        // Configurar calidad
-        if session.canSetSessionPreset(.photo) {
-            session.sessionPreset = .photo
-        }
-        
-        // Configurar entrada
-        guard let videoDevice = AVCaptureDevice.default(.builtInWideAngleCamera,
-                                                       for: .video,
-                                                       position: .back) else {
+        // Configurar dispositivo
+        guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else {
             throw CameraError.invalidDevice
         }
-        
-        do {
-            let videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
-            guard session.canAddInput(videoDeviceInput) else {
-                throw CameraError.configurationError
-            }
-            session.addInput(videoDeviceInput)
-            deviceInput = videoDeviceInput
-        } catch {
-            throw CameraError.configurationError
+        self.deviceInput = try? AVCaptureDeviceInput(device: device)
+        guard session.canAddInput(self.deviceInput!) else {
+            throw CameraError.setupFailed
         }
+        session.addInput(self.deviceInput!)
         
         // Configurar salida
         guard session.canAddOutput(photoOutput) else {
-            throw CameraError.configurationError
+            throw CameraError.setupFailed
         }
         session.addOutput(photoOutput)
+        
+        // Configurar resolución
+        do {
+            try configureResolution(resolution)
+        } catch {
+            print("Error al configurar resolución \(resolution): \(error). Usando calidad .photo")
+            session.sessionPreset = .photo
+        }
         
         // Configurar orientación
         if let connection = photoOutput.connection(with: .video) {
@@ -163,8 +205,6 @@ class CameraService: ObservableObject {
                 connection.isVideoMirrored = false
             }
         }
-        
-        session.commitConfiguration()
     }
     
     /// Inicia la sesión de la cámara.
@@ -173,11 +213,10 @@ class CameraService: ObservableObject {
     /// problemas de rendimiento en la UI.
     func start() {
         guard !session.isRunning else { return }
-        
-        Task.detached(priority: .userInitiated) { [weak self] in
-            await self?.session.startRunning()
-            await MainActor.run { [weak self] in
-                self?.isRunning = true
+        Task.detached { @MainActor in
+            self.session.startRunning()
+            await MainActor.run {
+                self.isRunning = true
             }
         }
     }
@@ -188,42 +227,35 @@ class CameraService: ObservableObject {
     /// problemas de rendimiento en la UI.
     func stop() {
         guard session.isRunning else { return }
-        
-        Task.detached(priority: .userInitiated) { [weak self] in
-            await self?.session.stopRunning()
-            await MainActor.run { [weak self] in
-                self?.isRunning = false
+        Task.detached { @MainActor in
+            self.session.stopRunning()
+            await MainActor.run {
+                self.isRunning = false
             }
         }
     }
     
     /// Clase auxiliar para manejar la captura de fotos.
     private class PhotoCaptureDelegate: NSObject, AVCapturePhotoCaptureDelegate {
-        private let onCapture: (UIImage) -> Void
-        private let onError: (Error) -> Void
+        private let completion: (Result<UIImage, CameraError>) -> Void
         
-        init(onCapture: @escaping (UIImage) -> Void, onError: @escaping (Error) -> Void) {
-            self.onCapture = onCapture
-            self.onError = onError
-            super.init()
+        init(completion: @escaping (Result<UIImage, CameraError>) -> Void) {
+            self.completion = completion
         }
         
         func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-            // Limpiar el delegate asociado
-            objc_setAssociatedObject(output, "delegate", nil, .OBJC_ASSOCIATION_RETAIN)
-            
-            if let error = error {
-                onError(error)
+            if  error != nil {
+                completion(.failure(.captureError))
                 return
             }
             
-            guard let imageData = photo.fileDataRepresentation(),
-                  let image = UIImage(data: imageData) else {
-                onError(CameraError.captureError)
+            guard let data = photo.fileDataRepresentation(),
+                  let image = UIImage(data: data) else {
+                completion(.failure(.captureError))
                 return
             }
             
-            onCapture(image)
+            completion(.success(image))
         }
     }
     
@@ -239,10 +271,13 @@ class CameraService: ObservableObject {
         return try await withCheckedThrowingContinuation { continuation in
             let settings = AVCapturePhotoSettings()
             
-            let delegate = PhotoCaptureDelegate { image in
-                continuation.resume(returning: image)
-            } onError: { error in
-                continuation.resume(throwing: error)
+            let delegate = PhotoCaptureDelegate { result in
+                switch result {
+                case .success(let image):
+                    continuation.resume(returning: image)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
             }
             
             // Retener el delegate hasta que se complete la captura

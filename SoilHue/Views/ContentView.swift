@@ -27,6 +27,8 @@ enum SelectionMode {
 struct ContentView: View {
     /// ViewModel que gestiona la lógica de las muestras de suelo.
     @StateObject private var viewModel = SoilSampleViewModel()
+    @StateObject private var onboardingModel = OnboardingModel()
+    @EnvironmentObject private var settingsModel: SettingsModel
     
     /// Item seleccionado del selector de fotos.
     @State private var selectedItem: PhotosPickerItem?
@@ -50,9 +52,28 @@ struct ContentView: View {
     @State private var showImagePicker = false
     @State private var selectionMode: SelectionMode = .rectangle
     @State private var showCalibration = false
+    @State private var showSettings = false
     
     /// Contenido principal de la vista.
     var body: some View {
+        Group {
+            if onboardingModel.hasSeenOnboarding {
+                mainContent
+            } else {
+                OnboardingView(model: onboardingModel)
+                    .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut, value: onboardingModel.hasSeenOnboarding)
+        .onAppear {
+            if settingsModel.autoCalibration {
+                showCalibration = true
+            }
+        }
+    }
+    
+    /// Vista principal de la aplicación
+    private var mainContent: some View {
         NavigationStack {
             ZStack {
                 Color(.systemBackground)
@@ -86,16 +107,32 @@ struct ContentView: View {
             }
             .navigationTitle("SoilHue")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showSettings = true
+                    } label: {
+                        Image(systemName: "gear")
+                    }
+                }
+            }
             .sheet(isPresented: $showImagePicker) {
                 ImagePicker(image: $selectedImage)
             }
             .sheet(isPresented: $isCameraActive) {
-                CameraCaptureView(capturedImage: $selectedImage)
+                CameraCaptureView(
+                    capturedImage: $selectedImage,
+                    resolution: settingsModel.cameraResolution,
+                    showGuide: false
+                )
             }
             .sheet(isPresented: $showCalibration) {
                 CalibrationView(onCalibrationComplete: {
                     showCalibration = false
                 })
+            }
+            .sheet(isPresented: $showSettings) {
+                SettingsView(model: settingsModel)
             }
         }
     }
@@ -108,4 +145,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environmentObject(SettingsModel())
 }
