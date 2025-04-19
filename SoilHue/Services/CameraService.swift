@@ -72,8 +72,14 @@ class CameraService: NSObject, ObservableObject {
     /// Indica si la sesión de la cámara está activa.
     @Published var isRunning = false
     
+    /// Continuación para el stream de previsualización
+    private var streamContinuation: AsyncStream<UIImage>.Continuation?
+    
     /// Sesión de captura de AVFoundation.
     private let session = AVCaptureSession()
+    
+    /// Salida de video para la previsualización
+    private let videoOutput = AVCaptureVideoDataOutput()
     
     /// Dispositivo de entrada de la cámara.
     private var deviceInput: AVCaptureDeviceInput?
@@ -122,18 +128,20 @@ class CameraService: NSObject, ObservableObject {
     /// Verifica y solicita los permisos de acceso a la cámara.
     ///
     /// - Returns: `true` si se concedieron los permisos, `false` en caso contrario.
-    func checkPermissions() async -> Bool {
-        switch AVCaptureDevice.authorizationStatus(for: .video) {
+    private func checkPermissions() async throws {
+        let status = AVCaptureDevice.authorizationStatus(for: .video)
+        switch status {
         case .authorized:
-            return true
+            return
         case .notDetermined:
-            return await AVCaptureDevice.requestAccess(for: .video)
+            let granted = await AVCaptureDevice.requestAccess(for: .video)
+            if !granted {
+                throw CameraError.permissionDenied
+            }
         case .denied, .restricted:
-            error = .permissionDenied
-            return false
+            throw CameraError.permissionDenied
         @unknown default:
-            error = .permissionDenied
-            return false
+            throw CameraError.permissionDenied
         }
     }
     
@@ -143,44 +151,39 @@ class CameraService: NSObject, ObservableObject {
     /// 1. Verifica los permisos
     /// 2. Configura el dispositivo de entrada (cámara trasera)
     /// 3. Configura la salida de fotos
-    /// 4. Configura la capa de previsualización
+    /// 4. Configura la salida de video para previsualización
+    /// 5. Configura la resolución y orientación
     ///
+    /// - Parameter resolution: La resolución deseada para la cámara
     /// - Throws: `CameraError` si hay algún problema durante la configuración
     func setup(resolution: CameraResolution) async throws {
         // Verificar permisos primero
-        let status = AVCaptureDevice.authorizationStatus(for: .video)
-        if status == .notDetermined {
-            let granted = await AVCaptureDevice.requestAccess(for: .video)
-            if !granted {
-                throw CameraError.noPermission
-            }
-        } else if status != .authorized {
-            throw CameraError.noPermission
-        }
+        try await checkPermissions()
         
-        // Configurar la sesión
-        session.beginConfiguration()
-        defer { session.commitConfiguration() }
-        
-        // Limpiar configuración previa
-        session.inputs.forEach { session.removeInput($0) }
-        session.outputs.forEach { session.removeOutput($0) }
-        
-        // Configurar dispositivo
+        // Configurar entrada
         guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else {
             throw CameraError.invalidDevice
         }
-        self.deviceInput = try? AVCaptureDeviceInput(device: device)
-        guard session.canAddInput(self.deviceInput!) else {
+        
+        deviceInput = try AVCaptureDeviceInput(device: device)
+        
+        guard session.canAddInput(deviceInput!) else {
             throw CameraError.setupFailed
         }
-        session.addInput(self.deviceInput!)
+        session.addInput(deviceInput!)
         
-        // Configurar salida
+        // Configurar salida de fotos
         guard session.canAddOutput(photoOutput) else {
             throw CameraError.setupFailed
         }
         session.addOutput(photoOutput)
+        
+        // Configurar salida de video para preview
+        videoOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "VideoPreviewQueue"))
+        guard session.canAddOutput(videoOutput) else {
+            throw CameraError.setupFailed
+        }
+        session.addOutput(videoOutput)
         
         // Configurar resolución
         do {
@@ -207,39 +210,40 @@ class CameraService: NSObject, ObservableObject {
         }
     }
     
-    /// Inicia la sesión de la cámara.
-    ///
-    /// Este método se ejecuta en un hilo en segundo plano para evitar
-    /// problemas de rendimiento en la UI.
-    func start() {
-        guard !session.isRunning else { return }
+    /// Inicia la sesión de la cámara y devuelve un stream de previsualización
+    func startSession() async throws -> AsyncStream<UIImage> {
+        guard !session.isRunning else {
+            throw CameraError.sessionNotRunning
+        }
+        
+        let stream = AsyncStream<UIImage> { continuation in
+            self.streamContinuation = continuation
+        }
+        
         Task.detached {
             await MainActor.run {
-                // Notificar que vamos a iniciar
                 self.isRunning = true
             }
-            // Ejecutar startRunning en el hilo en segundo plano
             await self.session.startRunning()
         }
+        
+        return stream
     }
     
-    /// Detiene la sesión de la cámara.
-    ///
-    /// Este método se ejecuta en un hilo en segundo plano para evitar
-    /// problemas de rendimiento en la UI.
-    func stop() {
+    /// Detiene la sesión de la cámara
+    func stopSession() {
         guard session.isRunning else { return }
         Task.detached {
-            // Ejecutar stopRunning en el hilo en segundo plano
-            await       self.session.stopRunning()
+            await self.session.stopRunning()
             await MainActor.run {
-                // Notificar que hemos detenido
                 self.isRunning = false
+                self.streamContinuation?.finish()
+                self.streamContinuation = nil
             }
         }
     }
     
-    /// Clase auxiliar para manejar la captura de fotos.
+    // MARK: - Photo Capture Delegate
     private class PhotoCaptureDelegate: NSObject, AVCapturePhotoCaptureDelegate {
         private let completion: (Result<UIImage, CameraError>) -> Void
         
@@ -248,7 +252,7 @@ class CameraService: NSObject, ObservableObject {
         }
         
         func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-            if  error != nil {
+            if error != nil {
                 completion(.failure(.captureError))
                 return
             }
@@ -262,7 +266,26 @@ class CameraService: NSObject, ObservableObject {
             completion(.success(image))
         }
     }
-    
+}
+
+// MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
+extension CameraService: AVCaptureVideoDataOutputSampleBufferDelegate {
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        guard let imageBuffer = sampleBuffer.imageBuffer else { return }
+        
+        let ciImage = CIImage(cvImageBuffer: imageBuffer)
+        let context = CIContext()
+        guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else { return }
+        let image = UIImage(cgImage: cgImage)
+        
+        Task { @MainActor in
+            streamContinuation?.yield(image)
+        }
+    }
+}
+
+// MARK: - Photo Capture
+extension CameraService {
     /// Captura una foto usando la cámara.
     ///
     /// - Returns: Una imagen capturada por la cámara
