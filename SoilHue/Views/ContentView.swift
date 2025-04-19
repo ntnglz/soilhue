@@ -49,37 +49,53 @@ struct ContentView: View {
     @State private var polygonPoints: [CGPoint]?
     @State private var showImagePicker = false
     @State private var selectionMode: SelectionMode = .rectangle
+    @State private var showCalibration = false
     
     /// Contenido principal de la vista.
     var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack {
-                    if let image = selectedImage {
-                        ImageAnalysisView(
-                            image: image,
-                            selectionMode: $selectionMode,
-                            viewModel: viewModel,
-                            colorAnalysisService: colorAnalysisService,
-                            onNewSample: resetState
-                        )
-                    } else {
-                        ImageSelectionView(
-                            isCameraActive: $isCameraActive,
-                            showImagePicker: $showImagePicker,
-                            onImageSelected: { image in
-                                selectedImage = image
+        NavigationStack {
+            ZStack {
+                Color(.systemBackground)
+                    .ignoresSafeArea()
+
+                VStack(spacing: 0) {
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            if let image = selectedImage {
+                                ImageAnalysisView(
+                                    image: image,
+                                    selectionMode: $selectionMode,
+                                    viewModel: viewModel,
+                                    colorAnalysisService: colorAnalysisService,
+                                    onNewSample: resetState
+                                )
+                                .frame(maxHeight: .infinity)
+                            } else {
+                                ImageSelectionView(
+                                    isCameraActive: $isCameraActive,
+                                    showImagePicker: $showImagePicker,
+                                    showCalibration: $showCalibration,
+                                    onImageSelected: { image in
+                                        selectedImage = image
+                                    }
+                                )
                             }
-                        )
+                        }
                     }
                 }
             }
             .navigationTitle("SoilHue")
+            .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showImagePicker) {
                 ImagePicker(image: $selectedImage)
             }
             .sheet(isPresented: $isCameraActive) {
                 CameraCaptureView(capturedImage: $selectedImage)
+            }
+            .sheet(isPresented: $showCalibration) {
+                CalibrationView(onCalibrationComplete: {
+                    showCalibration = false
+                })
             }
         }
     }

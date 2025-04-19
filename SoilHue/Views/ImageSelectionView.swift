@@ -3,11 +3,12 @@ import SwiftUI
 struct ImageSelectionView: View {
     @Binding var isCameraActive: Bool
     @Binding var showImagePicker: Bool
+    @Binding var showCalibration: Bool
     @State private var showHelp = false
     let onImageSelected: (UIImage) -> Void
     
     var body: some View {
-        VStack(spacing: 30) {
+        VStack(spacing: 0) {
             // Logo y título
             VStack(spacing: 15) {
                 Image(systemName: "leaf.circle.fill")
@@ -24,21 +25,25 @@ struct ImageSelectionView: View {
                     .font(.title3)
                     .foregroundColor(.secondary)
             }
+            .padding(.top, 44) // Altura del NavigationBar
             
             // Descripción
-            VStack(spacing: 20) {
-                Text("Captura o selecciona una imagen de una muestra de suelo para analizar su color utilizando el sistema Munsell.")
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal)
-                
-                // Características principales
-                HStack(spacing: 25) {
-                    FeatureItem(icon: "camera.viewfinder", text: "Captura\nPrecisa")
-                    FeatureItem(icon: "eyedropper.halffull", text: "Análisis\nMunsell")
-                    FeatureItem(icon: "square.stack.3d.up", text: "Clasificación\nde Suelos")
-                }
+            Text("Captura o selecciona una imagen de una muestra de suelo para analizar su color utilizando el sistema Munsell.")
+                .multilineTextAlignment(.center)
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 30)
+                .padding(.top, 30)
+            
+            // Características principales
+            HStack(spacing: 25) {
+                FeatureItem(icon: "camera.viewfinder", text: "Captura\nPrecisa")
+                FeatureItem(icon: "eyedropper.halffull", text: "Análisis\nMunsell")
+                FeatureItem(icon: "square.stack.3d.up", text: "Clasificación\nde Suelos")
             }
+            .padding(.horizontal, 30)
+            .padding(.top, 30)
+            
+            Spacer(minLength: 40)
             
             // Botones de acción
             VStack(spacing: 15) {
@@ -74,8 +79,21 @@ struct ImageSelectionView: View {
                             .stroke(Color.blue, lineWidth: 1)
                     )
                 }
+                
+                // Botón de calibración
+                Button(action: { showCalibration = true }) {
+                    HStack {
+                        Image(systemName: "camera.aperture")
+                        Text("Calibrar Cámara")
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.orange)
+                    .foregroundColor(.white)
+                    .cornerRadius(15)
+                }
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 30)
             
             // Botón de ayuda
             Button(action: { showHelp = true }) {
@@ -85,13 +103,20 @@ struct ImageSelectionView: View {
                 }
                 .foregroundColor(.secondary)
             }
-            .padding(.top)
+            .padding(.vertical, 20)
         }
-        .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.systemBackground))
         .sheet(isPresented: $showHelp) {
             HelpView()
         }
     }
+}
+
+#Preview {
+    ImageSelectionView(
+        isCameraActive: .constant(false),
+        showImagePicker: .constant(false),
+        showCalibration: .constant(false),
+        onImageSelected: { _ in }
+    )
 } 

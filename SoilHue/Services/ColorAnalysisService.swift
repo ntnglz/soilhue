@@ -17,22 +17,27 @@ class ColorAnalysisService: ObservableObject {
     /// Servicio de clasificación Munsell.
     private let munsellService = MunsellClassificationService()
     
-    /// Analiza una imagen y extrae su color dominante.
-    ///
+    /// Servicio de calibración
+    private let calibrationService = CalibrationService()
+    
+    /// Analiza una imagen y devuelve la clasificación Munsell y la descripción del suelo.
     /// - Parameters:
-    ///   - image: La imagen a analizar
-    ///   - region: Opcional. La región rectangular a analizar (en coordenadas normalizadas 0-1)
-    ///   - polygonPoints: Opcional. Puntos que definen un polígono a analizar (en coordenadas normalizadas 0-1)
-    /// - Returns: Una tupla con la notación Munsell y la clasificación del suelo
+    ///   - image: Imagen a analizar
+    ///   - region: Región rectangular a analizar (opcional)
+    ///   - polygonPoints: Puntos del polígono a analizar (opcional)
+    /// - Returns: Tupla con la notación Munsell, clasificación del suelo y descripción
     func analyzeImage(_ image: UIImage, region: CGRect? = nil, polygonPoints: [CGPoint]? = nil) async -> (munsellNotation: String, soilClassification: String, soilDescription: String) {
-        // Extraer el color dominante
+        // Obtener el color promedio de la región seleccionada
         let (red, green, blue) = await extractDominantColor(from: image, region: region, polygonPoints: polygonPoints)
         
-        // Convertir a notación Munsell
-        let munsellNotation = munsellService.rgbToMunsellNotation(red: red, green: green, blue: blue)
+        // Aplicar factores de calibración
+        let calibratedColor = calibrationService.applyCalibration(red: red, green: green, blue: blue)
         
-        // Obtener clasificación del suelo
-        let (classification, description) = munsellService.getSoilClassification(red: red, green: green, blue: blue)
+        // Obtener la clasificación Munsell
+        let munsellNotation = munsellService.rgbToMunsellNotation(red: calibratedColor.red, green: calibratedColor.green, blue: calibratedColor.blue)
+        
+        // Obtener la clasificación del suelo
+        let (classification, description) = munsellService.getSoilClassification(red: calibratedColor.red, green: calibratedColor.green, blue: calibratedColor.blue)
         
         return (munsellNotation, classification, description)
     }

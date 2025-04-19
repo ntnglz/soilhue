@@ -150,8 +150,14 @@ class CameraService: ObservableObject {
         
         // Configurar orientación
         if let connection = photoOutput.connection(with: .video) {
-            if connection.isVideoOrientationSupported {
-                connection.videoOrientation = .portrait
+            if #available(iOS 17.0, *) {
+                if connection.isVideoRotationAngleSupported(0) {
+                    connection.videoRotationAngle = 0
+                }
+            } else {
+                if connection.isVideoOrientationSupported {
+                    connection.videoOrientation = .portrait
+                }
             }
             if connection.isVideoMirroringSupported {
                 connection.isVideoMirrored = false
@@ -169,7 +175,7 @@ class CameraService: ObservableObject {
         guard !session.isRunning else { return }
         
         Task.detached(priority: .userInitiated) { [weak self] in
-            self?.session.startRunning()
+            await self?.session.startRunning()
             await MainActor.run { [weak self] in
                 self?.isRunning = true
             }
@@ -184,7 +190,7 @@ class CameraService: ObservableObject {
         guard session.isRunning else { return }
         
         Task.detached(priority: .userInitiated) { [weak self] in
-            self?.session.stopRunning()
+            await self?.session.stopRunning()
             await MainActor.run { [weak self] in
                 self?.isRunning = false
             }

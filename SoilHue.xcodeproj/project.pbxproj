@@ -11,7 +11,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		EA42EB632DACED4A003FC91D /* Exceptions for "SoilHue" folder in "SoilHue" target */ = {
+		EA42EB932DB40C7A003FC91D /* Exceptions for "SoilHue" folder in "SoilHue" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -24,7 +24,7 @@
 		EA42EB032DAC331D003FC91D /* SoilHue */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				EA42EB632DACED4A003FC91D /* Exceptions for "SoilHue" folder in "SoilHue" target */,
+				EA42EB932DB40C7A003FC91D /* Exceptions for "SoilHue" folder in "SoilHue" target */,
 			);
 			path = SoilHue;
 			sourceTree = "<group>";
@@ -263,6 +263,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = SoilHue/SoilHue.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -276,6 +277,7 @@
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 Antonio J. González. Todos los derechos reservados.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "SoilHue necesita acceso a tu ubicación para registrar dónde se tomaron las muestras de suelo";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "SoilHue necesita acceso a tu biblioteca de fotos para guardar y acceder a las imágenes de muestras de suelo";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -297,6 +299,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = SoilHue/SoilHue.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -310,6 +313,7 @@
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 Antonio J. González. Todos los derechos reservados.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "SoilHue necesita acceso a tu ubicación para registrar dónde se tomaron las muestras de suelo";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "SoilHue necesita acceso a tu biblioteca de fotos para guardar y acceder a las imágenes de muestras de suelo";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
