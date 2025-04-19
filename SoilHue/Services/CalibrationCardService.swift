@@ -4,65 +4,42 @@ class CalibrationCardService {
     /// Genera una imagen de la tarjeta de calibración
     /// - Returns: La imagen generada
     func generateCalibrationCard() -> UIImage? {
-        // Crear un PDF temporal
-        let pdfData = NSMutableData()
-        let pdfConsumer = CGDataConsumer(data: pdfData)!
+        let pageSize = CGSize(width: 595, height: 842) // A4
+        let renderer = UIGraphicsImageRenderer(size: pageSize)
         
-        var mediaBox = CGRect(x: 0, y: 0, width: 595, height: 842) // A4
-        guard let pdfContext = CGContext(consumer: pdfConsumer, mediaBox: &mediaBox, nil) else {
-            return nil
-        }
-        
-        // Configurar el contexto
-        pdfContext.beginPDFPage(nil)
-        pdfContext.translateBy(x: 0, y: 842) // Mover al origen
-        pdfContext.scaleBy(x: 1.0, y: -1.0) // Invertir el eje Y
-        
-        // Configurar el texto
-        let titleFont = UIFont.boldSystemFont(ofSize: 24)
-        let titleAttributes: [NSAttributedString.Key: Any] = [
-            .font: titleFont,
-            .foregroundColor: UIColor.black
-        ]
-        
-        let textFont = UIFont.systemFont(ofSize: 12)
-        let textAttributes: [NSAttributedString.Key: Any] = [
-            .font: textFont,
-            .foregroundColor: UIColor.black
-        ]
-        
-        // Dibujar el título
-        let title = "Tarjeta de Calibración Básica"
-        title.draw(at: CGPoint(x: 50, y: 50), withAttributes: titleAttributes)
-        
-        // Dibujar las instrucciones
-        let instructions = [
-            "Instrucciones de uso:",
-            "1. Imprime esta tarjeta en una impresora de calidad",
-            "2. Asegúrate de que los colores se impriman correctamente",
-            "3. Coloca la tarjeta sobre una superficie plana",
-            "4. Evita sombras y reflejos",
-            "5. Usa iluminación uniforme (preferiblemente luz natural indirecta)",
-            "6. Mantén la tarjeta paralela a la cámara al tomar la foto",
-            "",
-            "Nota: Esta tarjeta básica proporciona una calibración aproximada.",
-            "Para resultados profesionales, se recomienda usar el X-Rite ColorChecker Classic."
-        ]
-        
-        var yPosition: CGFloat = 100
-        for instruction in instructions {
-            instruction.draw(at: CGPoint(x: 50, y: yPosition), withAttributes: textAttributes)
-            yPosition += 20
-        }
-        
-        // Añadir espacio extra antes de la cuadrícula
-        yPosition += 40
-        
-        // Dibujar la cuadrícula de colores
-        let gridSize: CGFloat = 60
-        let gridSpacing: CGFloat = 10
-        let startX: CGFloat = 50
-        let startY = yPosition
+        return renderer.image { context in
+            // Fondo blanco
+            UIColor.white.setFill()
+            context.fill(CGRect(origin: .zero, size: pageSize))
+            
+            // Configurar las fuentes y estilos
+            let titleFont = UIFont.boldSystemFont(ofSize: 24)
+            let textFont = UIFont.systemFont(ofSize: 12)
+            
+            // Configurar los atributos de texto
+            let titleParagraphStyle = NSMutableParagraphStyle()
+            titleParagraphStyle.alignment = .left
+            
+            let textParagraphStyle = NSMutableParagraphStyle()
+            textParagraphStyle.alignment = .left
+            
+            let titleAttributes: [NSAttributedString.Key: Any] = [
+                .font: titleFont,
+                .foregroundColor: UIColor.black,
+                .paragraphStyle: titleParagraphStyle
+            ]
+            
+            let textAttributes: [NSAttributedString.Key: Any] = [
+                .font: textFont,
+                .foregroundColor: UIColor.black,
+                .paragraphStyle: textParagraphStyle
+            ]
+            
+            // Dibujar la cuadrícula de colores primero
+            let gridSize: CGFloat = 60
+            let gridSpacing: CGFloat = 10
+            let startX: CGFloat = 50
+            let startY: CGFloat = 350 // Posición fija para la cuadrícula
         
         // Colores de referencia para la cuadrícula
         let colors: [[UIColor]] = [
@@ -107,35 +84,56 @@ class CalibrationCardService {
                 let y = startY + CGFloat(rowIndex) * (gridSize + gridSpacing)
                 
                 let rect = CGRect(x: x, y: y, width: gridSize, height: gridSize)
-                pdfContext.setFillColor(color.cgColor)
-                pdfContext.fill(rect)
+                
+                // Dibujar el color
+                color.setFill()
+                UIBezierPath(rect: rect).fill()
                 
                 // Añadir borde negro
-                pdfContext.setStrokeColor(UIColor.black.cgColor)
-                pdfContext.setLineWidth(1.0)
-                pdfContext.stroke(rect)
+                UIColor.black.setStroke()
+                let borderPath = UIBezierPath(rect: rect)
+                borderPath.lineWidth = 1.0
+                borderPath.stroke()
+            }
+            
+            // Ahora dibujamos todo el texto
+            // Título
+            let title = "Tarjeta de Calibración Básica"
+            let titleRect = CGRect(x: 50, y: 50, width: pageSize.width - 100, height: 30)
+            (title as NSString).draw(in: titleRect, withAttributes: titleAttributes)
+            
+            // Instrucciones antes de la cuadrícula
+            let instructionsBefore = [
+                "Instrucciones de uso:",
+                "1. Imprime esta tarjeta en una impresora de calidad",
+                "2. Asegúrate de que los colores se impriman correctamente",
+                "3. Coloca la tarjeta sobre una superficie plana",
+                "4. Evita sombras y reflejos",
+                "5. Usa iluminación uniforme (preferiblemente luz natural indirecta)",
+                "6. Mantén la tarjeta paralela a la cámara al tomar la foto"
+            ]
+            
+            var yPosition: CGFloat = 100
+            for instruction in instructionsBefore {
+                let textRect = CGRect(x: 50, y: yPosition, width: pageSize.width - 100, height: 20)
+                (instruction as NSString).draw(in: textRect, withAttributes: textAttributes)
+                yPosition += 20
+            }
+            
+            // Instrucciones después de la cuadrícula
+            let instructionsAfter = [
+                "",
+                "Nota: Esta tarjeta básica proporciona una calibración aproximada.",
+                "Para resultados profesionales, se recomienda usar el X-Rite ColorChecker Classic."
+            ]
+            
+            yPosition = startY + (4 * (gridSize + gridSpacing)) + 40 // Posición después de la cuadrícula
+            for instruction in instructionsAfter {
+                let textRect = CGRect(x: 50, y: yPosition, width: pageSize.width - 100, height: 20)
+                (instruction as NSString).draw(in: textRect, withAttributes: textAttributes)
+                yPosition += 20
             }
         }
-        
-        // Finalizar el PDF
-        pdfContext.endPDFPage()
-        pdfContext.closePDF()
-        
-        // Convertir el PDF a una imagen
-        let pdfDataRef = pdfData as CFData
-        guard let dataProvider = CGDataProvider(data: pdfDataRef),
-              let pdfDocument = CGPDFDocument(dataProvider),
-              let pdfPage = pdfDocument.page(at: 1) else {
-            return nil
-        }
-        
-        let pageRect = pdfPage.getBoxRect(.mediaBox)
-        let renderer = UIGraphicsImageRenderer(bounds: CGRect(origin: .zero, size: pageRect.size))
-        
-        return renderer.image { context in
-            context.cgContext.translateBy(x: 0, y: pageRect.size.height)
-            context.cgContext.scaleBy(x: 1.0, y: -1.0)
-            context.cgContext.drawPDFPage(pdfPage)
         }
     }
 } 

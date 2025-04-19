@@ -1,6 +1,7 @@
 import Foundation
-import SwiftUI
 import CoreImage
+import CoreImage.CIFilterBuiltins
+import SwiftUI
 
 /// Servicio que maneja la calibración de la cámara para el análisis de color del suelo.
 ///
@@ -25,7 +26,53 @@ class CalibrationService: ObservableObject {
     @Published var calibrationState: CalibrationState = .notCalibrated
     
     /// Factores de corrección para cada canal de color
-    @Published var correctionFactors: (red: Double, green: Double, blue: Double) = (1.0, 1.0, 1.0)
+    @Published var correctionFactors: CorrectionFactors = CorrectionFactors(red: 1.0, green: 1.0, blue: 1.0)
+    
+    /// Indica si la cámara está calibrada
+    var isCalibrated: Bool {
+        if case .calibrated = calibrationState {
+            return true
+        }
+        return false
+    }
+    
+    /// Lista de observadores del servicio
+    private var observers: [(CalibrationService) -> Void] = []
+    
+    /// Añade un observador al servicio
+    /// - Parameter observer: Closure que será llamado cuando haya cambios en el servicio
+    func addObserver(_ observer: @escaping (CalibrationService) -> Void) {
+        observers.append(observer)
+        observer(self) // Notificar estado inicial
+    }
+    
+    /// Notifica a todos los observadores de cambios en el servicio
+    private func notifyObservers() {
+        observers.forEach { observer in
+            observer(self)
+        }
+    }
+    
+    /// Carga los factores de corrección desde UserDefaults
+    func loadCalibrationFactors() {
+        let defaults = UserDefaults.standard
+        if defaults.bool(forKey: "isCalibrated") {
+            correctionFactors = CorrectionFactors(
+                red: defaults.double(forKey: "calibrationRedFactor"),
+                green: defaults.double(forKey: "calibrationGreenFactor"),
+                blue: defaults.double(forKey: "calibrationBlueFactor")
+            )
+            calibrationState = .calibrated
+            notifyObservers()
+        } else {
+            calibrationState = .notCalibrated
+            notifyObservers()
+        }
+    }
+    
+    init() {
+        loadCalibrationFactors()
+    }
     
     /// Estructura que representa un parche de color en la tarjeta de calibración
     struct ColorPatch {
@@ -145,7 +192,7 @@ class CalibrationService: ObservableObject {
         print("Total de parches válidos: \(validPatches)")
         
         // Calcular los factores de corrección promedio
-        correctionFactors = (
+        correctionFactors = CorrectionFactors(
             red: redCorrection / Double(validPatches),
             green: greenCorrection / Double(validPatches),
             blue: blueCorrection / Double(validPatches)
@@ -156,9 +203,39 @@ class CalibrationService: ObservableObject {
         print("G: \(correctionFactors.green)")
         print("B: \(correctionFactors.blue)")
         
-        // Guardar los factores de corrección
-        saveCalibrationFactors()
-        calibrationState = .calibrated
+        // Validar la calidad de la calibración
+        var measuredColors: [String: CorrectionFactors] = [:]
+        var referenceColors: [String: CorrectionFactors] = [:]
+        
+        for patch in colorCheckerPatches {
+            let measured = getAverageColor(in: ciImage, region: CGRect(
+                x: CGFloat(patch.position % 6) * patchWidth,
+                y: CGFloat(patch.position / 6) * patchHeight,
+                width: patchWidth,
+                height: patchHeight
+            ), context: context)
+            
+            measuredColors[patch.name] = CorrectionFactors(red: measured.red, green: measured.green, blue: measured.blue)
+            referenceColors[patch.name] = CorrectionFactors(red: patch.referenceValues.red, green: patch.referenceValues.green, blue: patch.referenceValues.blue)
+        }
+        
+        let validator = CalibrationValidator()
+        let validationResult = validator.validateCalibration(measuredColors: measuredColors, referenceColors: referenceColors)
+        
+        if validationResult.isValid {
+            print(validationResult.description)
+            // Guardar los factores de corrección
+            saveCalibrationFactors()
+            calibrationState = .calibrated
+            notifyObservers()
+        } else {
+            let errorMessage = "La calibración no cumple con los requisitos mínimos de calidad:\n" +
+                              "Error máximo: \(String(format: "%.1f%%", validationResult.maxError * 100))\n" +
+                              "Error promedio: \(String(format: "%.1f%%", validationResult.averageError * 100))\n" +
+                              "Colores problemáticos: \(validationResult.problematicColors.joined(separator: ", "))"
+            calibrationState = .error(errorMessage)
+            notifyObservers()
+        }
     }
     
     /// Obtiene el color promedio en una región específica de la imagen
@@ -216,29 +293,17 @@ class CalibrationService: ObservableObject {
         defaults.set(true, forKey: "isCalibrated")
     }
     
-    /// Carga los factores de corrección desde UserDefaults
-    func loadCalibrationFactors() {
-        let defaults = UserDefaults.standard
-        if defaults.bool(forKey: "isCalibrated") {
-            correctionFactors = (
-                defaults.double(forKey: "calibrationRedFactor"),
-                defaults.double(forKey: "calibrationGreenFactor"),
-                defaults.double(forKey: "calibrationBlueFactor")
-            )
-            calibrationState = .calibrated
-        } else {
-            calibrationState = .notCalibrated
-        }
-    }
+
     
     /// Reinicia la calibración
     func resetCalibration() {
-        correctionFactors = (1.0, 1.0, 1.0)
+        correctionFactors = CorrectionFactors(red: 1.0, green: 1.0, blue: 1.0)
         let defaults = UserDefaults.standard
         defaults.removeObject(forKey: "calibrationRedFactor")
         defaults.removeObject(forKey: "calibrationGreenFactor")
         defaults.removeObject(forKey: "calibrationBlueFactor")
         defaults.removeObject(forKey: "isCalibrated")
         calibrationState = .notCalibrated
+        notifyObservers()
     }
 } 

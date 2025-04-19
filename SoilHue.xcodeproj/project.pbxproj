@@ -8,6 +8,7 @@
 
 /* Begin PBXFileReference section */
 		EA42EB012DAC331D003FC91D /* SoilHue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoilHue.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA42EBA72DB42F55003FC91D /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -45,6 +46,7 @@
 		EA42EAF82DAC331D003FC91D = {
 			isa = PBXGroup;
 			children = (
+				EA42EBA72DB42F55003FC91D /* TODO.md */,
 				EA42EB032DAC331D003FC91D /* SoilHue */,
 				EA42EB022DAC331D003FC91D /* Products */,
 			);

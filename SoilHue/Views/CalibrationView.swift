@@ -19,11 +19,23 @@ struct CalibrationView: View {
     /// Servicio de tarjeta de calibración
     private let cardService = CalibrationCardService()
     
-    /// Indica si la cámara está activa
-    @State private var isCameraActive = false
+    /// Enum para controlar qué sheet se muestra
+    private enum SheetType: Identifiable {
+        case camera
+        case imagePicker
+        case share(UIImage)
+        
+        var id: Int {
+            switch self {
+            case .camera: return 1
+            case .imagePicker: return 2
+            case .share: return 3
+            }
+        }
+    }
     
-    /// Indica si se debe mostrar el selector de imágenes
-    @State private var showImagePicker = false
+    /// Estado actual del sheet
+    @State private var activeSheet: SheetType?
     
     /// Imagen seleccionada para calibración
     @State private var selectedImage: UIImage?
@@ -37,17 +49,14 @@ struct CalibrationView: View {
     /// Indica si se debe mostrar un mensaje de éxito
     @State private var showSuccess = false
     
-    /// Indica si se debe mostrar el compartir para el PDF
-    @State private var showShareSheet = false
-    
-    /// URL del PDF generado
-    @State private var pdfURL: URL?
-    
-    /// Imagen generada para compartir
-    @State private var shareImage: UIImage?
-    
     /// Callback para cuando se completa la calibración
     var onCalibrationComplete: (() -> Void)?
+    
+    init(onCalibrationComplete: (() -> Void)? = nil) {
+        // Cargar factores de calibración al inicio
+        _calibrationService = StateObject(wrappedValue: CalibrationService())
+        self.onCalibrationComplete = onCalibrationComplete
+    }
     
     var body: some View {
         ScrollView {
@@ -62,8 +71,8 @@ struct CalibrationView: View {
                 
                 // Botones de acción
                 ActionButtonsView(
-                    onCameraTap: { isCameraActive = true },
-                    onGalleryTap: { showImagePicker = true }
+                    onCameraTap: { activeSheet = .camera },
+                    onGalleryTap: { activeSheet = .imagePicker }
                 )
                 
                 // Información de calibración
@@ -73,8 +82,7 @@ struct CalibrationView: View {
                 BasicCalibrationCardView(
                     onDownloadTap: {
                         if let image = cardService.generateCalibrationCard() {
-                            shareImage = image
-                            showShareSheet = true
+                            activeSheet = .share(image)
                         } else {
                             errorMessage = "Error al generar la tarjeta de calibración"
                             showError = true
@@ -88,18 +96,17 @@ struct CalibrationView: View {
         .navigationBarItems(trailing: Button("Cerrar") {
             onCalibrationComplete?()
         })
-        .sheet(isPresented: $isCameraActive) {
-            CameraCaptureView(
-                capturedImage: $selectedImage,
-                resolution: .high,
-                showGuide: true
-            )
-        }
-        .sheet(isPresented: $showImagePicker) {
-            ImagePicker(image: $selectedImage)
-        }
-        .sheet(isPresented: $showShareSheet) {
-            if let image = shareImage {
+        .sheet(item: $activeSheet) { sheet in
+            switch sheet {
+            case .camera:
+                CameraCaptureView(
+                    capturedImage: $selectedImage,
+                    resolution: .high,
+                    showGuide: true
+                )
+            case .imagePicker:
+                ImagePicker(image: $selectedImage)
+            case .share(let image):
                 ActivityViewController(activityItems: [image])
             }
         }
@@ -115,9 +122,7 @@ struct CalibrationView: View {
         } message: {
             Text("La cámara ha sido calibrada correctamente.")
         }
-        .onAppear {
-            calibrationService.loadCalibrationFactors()
-        }
+
         .onChange(of: selectedImage) { oldImage, newImage in
             if let image = newImage {
                 processCalibrationImage(image)

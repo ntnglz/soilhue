@@ -70,6 +70,7 @@ struct ContentView: View {
                 showCalibration = true
             }
         }
+        .preferredColorScheme(colorScheme)
     }
     
     /// Vista principal de la aplicación
@@ -140,6 +141,18 @@ struct ContentView: View {
     private func resetState() {
         selectedImage = nil
         viewModel.currentSample = nil
+    }
+    
+    /// Esquema de color basado en los ajustes
+    private var colorScheme: ColorScheme? {
+        switch settingsModel.darkMode {
+        case .light:
+            return .light
+        case .dark:
+            return .dark
+        case .system:
+            return nil
+        }
     }
 }
 

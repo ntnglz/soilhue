@@ -40,7 +40,7 @@ class SoilSampleViewModel: ObservableObject {
     /// - Returns: Un objeto `SoilAnalysisResult` que contiene el color Munsell y la clasificación del suelo.
     func analyzeSample(_ sample: SoilSample) async throws -> SoilAnalysisResult {
         // Analizar la imagen para obtener el color dominante y la clasificación
-        let analysis = await colorAnalysisService.analyzeImage(sample.image)
+        let analysis = try await colorAnalysisService.analyzeImage(sample.image)
         
         // Crear el resultado del análisis
         let result = SoilAnalysisResult(
@@ -68,7 +68,7 @@ class SoilSampleViewModel: ObservableObject {
     /// - Returns: Un objeto `SoilAnalysisResult` que contiene el color Munsell y la clasificación del suelo.
     func analyzeSampleRegion(_ sample: SoilSample, region: CGRect) async throws -> SoilAnalysisResult {
         // Analizar la región específica de la imagen
-        let analysis = await colorAnalysisService.analyzeImage(sample.image, region: region)
+        let analysis = try await colorAnalysisService.analyzeImage(sample.image, region: region)
         
         // Crear el resultado del análisis
         let result = SoilAnalysisResult(
@@ -96,7 +96,7 @@ class SoilSampleViewModel: ObservableObject {
     /// - Returns: Un objeto `SoilAnalysisResult` que contiene el color Munsell y la clasificación del suelo.
     func analyzeSamplePolygon(_ sample: SoilSample, polygonPoints: [CGPoint]) async throws -> SoilAnalysisResult {
         // Analizar el área poligonal de la imagen
-        let analysis = await colorAnalysisService.analyzeImage(sample.image, polygonPoints: polygonPoints)
+        let analysis = try await colorAnalysisService.analyzeImage(sample.image, polygonPoints: polygonPoints)
         
         // Crear el resultado del análisis
         let result = SoilAnalysisResult(

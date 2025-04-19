@@ -13,6 +13,9 @@ struct ImageAnalysisView: View {
     @State private var munsellNotation: String = ""
     @State private var soilClassification: String = ""
     @State private var soilDescription: String = ""
+    @State private var errorMessage: String? = nil
+    @State private var showError = false
+    @State private var showCalibration = false
     
     var body: some View {
         VStack {
@@ -36,12 +39,33 @@ struct ImageAnalysisView: View {
                let munsellColor = sample.munsellColor,
                !munsellColor.isEmpty {
                 AnalysisResultsView(
+                    image: image,
                     munsellNotation: munsellColor,
                     soilClassification: soilClassification,
                     soilDescription: soilDescription,
+                    selectionArea: SelectionArea(
+                        type: selectionMode == .rectangle ? .rectangle : .polygon,
+                        coordinates: selectionMode == .rectangle ? 
+                            .rectangle(selectionRect ?? .zero) : 
+                            .polygon(polygonPoints ?? [])
+                    ),
+                    wasCalibrated: colorAnalysisService.isCalibrated,
+                    correctionFactors: colorAnalysisService.correctionFactors,
                     onNewSample: onNewSample
                 )
             }
+        }
+        .alert("Error", isPresented: $showError) {
+            Button("Calibrar", role: .none) {
+                showCalibration = true
+                showError = false
+            }
+            Button("Cancelar", role: .cancel) { }
+        } message: {
+            Text(errorMessage ?? "Error desconocido")
+        }
+        .sheet(isPresented: $showCalibration) {
+            CalibrationView()
         }
     }
     
@@ -61,21 +85,33 @@ struct ImageAnalysisView: View {
                 viewModel.addSample(image: image)
             }
             
-            let result = if selectionMode == .rectangle {
-                await colorAnalysisService.analyzeImage(image, region: selectionRect)
-            } else {
-                await colorAnalysisService.analyzeImage(image, polygonPoints: polygonPoints)
-            }
-            
-            await MainActor.run {
-                munsellNotation = result.munsellNotation
-                soilClassification = result.soilClassification
-                soilDescription = result.soilDescription
+            do {
+                let result = if selectionMode == .rectangle {
+                    try await colorAnalysisService.analyzeImage(image, region: selectionRect)
+                } else {
+                    try await colorAnalysisService.analyzeImage(image, polygonPoints: polygonPoints)
+                }
                 
-                // Actualizar la muestra actual
-                viewModel.currentSample?.munsellColor = result.munsellNotation
-                viewModel.currentSample?.soilClassification = result.soilClassification
-                viewModel.currentSample?.soilDescription = result.soilDescription
+                await MainActor.run {
+                    munsellNotation = result.munsellNotation
+                    soilClassification = result.soilClassification
+                    soilDescription = result.soilDescription
+                    
+                    // Actualizar la muestra actual
+                    viewModel.currentSample?.munsellColor = result.munsellNotation
+                    viewModel.currentSample?.soilClassification = result.soilClassification
+                    viewModel.currentSample?.soilDescription = result.soilDescription
+                }
+            } catch let error as CalibrationError {
+                await MainActor.run {
+                    errorMessage = error.localizedDescription
+                    showError = true
+                }
+            } catch {
+                await MainActor.run {
+                    errorMessage = "Error al analizar la imagen: \(error.localizedDescription)"
+                    showError = true
+                }
             }
         }
     }

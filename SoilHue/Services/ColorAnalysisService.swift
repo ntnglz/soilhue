@@ -1,6 +1,20 @@
 import SwiftUI
 import CoreImage
 import CoreImage.CIFilterBuiltins
+import Foundation
+
+/// Errores que pueden ocurrir durante el análisis de color
+enum CalibrationError: LocalizedError {
+    /// La cámara no está calibrada
+    case notCalibrated
+    
+    var errorDescription: String? {
+        switch self {
+        case .notCalibrated:
+            return "La cámara no está calibrada. Por favor, realice la calibración antes de analizar imágenes."
+        }
+    }
+}
 
 /// Servicio que analiza el color de una imagen o región específica.
 ///
@@ -11,14 +25,42 @@ import CoreImage.CIFilterBuiltins
 /// - Convertir el color extraído a notación Munsell
 /// - Proporcionar clasificación del suelo basada en el color
 class ColorAnalysisService: ObservableObject {
+    /// Indica si la cámara está calibrada
+    @Published var isCalibrated: Bool = false
+    
+    /// Factores de corrección actuales para ajustar los valores RGB
+    /// Estos factores se actualizan automáticamente cuando cambia la calibración
+    @Published var correctionFactors = CorrectionFactors(red: 1.0, green: 1.0, blue: 1.0)
+    
+    /// Error de calibración actual, si existe
+    @Published var calibrationError: Error?
+    
     /// Contexto de CoreImage para procesamiento de imágenes.
     private let context = CIContext()
     
     /// Servicio de clasificación Munsell.
     private let munsellService = MunsellClassificationService()
     
-    /// Servicio de calibración
+    /// Servicio de calibración para ajustar los valores de color
     private let calibrationService = CalibrationService()
+    
+    init() {
+        // Observar cambios en el servicio de calibración
+        calibrationService.addObserver { [weak self] service in
+            Task { @MainActor in
+                self?.isCalibrated = service.isCalibrated
+                self?.correctionFactors = service.correctionFactors
+                self?.calibrationError = nil
+            }
+        }
+        
+        // Cargar el estado de calibración inicial
+        Task { @MainActor in
+                calibrationService.loadCalibrationFactors()
+                isCalibrated = calibrationService.isCalibrated
+                correctionFactors = calibrationService.correctionFactors
+        }
+    }
     
     /// Analiza una imagen y devuelve la clasificación Munsell y la descripción del suelo.
     /// - Parameters:
@@ -26,7 +68,13 @@ class ColorAnalysisService: ObservableObject {
     ///   - region: Región rectangular a analizar (opcional)
     ///   - polygonPoints: Puntos del polígono a analizar (opcional)
     /// - Returns: Tupla con la notación Munsell, clasificación del suelo y descripción
-    func analyzeImage(_ image: UIImage, region: CGRect? = nil, polygonPoints: [CGPoint]? = nil) async -> (munsellNotation: String, soilClassification: String, soilDescription: String) {
+    /// - Throws: CalibrationError si la cámara no está calibrada
+    func analyzeImage(_ image: UIImage, region: CGRect? = nil, polygonPoints: [CGPoint]? = nil) async throws -> (munsellNotation: String, soilClassification: String, soilDescription: String) {
+        // Verificar el estado de calibración
+        guard isCalibrated else {
+            throw CalibrationError.notCalibrated
+        }
+        
         // Obtener el color promedio de la región seleccionada
         let (red, green, blue) = await extractDominantColor(from: image, region: region, polygonPoints: polygonPoints)
         
@@ -34,10 +82,18 @@ class ColorAnalysisService: ObservableObject {
         let calibratedColor = calibrationService.applyCalibration(red: red, green: green, blue: blue)
         
         // Obtener la clasificación Munsell
-        let munsellNotation = munsellService.rgbToMunsellNotation(red: calibratedColor.red, green: calibratedColor.green, blue: calibratedColor.blue)
+        let munsellNotation = munsellService.rgbToMunsellNotation(
+            red: calibratedColor.red,
+            green: calibratedColor.green,
+            blue: calibratedColor.blue
+        )
         
         // Obtener la clasificación del suelo
-        let (classification, description) = munsellService.getSoilClassification(red: calibratedColor.red, green: calibratedColor.green, blue: calibratedColor.blue)
+        let (classification, description) = munsellService.getSoilClassification(
+            red: calibratedColor.red,
+            green: calibratedColor.green,
+            blue: calibratedColor.blue
+        )
         
         return (munsellNotation, classification, description)
     }

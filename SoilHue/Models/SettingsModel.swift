@@ -70,7 +70,7 @@ class SettingsModel: ObservableObject {
 }
 
 /// Resolución de la cámara
-enum CameraResolution: Int, CaseIterable, Identifiable {
+enum CameraResolution: Int, CaseIterable, Identifiable, Codable {
     case low = 0
     case medium = 1
     case high = 2

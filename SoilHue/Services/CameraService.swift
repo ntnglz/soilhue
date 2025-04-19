@@ -213,11 +213,13 @@ class CameraService: NSObject, ObservableObject {
     /// problemas de rendimiento en la UI.
     func start() {
         guard !session.isRunning else { return }
-        Task.detached { @MainActor in
-            self.session.startRunning()
+        Task.detached {
             await MainActor.run {
+                // Notificar que vamos a iniciar
                 self.isRunning = true
             }
+            // Ejecutar startRunning en el hilo en segundo plano
+            await self.session.startRunning()
         }
     }
     
@@ -227,9 +229,11 @@ class CameraService: NSObject, ObservableObject {
     /// problemas de rendimiento en la UI.
     func stop() {
         guard session.isRunning else { return }
-        Task.detached { @MainActor in
-            self.session.stopRunning()
+        Task.detached {
+            // Ejecutar stopRunning en el hilo en segundo plano
+            await       self.session.stopRunning()
             await MainActor.run {
+                // Notificar que hemos detenido
                 self.isRunning = false
             }
         }
