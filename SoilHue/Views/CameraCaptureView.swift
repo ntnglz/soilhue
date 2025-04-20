@@ -1,10 +1,14 @@
 import SwiftUI
 import AVFoundation
+import CoreLocation
 
 /// Vista para la captura de imágenes con la cámara
 struct CameraCaptureView: View {
     /// Imagen capturada
     @Binding var capturedImage: UIImage?
+    
+    /// Localización capturada
+    @Binding var capturedLocation: CLLocation?
     
     /// Resolución de la cámara
     let resolution: CameraResolution
@@ -25,106 +29,152 @@ struct CameraCaptureView: View {
     @State private var showError = false
     @State private var errorMessage = ""
     
+    @StateObject private var locationService = LocationService()
+    
+    @State private var showingAlert = false
+    @State private var alertTitle = ""
+    @State private var alertMessage = ""
+    @State private var isCapturing = false
+    @State private var previewStream: AsyncStream<UIImage>?
+    @State private var isLocationEnabled = false
+    
     var body: some View {
-        ZStack {
-            // Vista de la cámara
-            if let preview = previewImage {
-                Image(uiImage: preview)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .ignoresSafeArea()
-            }
-            
-            // Guía de calibración
-            if showGuide {
-                CalibrationGuideView()
-            }
-            
-            // Controles de la cámara
-            VStack {
-                Spacer()
-                
-                HStack {
-                    Spacer()
-                    
-                    // Botón de captura
-                    Button {
-                        captureImage()
-                    } label: {
-                        Circle()
-                            .fill(Color.white)
-                            .frame(width: 80, height: 80)
-                            .overlay(
-                                Circle()
-                                    .stroke(Color.black.opacity(0.2), lineWidth: 2)
-                                    .frame(width: 65, height: 65)
-                            )
-                    }
-                    
-                    Spacer()
+        GeometryReader { geometry in
+            ZStack {
+                // Vista de la cámara
+                if let preview = previewImage {
+                    Image(uiImage: preview)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .ignoresSafeArea()
                 }
-                .padding(.bottom, 30)
+                
+                // Guía de calibración
+                if showGuide {
+                    CalibrationGuideView()
+                }
+                
+                // Controles de la cámara
+                VStack {
+                    // Indicador de localización
+                    HStack {
+                        Image(systemName: isLocationEnabled ? "location.fill" : "location.slash.fill")
+                            .foregroundColor(isLocationEnabled ? .green : .red)
+                        Text(isLocationEnabled ? "Ubicación activada" : "Ubicación desactivada")
+                            .font(.caption)
+                            .foregroundColor(.white)
+                    }
+                    .padding(8)
+                    .background(.black.opacity(0.6))
+                    .cornerRadius(8)
+                    .padding(.top, 44)
+                    
+                    Spacer()
+                    
+                    HStack {
+                        Spacer()
+                        
+                        // Botón de captura
+                        Button {
+                            Task {
+                                await capturePhoto()
+                            }
+                        } label: {
+                            Circle()
+                                .fill(.white)
+                                .frame(width: 80, height: 80)
+                                .overlay(
+                                    Circle()
+                                        .stroke(.black.opacity(0.8), lineWidth: 2)
+                                )
+                                .shadow(radius: 4)
+                        }
+                        .disabled(isCapturing)
+                        
+                        Spacer()
+                    }
+                    .padding(.bottom, 30)
+                }
+                
+                if isCapturing {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .scaleEffect(1.5)
+                }
             }
         }
-        .onAppear {
-            setupCamera()
+        .task {
+            do {
+                try await setupCamera()
+                locationService.requestAuthorization()
+                updateLocationStatus()
+            } catch {
+                showAlert(title: "Error", message: error.localizedDescription)
+            }
         }
         .onDisappear {
             cameraService.stopSession()
         }
-        .alert("Error", isPresented: $showError) {
+        .alert(alertTitle, isPresented: $showingAlert) {
             Button("OK", role: .cancel) { }
         } message: {
-            Text(errorMessage)
+            Text(alertMessage)
         }
-        .task {
-            do {
-                for try await image in try await cameraService.startSession() {
-                    previewImage = image
-                }
-            } catch {
-                errorMessage = error.localizedDescription
-                showError = true
-            }
+        .onChange(of: locationService.authorizationStatus) { _ in
+            updateLocationStatus()
         }
+    }
+    
+    private func updateLocationStatus() {
+        isLocationEnabled = locationService.authorizationStatus == .authorizedWhenInUse || 
+                          locationService.authorizationStatus == .authorizedAlways
     }
     
     /// Configura la cámara
-    private func setupCamera() {
-        Task {
-            do {
-                try await cameraService.setup(resolution: resolution)
-            } catch {
-                await MainActor.run {
-                    errorMessage = error.localizedDescription
-                    showError = true
-                }
+    private func setupCamera() async throws {
+        // Configurar la cámara
+        try await cameraService.setup(resolution: resolution)
+        
+        // Iniciar la sesión y obtener el stream de previsualización
+        let stream = try await cameraService.startSession()
+        
+        // Actualizar la UI con las imágenes del stream
+        for await image in stream {
+            await MainActor.run {
+                previewImage = image
             }
         }
     }
     
-    /// Captura una imagen
-    private func captureImage() {
-        Task {
-            do {
-                let image = try await cameraService.capturePhoto()
-                await MainActor.run {
-                    capturedImage = image
-                    dismiss()
-                }
-            } catch {
-                await MainActor.run {
-                    errorMessage = error.localizedDescription
-                    showError = true
-                }
+    private func capturePhoto() async {
+        isCapturing = true
+        do {
+            let location = try await locationService.getCurrentLocation()
+            let image = try await cameraService.capturePhoto(location: location)
+            await MainActor.run {
+                capturedImage = image
+                capturedLocation = location
+                isCapturing = false
+            }
+        } catch {
+            await MainActor.run {
+                showAlert(title: "Error", message: error.localizedDescription)
+                isCapturing = false
             }
         }
+    }
+    
+    private func showAlert(title: String, message: String) {
+        alertTitle = title
+        alertMessage = message
+        showingAlert = true
     }
 }
 
 #Preview {
     CameraCaptureView(
         capturedImage: .constant(nil),
+        capturedLocation: .constant(nil),
         resolution: .high,
         showGuide: true
     )

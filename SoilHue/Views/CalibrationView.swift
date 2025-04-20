@@ -101,6 +101,7 @@ struct CalibrationView: View {
             case .camera:
                 CameraCaptureView(
                     capturedImage: $selectedImage,
+                    capturedLocation: .constant(nil),
                     resolution: .high,
                     showGuide: true
                 )

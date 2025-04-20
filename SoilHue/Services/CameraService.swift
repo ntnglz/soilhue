@@ -8,6 +8,7 @@
 import SwiftUI
 import AVFoundation
 import UIKit
+import CoreLocation
 
 /// Servicio que maneja la funcionalidad de la cámara del dispositivo.
 ///
@@ -128,7 +129,7 @@ class CameraService: NSObject, ObservableObject {
     /// Verifica y solicita los permisos de acceso a la cámara.
     ///
     /// - Returns: `true` si se concedieron los permisos, `false` en caso contrario.
-    private func checkPermissions() async throws {
+    func checkPermissions() async throws {
         let status = AVCaptureDevice.authorizationStatus(for: .video)
         switch status {
         case .authorized:
@@ -264,10 +265,11 @@ class CameraService: NSObject, ObservableObject {
         
         init(completion: @escaping (Result<UIImage, CameraError>) -> Void) {
             self.completion = completion
+            super.init()
         }
         
         func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-            if error != nil {
+            if let error = error {
                 completion(.failure(.captureError))
                 return
             }
@@ -301,18 +303,32 @@ extension CameraService: AVCaptureVideoDataOutputSampleBufferDelegate {
 
 // MARK: - Photo Capture
 extension CameraService {
-    /// Captura una foto usando la cámara.
+    /// Captura una foto con los ajustes especificados
     ///
-    /// - Returns: Una imagen capturada por la cámara
-    /// - Throws: `CameraError.captureError` si hay un problema durante la captura
-    func capturePhoto() async throws -> UIImage {
+    /// - Parameters:
+    ///   - location: Ubicación opcional para incluir en los metadatos de la foto
+    /// - Returns: La imagen capturada
+    /// - Throws: `CameraError` si hay algún problema durante la captura
+    func capturePhoto(location: CLLocation? = nil) async throws -> UIImage {
         guard session.isRunning else {
             throw CameraError.sessionNotRunning
         }
         
+        let settings = AVCapturePhotoSettings()
+        if let location = location {
+            settings.metadata = [
+                kCGImagePropertyGPSDictionary as String: [
+                    kCGImagePropertyGPSLatitude as String: abs(location.coordinate.latitude),
+                    kCGImagePropertyGPSLatitudeRef as String: location.coordinate.latitude >= 0 ? "N" : "S",
+                    kCGImagePropertyGPSLongitude as String: abs(location.coordinate.longitude),
+                    kCGImagePropertyGPSLongitudeRef as String: location.coordinate.longitude >= 0 ? "E" : "W",
+                    kCGImagePropertyGPSAltitude as String: location.altitude,
+                    kCGImagePropertyGPSTimeStamp as String: ISO8601DateFormatter().string(from: location.timestamp)
+                ]
+            ]
+        }
+        
         return try await withCheckedThrowingContinuation { continuation in
-            let settings = AVCapturePhotoSettings()
-            
             let delegate = PhotoCaptureDelegate { result in
                 switch result {
                 case .success(let image):
@@ -323,7 +339,7 @@ extension CameraService {
             }
             
             // Retener el delegate hasta que se complete la captura
-            objc_setAssociatedObject(photoOutput, "delegate", delegate, .OBJC_ASSOCIATION_RETAIN)
+            objc_setAssociatedObject(photoOutput, "PhotoCaptureDelegate", delegate, .OBJC_ASSOCIATION_RETAIN)
             
             photoOutput.capturePhoto(with: settings, delegate: delegate)
         }

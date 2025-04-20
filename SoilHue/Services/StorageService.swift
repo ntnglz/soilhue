@@ -143,7 +143,9 @@ class StorageService: ObservableObject {
         // Guardar los datos del análisis
         let analysisURL = analysisDirectory.appendingPathComponent("analysis.json")
         do {
-            let analysisData = try JSONEncoder().encode(updatedAnalysis)
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = [.prettyPrinted]
+            let analysisData = try encoder.encode(updatedAnalysis)
             try analysisData.write(to: analysisURL)
         } catch {
             throw StorageError.failedToSaveAnalysis
@@ -162,6 +164,8 @@ class StorageService: ObservableObject {
         guard directoryExists(at: baseURL) else {
             return []
         }
+        
+        print("DEBUG: Cargando análisis desde: \(baseURL)")
         
         // Obtener contenido del directorio
         let fileManager = FileManager.default
@@ -183,6 +187,7 @@ class StorageService: ObservableObject {
             do {
                 let analysisData = try Data(contentsOf: analysisURL)
                 let analysis = try JSONDecoder().decode(SoilAnalysis.self, from: analysisData)
+                print("DEBUG: Análisis cargado con localización: \(String(describing: analysis.metadata.location))")
                 analyses.append(analysis)
             } catch {
                 // Ignorar análisis que no se pueden cargar

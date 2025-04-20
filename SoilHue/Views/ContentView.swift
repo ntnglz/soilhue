@@ -138,8 +138,25 @@ struct ContentView: View {
             }
             .sheet(isPresented: $isCameraActive) {
                 CameraCaptureView(
-                    capturedImage: $selectedImage,
-                    resolution: settingsModel.cameraResolution,
+                    capturedImage: Binding(
+                        get: { viewModel.currentSample?.image },
+                        set: { newImage in
+                            if let image = newImage {
+                                viewModel.addSample(image: image)
+                                isCameraActive = false
+                                selectedImage = image
+                            }
+                        }
+                    ),
+                    capturedLocation: Binding(
+                        get: { viewModel.currentSample?.location },
+                        set: { newLocation in
+                            if let location = newLocation {
+                                viewModel.currentSample?.location = location
+                            }
+                        }
+                    ),
+                    resolution: .high,
                     showGuide: false
                 )
             }

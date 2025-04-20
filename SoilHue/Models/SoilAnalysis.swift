@@ -163,22 +163,6 @@ struct ImageResolution: Codable {
     let quality: CameraResolution
 }
 
-/// Información de localización
-struct LocationInfo: Codable {
-    let latitude: Double
-    let longitude: Double
-    let altitude: Double?
-    let timestamp: Date
-    
-    init?(from location: CLLocation?) {
-        guard let location = location else { return nil }
-        self.latitude = location.coordinate.latitude
-        self.longitude = location.coordinate.longitude
-        self.altitude = location.altitude
-        self.timestamp = location.timestamp
-    }
-}
-
 /// Condiciones ambientales durante el análisis
 struct EnvironmentalConditions: Codable {
     let lightingCondition: LightingCondition

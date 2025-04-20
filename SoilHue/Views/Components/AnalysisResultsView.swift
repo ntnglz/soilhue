@@ -1,4 +1,5 @@
 import SwiftUI
+import CoreLocation
 
 struct AnalysisResultsView: View {
     // Datos del análisis
@@ -9,6 +10,7 @@ struct AnalysisResultsView: View {
     let selectionArea: SelectionArea
     let wasCalibrated: Bool
     let correctionFactors: CorrectionFactors
+    let location: CLLocation?
     
     // Callback
     let onNewSample: () -> Void
@@ -112,6 +114,8 @@ struct AnalysisResultsView: View {
     private func saveAnalysis(notes: String, tags: String) {
         Task {
             do {
+                let locationInfo = location.map { LocationInfo(from: $0) }
+                
                 // Crear el análisis
                 let analysis = SoilAnalysis(
                     colorInfo: ColorInfo(
@@ -135,7 +139,7 @@ struct AnalysisResultsView: View {
                         lastCalibrationDate: Date()
                     ),
                     metadata: AnalysisMetadata(
-                        location: nil, // TODO: Implementar localización
+                        location: locationInfo,
                         notes: notes.isEmpty ? nil : notes,
                         tags: tags.split(separator: ",").map(String.init),
                         environmentalConditions: nil // TODO: Implementar condiciones

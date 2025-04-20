@@ -22,14 +22,19 @@ class SoilSampleViewModel: ObservableObject {
     /// Muestra de suelo actualmente seleccionada o en proceso de análisis.
     @Published var currentSample: SoilSample?
     
+    /// Resultado del análisis actual
+    @Published var analysisResult: SoilAnalysisResult?
+    
     /// Servicio para analizar el color de las imágenes.
     private let colorAnalysisService = ColorAnalysisService()
     
     /// Añade una nueva muestra de suelo a la colección.
     ///
-    /// - Parameter image: Imagen capturada de la muestra de suelo.
-    func addSample(image: UIImage) {
-        let sample = SoilSample(image: image)
+    /// - Parameters:
+    ///   - image: Imagen capturada de la muestra de suelo.
+    ///   - location: Ubicación donde se capturó la muestra (opcional).
+    func addSample(image: UIImage, location: CLLocation? = nil) {
+        let sample = SoilSample(image: image, location: location)
         samples.append(sample)
         currentSample = sample
     }
@@ -56,6 +61,9 @@ class SoilSampleViewModel: ObservableObject {
             samples[index].soilDescription = result.soilDescription
             currentSample = samples[index]
         }
+        
+        // Actualizar el resultado del análisis
+        analysisResult = result
         
         return result
     }
@@ -85,6 +93,9 @@ class SoilSampleViewModel: ObservableObject {
             currentSample = samples[index]
         }
         
+        // Actualizar el resultado del análisis
+        analysisResult = result
+        
         return result
     }
     
@@ -112,6 +123,9 @@ class SoilSampleViewModel: ObservableObject {
             samples[index].soilDescription = result.soilDescription
             currentSample = samples[index]
         }
+        
+        // Actualizar el resultado del análisis
+        analysisResult = result
         
         return result
     }

@@ -1,4 +1,5 @@
 import Foundation
+import CoreLocation
 
 /// Servicio para exportar análisis de suelo en diferentes formatos
 @MainActor
@@ -84,23 +85,76 @@ class ExportService: ObservableObject {
     
     /// Exporta los análisis a formato CSV
     private func exportToCSV(_ analyses: [SoilAnalysis], to url: URL) async throws -> URL {
-        var csvString = "ID,Fecha,Notación Munsell,Clasificación,Descripción,RGB Corregido,Calibrado,Factores de Corrección,Notas,Etiquetas\n"
+        var csvString = "ID,Fecha,Notación Munsell,Clasificación,Descripción,RGB Corregido,Calibrado,Factores de Corrección,Latitud,Longitud,Altitud,Dirección,Notas,Etiquetas\n"
+        
+        let geocoder = CLGeocoder()
         
         for analysis in analyses {
+            print("DEBUG: Exportando análisis \(analysis.id) con localización: \(String(describing: analysis.metadata.location))")
+            var locationColumns = ["","","",""] // [latitud, longitud, altitud, dirección]
+            
+            if let location = analysis.metadata.location {
+                print("DEBUG: Procesando localización - lat: \(location.latitude), lon: \(location.longitude), alt: \(String(describing: location.altitude))")
+                locationColumns[0] = String(format: "%.6f", location.latitude)
+                locationColumns[1] = String(format: "%.6f", location.longitude)
+                if let altitude = location.altitude {
+                    locationColumns[2] = String(format: "%.1f", altitude)
+                }
+                
+                // Intentar obtener la dirección
+                let loc = CLLocation(
+                    coordinate: CLLocationCoordinate2D(
+                        latitude: location.latitude,
+                        longitude: location.longitude
+                    ),
+                    altitude: location.altitude ?? 0,
+                    horizontalAccuracy: 0,
+                    verticalAccuracy: 0,
+                    timestamp: location.timestamp
+                )
+                
+                if !Task.isCancelled {
+                    do {
+                        let placemarks = try await geocoder.reverseGeocodeLocation(loc)
+                        if let placemark = placemarks.first {
+                            let components = [
+                                placemark.thoroughfare,
+                                placemark.locality,
+                                placemark.administrativeArea,
+                                placemark.country
+                            ].compactMap { $0 }
+                            locationColumns[3] = components.joined(separator: ", ")
+                        }
+                    } catch {
+                        print("Error geocoding location: \(error)")
+                    }
+                }
+            }
+            
             let row = [
                 analysis.id.uuidString,
                 ISO8601DateFormatter().string(from: analysis.timestamp),
                 analysis.colorInfo.munsellNotation,
                 analysis.colorInfo.soilClassification,
                 analysis.colorInfo.soilDescription,
-                "\(analysis.colorInfo.correctedRGB.red),\(analysis.colorInfo.correctedRGB.green),\(analysis.colorInfo.correctedRGB.blue)",
+                String(format: "%.2f,%.2f,%.2f", 
+                    analysis.colorInfo.correctedRGB.red,
+                    analysis.colorInfo.correctedRGB.green,
+                    analysis.colorInfo.correctedRGB.blue),
                 analysis.calibrationInfo.wasCalibrated ? "Sí" : "No",
-                "\(analysis.calibrationInfo.correctionFactors.red),\(analysis.calibrationInfo.correctionFactors.green),\(analysis.calibrationInfo.correctionFactors.blue)",
-                analysis.metadata.notes ?? "",
-                analysis.metadata.tags.joined(separator: ";")
-            ].map { "\"\($0)\"" }.joined(separator: ",")
+                String(format: "%.3f,%.3f,%.3f",
+                    analysis.calibrationInfo.correctionFactors.red,
+                    analysis.calibrationInfo.correctionFactors.green,
+                    analysis.calibrationInfo.correctionFactors.blue)
+            ]
+            .map { "\"\($0)\"" }
+            + locationColumns.map { "\"\($0)\"" }
+            + [
+                "\"\(analysis.metadata.notes ?? "")\"",
+                "\"\(analysis.metadata.tags.joined(separator: ";"))\""
+            ]
             
-            csvString.append(row + "\n")
+            csvString.append(row.joined(separator: ",") + "\n")
         }
         
         try csvString.write(to: url, atomically: true, encoding: .utf8)

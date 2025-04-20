@@ -23,25 +23,15 @@
 	<key>NSCameraUsageDescription</key>
 	<string>SoilHue necesita acceso a la cámara para capturar imágenes de muestras de suelo.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>SoilHue necesita acceso a tu ubicación para registrar dónde se toman las muestras.</string>
+	<string>SoilHue necesita acceso a tu ubicación para registrar dónde se tomaron las muestras de suelo.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>SoilHue necesita acceso a tu ubicación para registrar dónde se tomaron las muestras de suelo.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>SoilHue necesita acceso a tu biblioteca de fotos para guardar y acceder a las imágenes de muestras.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
 		<false/>
-		<key>UISceneConfigurations</key>
-		<dict>
-			<key>UIWindowSceneSessionRoleApplication</key>
-			<array>
-				<dict>
-					<key>UISceneConfigurationName</key>
-					<string>Default Configuration</string>
-					<key>UISceneDelegateClassName</key>
-					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
-				</dict>
-			</array>
-		</dict>
 	</dict>
 	<key>UILaunchScreen</key>
 	<dict/>
