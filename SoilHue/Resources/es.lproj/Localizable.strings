@@ -1,0 +1,110 @@
+// Títulos de navegación
+"SoilHue" = "SoilHue";
+"Settings" = "Ajustes";
+"Export" = "Exportar";
+"Help" = "Ayuda";
+"Camera" = "Cámara";
+"Analysis" = "Análisis";
+"Calibration" = "Calibración";
+
+// Botones y acciones
+"Take Photo" = "Tomar Foto";
+"Select Photo" = "Seleccionar Foto";
+"Save" = "Guardar";
+"Cancel" = "Cancelar";
+"Close" = "Cerrar";
+"Done" = "Hecho";
+"Next" = "Siguiente";
+"Back" = "Atrás";
+"More Info" = "Más Información";
+"New Sample" = "Nueva Muestra";
+
+// Análisis
+"Munsell Notation" = "Notación Munsell";
+"Soil Classification" = "Clasificación del Suelo";
+"Description" = "Descripción";
+"Location" = "Ubicación";
+"Notes" = "Notas";
+"Tags" = "Etiquetas";
+"Calibration Status" = "Estado de Calibración";
+"Calibrated" = "Calibrado";
+"Not Calibrated" = "No Calibrado";
+"Calibrating..." = "Calibrando...";
+"Calibration Error" = "Error de Calibración";
+
+// Ajustes
+"Camera Resolution" = "Resolución de Cámara";
+"Storage Location" = "Ubicación de Almacenamiento";
+"Auto Calibration" = "Calibración Automática";
+"Dark Mode" = "Modo Oscuro";
+"Export Format" = "Formato de Exportación";
+"Reset to Defaults" = "Restaurar Valores por Defecto";
+
+// Resoluciones de cámara
+"Low (720p)" = "Baja (720p)";
+"Medium (1080p)" = "Media (1080p)";
+"High (4K)" = "Alta (4K)";
+
+// Ubicaciones de almacenamiento
+"Local Storage" = "Almacenamiento Local";
+"iCloud" = "iCloud";
+
+// Modos oscuros
+"Light" = "Claro";
+"Dark" = "Oscuro";
+"System" = "Sistema";
+
+// Formatos de exportación
+"CSV" = "CSV";
+"JSON" = "JSON";
+"Excel" = "Excel";
+
+// Mensajes de error
+"Camera Error" = "Error de Cámara";
+"Storage Error" = "Error de Almacenamiento";
+"Export Error" = "Error de Exportación";
+"Location Error" = "Error de Ubicación";
+"No camera access" = "Sin acceso a la cámara";
+"No location access" = "Sin acceso a la ubicación";
+"Failed to save image" = "Error al guardar la imagen";
+"Failed to load image" = "Error al cargar la imagen";
+"Failed to export data" = "Error al exportar los datos";
+"No data to export" = "No hay datos para exportar";
+
+// Mensajes de permisos
+"Camera Access Required" = "Acceso a Cámara Requerido";
+"Location Access Required" = "Acceso a Ubicación Requerido";
+"Camera permission is required to capture soil samples." = "Se requiere permiso de cámara para capturar muestras de suelo.";
+"Location permission is required to record where samples were taken." = "Se requiere permiso de ubicación para registrar dónde se tomaron las muestras.";
+"Open Settings" = "Abrir Ajustes";
+
+// Calibración
+"Start Calibration" = "Iniciar Calibración";
+"Calibration Complete" = "Calibración Completada";
+"Calibration Failed" = "Calibración Fallida";
+"Please calibrate the camera before taking samples." = "Por favor, calibre la cámara antes de tomar muestras.";
+"Calibration card not detected" = "Tarjeta de calibración no detectada";
+"Position the calibration card in the frame" = "Posicione la tarjeta de calibración en el marco";
+
+// Análisis de muestras
+"Analyzing sample..." = "Analizando muestra...";
+"Analysis complete" = "Análisis completado";
+"Analysis failed" = "Análisis fallido";
+"Save Sample" = "Guardar Muestra";
+"Sample saved successfully" = "Muestra guardada correctamente";
+"Failed to save sample" = "Error al guardar la muestra";
+
+// Exportación
+"Export Data" = "Exportar Datos";
+"Export Format" = "Formato de Exportación";
+"Export Complete" = "Exportación Completada";
+"Export Failed" = "Exportación Fallida";
+"Exporting..." = "Exportando...";
+"Share" = "Compartir";
+
+// Información
+"Version" = "Versión";
+"About" = "Acerca de";
+"Help & Support" = "Ayuda y Soporte";
+"Privacy Policy" = "Política de Privacidad";
+"Terms of Use" = "Términos de Uso"; 

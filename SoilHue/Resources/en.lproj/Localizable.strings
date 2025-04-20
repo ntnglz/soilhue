@@ -1,0 +1,110 @@
+// Navigation titles
+"SoilHue" = "SoilHue";
+"Settings" = "Settings";
+"Export" = "Export";
+"Help" = "Help";
+"Camera" = "Camera";
+"Analysis" = "Analysis";
+"Calibration" = "Calibration";
+
+// Buttons and actions
+"Take Photo" = "Take Photo";
+"Select Photo" = "Select Photo";
+"Save" = "Save";
+"Cancel" = "Cancel";
+"Close" = "Close";
+"Done" = "Done";
+"Next" = "Next";
+"Back" = "Back";
+"More Info" = "More Info";
+"New Sample" = "New Sample";
+
+// Analysis
+"Munsell Notation" = "Munsell Notation";
+"Soil Classification" = "Soil Classification";
+"Description" = "Description";
+"Location" = "Location";
+"Notes" = "Notes";
+"Tags" = "Tags";
+"Calibration Status" = "Calibration Status";
+"Calibrated" = "Calibrated";
+"Not Calibrated" = "Not Calibrated";
+"Calibrating..." = "Calibrating...";
+"Calibration Error" = "Calibration Error";
+
+// Settings
+"Camera Resolution" = "Camera Resolution";
+"Storage Location" = "Storage Location";
+"Auto Calibration" = "Auto Calibration";
+"Dark Mode" = "Dark Mode";
+"Export Format" = "Export Format";
+"Reset to Defaults" = "Reset to Defaults";
+
+// Camera resolutions
+"Low (720p)" = "Low (720p)";
+"Medium (1080p)" = "Medium (1080p)";
+"High (4K)" = "High (4K)";
+
+// Storage locations
+"Local Storage" = "Local Storage";
+"iCloud" = "iCloud";
+
+// Dark modes
+"Light" = "Light";
+"Dark" = "Dark";
+"System" = "System";
+
+// Export formats
+"CSV" = "CSV";
+"JSON" = "JSON";
+"Excel" = "Excel";
+
+// Error messages
+"Camera Error" = "Camera Error";
+"Storage Error" = "Storage Error";
+"Export Error" = "Export Error";
+"Location Error" = "Location Error";
+"No camera access" = "No camera access";
+"No location access" = "No location access";
+"Failed to save image" = "Failed to save image";
+"Failed to load image" = "Failed to load image";
+"Failed to export data" = "Failed to export data";
+"No data to export" = "No data to export";
+
+// Permission messages
+"Camera Access Required" = "Camera Access Required";
+"Location Access Required" = "Location Access Required";
+"Camera permission is required to capture soil samples." = "Camera permission is required to capture soil samples.";
+"Location permission is required to record where samples were taken." = "Location permission is required to record where samples were taken.";
+"Open Settings" = "Open Settings";
+
+// Calibration
+"Start Calibration" = "Start Calibration";
+"Calibration Complete" = "Calibration Complete";
+"Calibration Failed" = "Calibration Failed";
+"Please calibrate the camera before taking samples." = "Please calibrate the camera before taking samples.";
+"Calibration card not detected" = "Calibration card not detected";
+"Position the calibration card in the frame" = "Position the calibration card in the frame";
+
+// Sample analysis
+"Analyzing sample..." = "Analyzing sample...";
+"Analysis complete" = "Analysis complete";
+"Analysis failed" = "Analysis failed";
+"Save Sample" = "Save Sample";
+"Sample saved successfully" = "Sample saved successfully";
+"Failed to save sample" = "Failed to save sample";
+
+// Export
+"Export Data" = "Export Data";
+"Export Format" = "Export Format";
+"Export Complete" = "Export Complete";
+"Export Failed" = "Export Failed";
+"Exporting..." = "Exporting...";
+"Share" = "Share";
+
+// Information
+"Version" = "Version";
+"About" = "About";
+"Help & Support" = "Help & Support";
+"Privacy Policy" = "Privacy Policy";
+"Terms of Use" = "Terms of Use"; 

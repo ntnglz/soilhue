@@ -28,7 +28,7 @@
 
 ### Almacenamiento local
 - [ ] Implementar copia de seguridad automática de los análisis
-- [ ] Añadir opción para exportar datos
+- [x] Añadir opción para exportar datos
 - [ ] Añadir opción para importar datos
 - [ ] Optimizar el almacenamiento de imágenes
 
@@ -42,7 +42,7 @@
 ### Diseño
 - [x] Añadir navegación directa a calibración desde el error de cámara no calibrada
 - [ ] Revisar y ajustar el diseño para diferentes tamaños de pantalla
-- [ ] Implementar modo oscuro completo
+- [x] Implementar modo oscuro completo
 - [ ] Mejorar la accesibilidad (VoiceOver, Dynamic Type, etc.)
 - [ ] Añadir animaciones y transiciones más fluidas
 
