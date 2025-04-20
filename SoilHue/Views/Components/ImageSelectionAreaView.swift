@@ -34,7 +34,7 @@ struct ImageSelectionAreaView: View {
                     .padding()
                 
                 if let points = polygonPoints, points.count >= 3 {
-                    Text("Polígono con \(points.count) vértices")
+                    Text(String(format: NSLocalizedString("selection.polygon.vertices", comment: ""), points.count))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 } else {

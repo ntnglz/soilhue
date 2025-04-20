@@ -230,19 +230,25 @@ class CalibrationService: ObservableObject {
     /// - Returns: Color promedio en formato RGB
     private func getAverageColor(in image: CIImage, region: CGRect, context: CIContext) -> (red: Double, green: Double, blue: Double) {
         // Crear un filtro para recortar la región
-        let cropFilter = CIFilter.crop()
-        cropFilter.inputImage = image
-        cropFilter.rectangle = region
+        guard let cropFilter = CIFilter(name: "CICrop") else {
+            return (0, 0, 0)
+        }
+        cropFilter.setValue(image, forKey: kCIInputImageKey)
+        cropFilter.setValue(region, forKey: "inputRectangle")
         
         guard let outputImage = cropFilter.outputImage else {
             return (0, 0, 0)
         }
         
         // Crear un filtro para reducir la imagen a 1x1 píxel
-        let scaleFilter = CIFilter.lanczosScaleTransform()
-        scaleFilter.inputImage = outputImage
-        scaleFilter.scale = 0.0001
-        scaleFilter.aspectRatio = 1.0
+        guard let scaleFilter = CIFilter(name: "CIAffineTransform") else {
+            return (0, 0, 0)
+        }
+        scaleFilter.setValue(outputImage, forKey: kCIInputImageKey)
+        
+        // Crear una transformación de escala
+        let scale = CGAffineTransform(scaleX: 0.0001, y: 0.0001)
+        scaleFilter.setValue(scale, forKey: kCIInputTransformKey)
         
         guard let scaledImage = scaleFilter.outputImage,
               let cgImage = context.createCGImage(scaledImage, from: scaledImage.extent) else {
@@ -250,15 +256,34 @@ class CalibrationService: ObservableObject {
         }
         
         // Obtener el color del píxel único
-        let color = UIColor(cgImage: cgImage)
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
+        let bitmapInfo = CGImageAlphaInfo.premultipliedLast.rawValue
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let width = 1
+        let height = 1
+        let bytesPerPixel = 4
+        let bytesPerRow = bytesPerPixel * width
+        let bitsPerComponent = 8
+        var pixelData = [UInt8](repeating: 0, count: width * height * bytesPerPixel)
         
-        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        guard let context = CGContext(
+            data: &pixelData,
+            width: width,
+            height: height,
+            bitsPerComponent: bitsPerComponent,
+            bytesPerRow: bytesPerRow,
+            space: colorSpace,
+            bitmapInfo: bitmapInfo
+        ) else {
+            return (0, 0, 0)
+        }
         
-        return (Double(red), Double(green), Double(blue))
+        context.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
+        
+        let red = Double(pixelData[0]) / 255.0
+        let green = Double(pixelData[1]) / 255.0
+        let blue = Double(pixelData[2]) / 255.0
+        
+        return (red, green, blue)
     }
     
     /// Aplica los factores de corrección a una imagen
@@ -273,9 +298,9 @@ class CalibrationService: ObservableObject {
         // Crear un filtro de matriz de color para aplicar los factores de corrección
         let colorMatrix = CIFilter.colorMatrix()
         colorMatrix.inputImage = ciImage
-        colorMatrix.rVector = CIVector(x: Float(correctionFactors.red), y: 0, z: 0, w: 0)
-        colorMatrix.gVector = CIVector(x: 0, y: Float(correctionFactors.green), z: 0, w: 0)
-        colorMatrix.bVector = CIVector(x: 0, y: 0, z: Float(correctionFactors.blue), w: 0)
+        colorMatrix.rVector = CIVector(x: CGFloat(correctionFactors.red), y: 0, z: 0, w: 0)
+        colorMatrix.gVector = CIVector(x: 0, y: CGFloat(correctionFactors.green), z: 0, w: 0)
+        colorMatrix.bVector = CIVector(x: 0, y: 0, z: CGFloat(correctionFactors.blue), w: 0)
         colorMatrix.aVector = CIVector(x: 0, y: 0, z: 0, w: 1)
         
         guard let outputImage = colorMatrix.outputImage,
@@ -284,5 +309,23 @@ class CalibrationService: ObservableObject {
         }
         
         return UIImage(cgImage: cgImage)
+    }
+    
+    /// Aplica los factores de corrección a un color RGB
+    /// - Parameters:
+    ///   - red: Componente rojo (0-1)
+    ///   - green: Componente verde (0-1)
+    ///   - blue: Componente azul (0-1)
+    /// - Returns: Color RGB corregido
+    func applyCalibration(red: Double, green: Double, blue: Double) -> (red: Double, green: Double, blue: Double) {
+        guard isCalibrated else {
+            return (red, green, blue)
+        }
+        
+        let correctedRed = min(1.0, max(0.0, red * correctionFactors.red))
+        let correctedGreen = min(1.0, max(0.0, green * correctionFactors.green))
+        let correctedBlue = min(1.0, max(0.0, blue * correctionFactors.blue))
+        
+        return (correctedRed, correctedGreen, correctedBlue)
     }
 } 

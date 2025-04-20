@@ -89,81 +89,20 @@ struct ImageAnalysisView: View {
                     if let sample = viewModel.currentSample,
                        let munsellColor = sample.munsellColor,
                        !munsellColor.isEmpty {
-                        VStack(spacing: 24) {
-                            Text(NSLocalizedString("analysis.results.title", comment: "Analysis results title"))
-                                .font(.title)
-                                .fontWeight(.bold)
-                            
-                            VStack(alignment: .leading, spacing: 12) {
-                                Text(String(format: NSLocalizedString("analysis.munsell.color", comment: "Munsell color format"), munsellColor))
-                                    .font(.title3)
-                                
-                                if let classification = sample.soilClassification {
-                                    Text(String(format: NSLocalizedString("analysis.classification", comment: "Classification format"), classification))
-                                        .font(.title3)
-                                }
-                                
-                                if let description = sample.soilDescription {
-                                    Text(String(format: NSLocalizedString("analysis.description", comment: "Description format"), description))
-                                        .font(.body)
-                                        .fixedSize(horizontal: false, vertical: true)
-                                }
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding()
-                            .background(Color.secondary.opacity(0.1))
-                            .cornerRadius(10)
-                            
-                            // Botones de acción
-                            VStack(spacing: 15) {
-                                Button(action: {
-                                    showingSaveDialog = true
-                                }) {
-                                    Label(NSLocalizedString("analysis.save", comment: "Save analysis button"), systemImage: "square.and.arrow.down")
-                                        .frame(maxWidth: .infinity)
-                                        .padding()
-                                        .background(Color.blue)
-                                        .foregroundColor(.white)
-                                        .cornerRadius(10)
-                                }
-                                
-                                HStack(spacing: 16) {
-                                    Button(action: {
-                                        showHelp = true
-                                    }) {
-                                        VStack {
-                                            Image(systemName: "book.fill")
-                                                .font(.title2)
-                                            Text(NSLocalizedString("analysis.more.info", comment: "More info button"))
-                                                .multilineTextAlignment(.center)
-                                        }
-                                        .frame(maxWidth: .infinity)
-                                        .padding()
-                                        .background(Color.blue.opacity(0.1))
-                                        .cornerRadius(12)
-                                        .foregroundColor(.blue)
-                                    }
-                                    
-                                    Button(action: onNewSample) {
-                                        VStack {
-                                            Image(systemName: "camera.fill")
-                                                .font(.title2)
-                                            Text(NSLocalizedString("analysis.new.sample", comment: "New sample button"))
-                                                .multilineTextAlignment(.center)
-                                        }
-                                        .frame(maxWidth: .infinity)
-                                        .padding()
-                                        .background(Color.blue)
-                                        .cornerRadius(12)
-                                        .foregroundColor(.white)
-                                    }
-                                }
-                            }
-                        }
-                        .padding()
-                        .background(Color.secondary.opacity(0.05))
-                        .cornerRadius(15)
-                        .padding(.horizontal)
+                        AnalysisResultsView(
+                            image: sample.image,
+                            munsellNotation: munsellColor,
+                            soilClassification: sample.soilClassification ?? "",
+                            soilDescription: sample.soilDescription ?? "",
+                            selectionArea: SelectionArea(
+                                type: .rectangle,
+                                coordinates: .rectangle(CGRect(x: 0, y: 0, width: 1, height: 1))
+                            ),
+                            wasCalibrated: colorAnalysisService.isCalibrated,
+                            correctionFactors: colorAnalysisService.correctionFactors,
+                            location: sample.location,
+                            onNewSample: onNewSample
+                        )
                         .transition(.opacity.combined(with: .move(edge: .bottom)))
                         .id("results")
                     }

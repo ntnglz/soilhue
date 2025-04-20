@@ -143,6 +143,8 @@
 "Save Sample" = "Guardar Muestra";
 "Sample saved successfully" = "Muestra guardada correctamente";
 "Failed to save sample" = "Error al guardar la muestra";
+"analysis.area.selected" = "Área seleccionada: %d%% x %d%%";
+"analysis.drag.select" = "Arrastra para seleccionar un área";
 
 // Exportación
 "Export Data" = "Exportar Datos";
@@ -204,10 +206,10 @@
 
 /* ImageAnalysisView */
 "analysis.results.title" = "Resultados del Análisis";
-"analysis.munsell.color" = "Color Munsell: %@";
-"analysis.classification" = "Clasificación: %@";
-"analysis.description" = "Descripción: %@";
-"analysis.save" = "Guardar análisis";
+"analysis.munsell.color" = "Color Munsell";
+"analysis.classification" = "Clasificación";
+"analysis.description" = "Descripción";
+"analysis.save" = "Guardar Análisis";
 "analysis.more.info" = "Más\nInfor-\nmación";
 "analysis.new.sample" = "Nueva\nMues-\ntra";
 "analysis.location" = "Ubicación";
@@ -215,8 +217,7 @@
 "analysis.longitude" = "Longitud: %.6f°";
 "analysis.altitude" = "Altitud: %.1f m";
 "analysis.accuracy" = "Precisión: %.1f m";
-"analysis.area.selected" = "Área seleccionada: %d%% x %d%%";
-"analysis.drag.select" = "Arrastra para seleccionar un área\no pulsa Analizar para procesar la imagen completa";
+"analysis.drag.select" = "Arrastra para seleccionar un área";
 "analysis.analyze.color" = "Analizar Color";
 "analysis.success" = "Éxito";
 "analysis.saved" = "Análisis guardado correctamente";

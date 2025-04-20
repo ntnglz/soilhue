@@ -42,9 +42,11 @@ class ColorAnalysisService: ObservableObject {
     private let munsellService = MunsellClassificationService()
     
     /// Servicio de calibración para ajustar los valores de color
-    private let calibrationService = CalibrationService()
+    private let calibrationService: CalibrationService
     
-    init() {
+    init(calibrationService: CalibrationService = CalibrationService()) {
+        self.calibrationService = calibrationService
+        
         // Observar cambios en el servicio de calibración
         calibrationService.addObserver { [weak self] service in
             Task { @MainActor in
@@ -56,9 +58,9 @@ class ColorAnalysisService: ObservableObject {
         
         // Cargar el estado de calibración inicial
         Task { @MainActor in
-                calibrationService.loadCalibrationFactors()
-                isCalibrated = calibrationService.isCalibrated
-                correctionFactors = calibrationService.correctionFactors
+            calibrationService.loadCalibrationFactors()
+            isCalibrated = calibrationService.isCalibrated
+            correctionFactors = calibrationService.correctionFactors
         }
     }
     

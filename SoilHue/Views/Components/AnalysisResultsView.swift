@@ -42,15 +42,15 @@ struct AnalysisResultsView: View {
             // Información del análisis
             VStack(alignment: .leading, spacing: 15) {
                 ResultInfoRow(
-                    title: NSLocalizedString("analysis.munsell.color", comment: "Munsell color"),
+                    title: NSLocalizedString("analysis.munsell.color", comment: "Munsell color label"),
                     value: munsellNotation
                 )
                 ResultInfoRow(
-                    title: NSLocalizedString("analysis.classification", comment: "Soil classification"),
+                    title: NSLocalizedString("analysis.classification", comment: "Classification label"),
                     value: soilClassification
                 )
                 ResultInfoRow(
-                    title: NSLocalizedString("analysis.description", comment: "Soil description"),
+                    title: NSLocalizedString("analysis.description", comment: "Description label"),
                     value: soilDescription
                 )
             }
