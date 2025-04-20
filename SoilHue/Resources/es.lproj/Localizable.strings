@@ -442,4 +442,67 @@
 "debug.location.decoding" = "DEBUG: Decodificando localización - lat: %f, lon: %f";
 "debug.location.not.found" = "DEBUG: No se encontró información de localización en el JSON";
 "debug.location.encoding" = "DEBUG: Codificando localización - lat: %f, lon: %f";
-"debug.location.none" = "DEBUG: No hay localización para codificar"; 
+"debug.location.none" = "DEBUG: No hay localización para codificar";
+
+/* Help View Sections */
+"help.section.intro" = "Introducción";
+"help.section.calibration" = "Calibración";
+"help.section.analysis" = "Análisis";
+"help.section.data" = "Datos";
+"help.section.troubleshooting" = "Problemas";
+
+/* Introduction Section */
+"help.intro.title" = "Bienvenido a SoilHue";
+"help.intro.description" = "SoilHue es una aplicación diseñada para analizar el color del suelo utilizando el sistema Munsell, un estándar internacional para la descripción del color.";
+"help.intro.feature.capture" = "Captura o selecciona imágenes de muestras de suelo";
+"help.intro.feature.calibration" = "Calibra la cámara para obtener colores precisos";
+"help.intro.feature.analysis" = "Analiza áreas específicas de la muestra";
+"help.intro.feature.export" = "Guarda y exporta los resultados";
+
+/* Calibration Section */
+"help.calibration.process.title" = "Proceso de Calibración";
+"help.calibration.step.1" = "Accede a la calibración desde el botón 'Calibrar Cámara'";
+"help.calibration.step.2" = "Utiliza la tarjeta de calibración básica incluida o una tarjeta ColorChecker";
+"help.calibration.step.3" = "Alinea la tarjeta con las guías en pantalla";
+"help.calibration.step.4" = "Mantén la tarjeta paralela a la cámara";
+"help.calibration.step.5" = "Asegúrate de tener buena iluminación";
+"help.calibration.step.6" = "Toma la foto cuando las guías estén alineadas";
+
+"help.calibration.limitations.title" = "Limitaciones de la Calibración";
+"help.calibration.limitation.basic" = "La tarjeta básica proporciona una calibración aproximada";
+"help.calibration.limitation.professional" = "Para resultados profesionales, se recomienda usar X-Rite ColorChecker";
+"help.calibration.limitation.lighting" = "La precisión puede variar según las condiciones de iluminación";
+"help.calibration.limitation.recalibration" = "Se recomienda recalibrar si cambian las condiciones de luz";
+
+/* Analysis Section */
+"help.analysis.capture.title" = "Captura de Muestras";
+"help.analysis.step.1" = "Selecciona 'Nueva Muestra' o 'Galería'";
+"help.analysis.step.2" = "Asegúrate de que la cámara esté calibrada";
+"help.analysis.step.3" = "Captura la imagen o selecciona una existente";
+"help.analysis.step.4" = "Selecciona el área a analizar usando el modo rectángulo o polígono";
+
+"help.analysis.practices.title" = "Mejores Prácticas";
+"help.analysis.practice.light" = "Usa luz natural difusa cuando sea posible";
+"help.analysis.practice.shadows" = "Evita sombras y reflejos directos";
+"help.analysis.practice.clean" = "Mantén la muestra de suelo limpia y seca";
+"help.analysis.practice.surface" = "Usa una superficie plana";
+"help.analysis.practice.calibration" = "Calibra la cámara bajo las mismas condiciones de luz";
+
+/* Data Section */
+"help.data.save.title" = "Guardar Análisis";
+"help.data.save.step.1" = "Pulsa 'Guardar Análisis' tras el análisis";
+"help.data.save.step.2" = "Añade notas y etiquetas (opcional)";
+"help.data.save.step.3" = "La ubicación se guarda automáticamente";
+
+"help.data.export.title" = "Exportar Datos";
+"help.data.export.step.1" = "Accede a la sección de exportación";
+"help.data.export.step.2" = "Selecciona el formato deseado";
+"help.data.export.step.3" = "Comparte o guarda el archivo";
+
+/* Troubleshooting Section */
+"help.troubleshooting.problems.title" = "Problemas Comunes";
+"help.troubleshooting.calibration" = "Calibración no detectada: recalibra la cámara";
+"help.troubleshooting.results" = "Resultados inconsistentes: verifica la iluminación";
+"help.troubleshooting.camera" = "Error de cámara: revisa los permisos";
+
+"help.contact.title" = "Contacto y Soporte"; 

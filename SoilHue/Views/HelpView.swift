@@ -15,19 +15,28 @@ struct HelpView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     Picker(NSLocalizedString("help.section", comment: "Section picker title"), selection: $selectedSection) {
-                        Text(NSLocalizedString("help.section.general", comment: "General section")).tag(0)
-                        Text(NSLocalizedString("help.section.soils", comment: "Soils section")).tag(1)
-                        Text(NSLocalizedString("help.section.horizons", comment: "Horizons section")).tag(2)
+                        Text(NSLocalizedString("help.section.intro", comment: "Introduction section")).tag(0)
+                        Text(NSLocalizedString("help.section.calibration", comment: "Calibration section")).tag(1)
+                        Text(NSLocalizedString("help.section.analysis", comment: "Analysis section")).tag(2)
+                        Text(NSLocalizedString("help.section.data", comment: "Data section")).tag(3)
+                        Text(NSLocalizedString("help.section.troubleshooting", comment: "Troubleshooting section")).tag(4)
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     .padding(.horizontal)
                     
-                    if selectedSection == 0 {
-                        generalSection
-                    } else if selectedSection == 1 {
-                        soilTypesSection
-                    } else {
-                        horizonsSection
+                    switch selectedSection {
+                    case 0:
+                        IntroductionSection()
+                    case 1:
+                        CalibrationSection()
+                    case 2:
+                        AnalysisSection()
+                    case 3:
+                        DataSection()
+                    case 4:
+                        TroubleshootingSection()
+                    default:
+                        IntroductionSection()
                     }
                 }
                 .padding()
@@ -43,81 +52,189 @@ struct HelpView: View {
             }
         }
     }
-    
-    private var generalSection: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            helpSection(
-                title: NSLocalizedString("help.general.what.title", comment: "What is SoilHue title"),
-                content: NSLocalizedString("help.general.what.content", comment: "What is SoilHue content")
-            )
+}
+
+struct IntroductionSection: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text(NSLocalizedString("help.intro.title", comment: "Introduction title"))
+                .font(.title2)
+                .bold()
             
-            helpSection(
-                title: NSLocalizedString("help.general.how.title", comment: "How it works title"),
-                content: NSLocalizedString("help.general.how.content", comment: "How it works content")
-            )
+            Text(NSLocalizedString("help.intro.description", comment: "Introduction description"))
+                .fixedSize(horizontal: false, vertical: true)
             
-            helpSection(
-                title: NSLocalizedString("help.general.tips.title", comment: "Tips title"),
-                content: NSLocalizedString("help.general.tips.content", comment: "Tips content")
-            )
-            
-            helpSection(
-                title: NSLocalizedString("help.general.munsell.title", comment: "Munsell system title"),
-                content: NSLocalizedString("help.general.munsell.content", comment: "Munsell system content")
-            )
+            VStack(alignment: .leading, spacing: 8) {
+                ForEach([
+                    "help.intro.feature.capture",
+                    "help.intro.feature.calibration",
+                    "help.intro.feature.analysis",
+                    "help.intro.feature.export"
+                ], id: \.self) { key in
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
+                        Text(NSLocalizedString(key, comment: "Feature"))
+                    }
+                }
+            }
+            .padding(.vertical)
         }
     }
-    
-    private var soilTypesSection: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            helpSection(
-                title: NSLocalizedString("help.soils.types.title", comment: "Main soil types title"),
-                content: NSLocalizedString("help.soils.types.content", comment: "Main soil types content")
-            )
+}
+
+struct CalibrationSection: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // Proceso de calibración
+            GroupBox(label: Text(NSLocalizedString("help.calibration.process.title", comment: "Calibration process title")).bold()) {
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach(1...6, id: \.self) { step in
+                        HStack(alignment: .top) {
+                            Text("\(step).")
+                                .bold()
+                            Text(NSLocalizedString("help.calibration.step.\(step)", comment: "Calibration step"))
+                        }
+                    }
+                }
+                .padding(.vertical)
+            }
             
-            helpSection(
-                title: NSLocalizedString("help.soils.color.title", comment: "Color characteristics title"),
-                content: NSLocalizedString("help.soils.color.content", comment: "Color characteristics content")
-            )
-            
-            helpSection(
-                title: NSLocalizedString("help.soils.factors.title", comment: "Influencing factors title"),
-                content: NSLocalizedString("help.soils.factors.content", comment: "Influencing factors content")
-            )
+            // Limitaciones
+            GroupBox(label: Text(NSLocalizedString("help.calibration.limitations.title", comment: "Limitations title")).bold()) {
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach([
+                        "help.calibration.limitation.basic",
+                        "help.calibration.limitation.professional",
+                        "help.calibration.limitation.lighting",
+                        "help.calibration.limitation.recalibration"
+                    ], id: \.self) { key in
+                        HStack(alignment: .top) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundColor(.orange)
+                            Text(NSLocalizedString(key, comment: "Limitation"))
+                        }
+                    }
+                }
+                .padding(.vertical)
+            }
         }
     }
-    
-    private var horizonsSection: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            helpSection(
-                title: NSLocalizedString("help.horizons.main.title", comment: "Main horizons title"),
-                content: NSLocalizedString("help.horizons.main.content", comment: "Main horizons content")
-            )
+}
+
+struct AnalysisSection: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // Captura de muestras
+            GroupBox(label: Text(NSLocalizedString("help.analysis.capture.title", comment: "Sample capture title")).bold()) {
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach(1...4, id: \.self) { step in
+                        HStack(alignment: .top) {
+                            Text("\(step).")
+                                .bold()
+                            Text(NSLocalizedString("help.analysis.step.\(step)", comment: "Analysis step"))
+                        }
+                    }
+                }
+                .padding(.vertical)
+            }
             
-            helpSection(
-                title: NSLocalizedString("help.horizons.a.title", comment: "A horizon title"),
-                content: NSLocalizedString("help.horizons.a.content", comment: "A horizon content")
-            )
-            
-            helpSection(
-                title: NSLocalizedString("help.horizons.b.title", comment: "B horizon title"),
-                content: NSLocalizedString("help.horizons.b.content", comment: "B horizon content")
-            )
-            
-            helpSection(
-                title: NSLocalizedString("help.horizons.color.title", comment: "Color importance title"),
-                content: NSLocalizedString("help.horizons.color.content", comment: "Color importance content")
-            )
+            // Mejores prácticas
+            GroupBox(label: Text(NSLocalizedString("help.analysis.practices.title", comment: "Best practices title")).bold()) {
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach([
+                        "help.analysis.practice.light",
+                        "help.analysis.practice.shadows",
+                        "help.analysis.practice.clean",
+                        "help.analysis.practice.surface",
+                        "help.analysis.practice.calibration"
+                    ], id: \.self) { key in
+                        HStack {
+                            Image(systemName: "lightbulb.fill")
+                                .foregroundColor(.yellow)
+                            Text(NSLocalizedString(key, comment: "Practice"))
+                        }
+                    }
+                }
+                .padding(.vertical)
+            }
         }
     }
-    
-    private func helpSection(title: String, content: String) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(title)
-                .font(.headline)
-            Text(content)
-                .font(.body)
-                .foregroundColor(.secondary)
+}
+
+struct DataSection: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // Guardar análisis
+            GroupBox(label: Text(NSLocalizedString("help.data.save.title", comment: "Save analysis title")).bold()) {
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach(1...3, id: \.self) { step in
+                        HStack(alignment: .top) {
+                            Text("\(step).")
+                                .bold()
+                            Text(NSLocalizedString("help.data.save.step.\(step)", comment: "Save step"))
+                        }
+                    }
+                }
+                .padding(.vertical)
+            }
+            
+            // Exportar datos
+            GroupBox(label: Text(NSLocalizedString("help.data.export.title", comment: "Export title")).bold()) {
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach(1...3, id: \.self) { step in
+                        HStack(alignment: .top) {
+                            Text("\(step).")
+                                .bold()
+                            Text(NSLocalizedString("help.data.export.step.\(step)", comment: "Export step"))
+                        }
+                    }
+                }
+                .padding(.vertical)
+            }
         }
     }
+}
+
+struct TroubleshootingSection: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // Problemas comunes
+            GroupBox(label: Text(NSLocalizedString("help.troubleshooting.problems.title", comment: "Common problems title")).bold()) {
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach([
+                        "help.troubleshooting.calibration",
+                        "help.troubleshooting.results",
+                        "help.troubleshooting.camera"
+                    ], id: \.self) { key in
+                        HStack(alignment: .top) {
+                            Image(systemName: "wrench.fill")
+                                .foregroundColor(.gray)
+                            Text(NSLocalizedString(key, comment: "Problem"))
+                        }
+                    }
+                }
+                .padding(.vertical)
+            }
+            
+            // Contacto
+            GroupBox(label: Text(NSLocalizedString("help.contact.title", comment: "Contact title")).bold()) {
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Image(systemName: "envelope.fill")
+                        Text("soilhue@ajgb.eu")
+                    }
+                    HStack {
+                        Image(systemName: "globe")
+                        Text("soilhue.ajgb.eu")
+                    }
+                }
+                .padding(.vertical)
+            }
+        }
+    }
+}
+
+#Preview {
+    HelpView()
 } 

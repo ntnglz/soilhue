@@ -1,9 +1,69 @@
 # Tareas pendientes para la publicación de SoilHue
 
-## Funcionalidad principal
+## MVP (Versión 1.0)
 
 ### Calibración
 - [x] Implementar validación de calibración
+- [x] Añadir una guía visual para la calibración
+- [x] Proporcionar tarjeta de calibración básica integrada
+- [ ] Documentar limitaciones y recomendar ColorChecker para uso profesional
+- [ ] Implementar advertencias claras sobre el uso de calibración básica vs profesional
+- [ ] Documentar el proceso de calibración en la ayuda
+
+### Análisis de color
+- [x] Implementación básica del análisis de color
+- [ ] Añadir advertencias sobre condiciones de iluminación
+- [ ] Documentar las mejores prácticas para la captura de muestras
+- [ ] Implementar validación básica de resultados
+
+### Interfaz de usuario y experiencia
+- [x] Completar la localización al español
+- [ ] Crear guía básica de usuario
+- [ ] Añadir ayuda contextual esencial
+- [ ] Implementar sistema de feedback para usuarios
+- [ ] Optimizar UI para iPhone 12 y posteriores
+
+### Legal y documentación
+- [ ] Preparar política de privacidad básica
+- [ ] Crear términos de uso
+- [ ] Documentar limitaciones conocidas
+- [ ] Preparar página de soporte básica
+
+### App Store
+- [ ] Preparar capturas de pantalla (iPhone 12)
+- [ ] Escribir descripción clara mencionando dispositivos soportados
+- [ ] Especificar requisitos de hardware
+- [ ] Crear lista de preguntas frecuentes
+
+## Futuras mejoras (Post-MVP)
+
+### Calibración avanzada
+- [ ] Soporte para ColorChecker profesional
+- [ ] Mejora de la detección en condiciones de poca luz
+- [ ] Calibración automática periódica
+- [ ] Validación en múltiples dispositivos
+
+### Análisis avanzado
+- [ ] Obtener y almacenar valores RGB reales
+- [ ] Mejorar precisión en diferentes condiciones
+- [ ] Implementar ajustes manuales
+- [ ] Comparación entre muestras
+
+### Almacenamiento y sincronización
+- [ ] Implementar copia de seguridad local
+- [ ] Sincronización con iCloud
+- [ ] Exportación a formatos adicionales
+- [ ] Gestión avanzada de datos
+
+### Comunidad y soporte
+- [ ] Crear foro de usuarios
+- [ ] Implementar sistema de reporte de bugs
+- [ ] Programa de beta testing
+- [ ] Documentación extendida
+
+## Funcionalidad principal
+
+### Calibración
 - [ ] Verificar que la calibración funcione correctamente en diferentes dispositivos
 - [ ] Mejorar la detección de la tarjeta de calibración en condiciones de poca luz
 - [x] Añadir una guía visual más clara para la calibración
@@ -47,7 +107,6 @@
 - [ ] Añadir animaciones y transiciones más fluidas
 
 ### Localización
-- [ ] Completar la localización al español
 - [ ] Preparar la aplicación para futuras localizaciones
 - [ ] Verificar que todos los textos estén correctamente localizados
 
@@ -107,7 +166,6 @@
 ## Mejoras futuras (post-lanzamiento)
 
 ### Funcionalidades adicionales
-- [ ] Implementar comparación de muestras
 - [ ] Añadir exportación a formatos estándar de laboratorio
 - [ ] Crear sistema de colaboración entre usuarios
 - [ ] Implementar análisis histórico y tendencias
