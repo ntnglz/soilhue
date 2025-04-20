@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8B033C635AF311AA6DCC2AED /* Pods_SoilHue.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 018A8B3AAADBF70C5B0FA6AC /* Pods_SoilHue.framework */; };
+		EE32EA120BB0D170109F4D3E /* Pods_SoilHue.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD13F2ED4FEB39D6EF7A8321 /* Pods_SoilHue.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		018A8B3AAADBF70C5B0FA6AC /* Pods_SoilHue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoilHue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		3F444466011F2CC172187EB5 /* Pods-SoilHue.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoilHue.release.xcconfig"; path = "Target Support Files/Pods-SoilHue/Pods-SoilHue.release.xcconfig"; sourceTree = "<group>"; };
-		9DBF24A54B9BB6643EF6B28C /* Pods-SoilHue.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoilHue.debug.xcconfig"; path = "Target Support Files/Pods-SoilHue/Pods-SoilHue.debug.xcconfig"; sourceTree = "<group>"; };
+		014F9F738B03BB7977A054B7 /* Pods-SoilHue.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoilHue.release.xcconfig"; path = "Target Support Files/Pods-SoilHue/Pods-SoilHue.release.xcconfig"; sourceTree = "<group>"; };
+		AD13F2ED4FEB39D6EF7A8321 /* Pods_SoilHue.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoilHue.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2809FC158DEABC660F1CA46 /* Pods-SoilHue.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoilHue.debug.xcconfig"; path = "Target Support Files/Pods-SoilHue/Pods-SoilHue.debug.xcconfig"; sourceTree = "<group>"; };
 		EA42EB012DAC331D003FC91D /* SoilHue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoilHue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA42EBA72DB42F55003FC91D /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -44,20 +44,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B033C635AF311AA6DCC2AED /* Pods_SoilHue.framework in Frameworks */,
+				EE32EA120BB0D170109F4D3E /* Pods_SoilHue.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2FFB272A66642ED45ED21C86 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AD13F2ED4FEB39D6EF7A8321 /* Pods_SoilHue.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		C6E17C33AC4F5D8611ED83C7 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				9DBF24A54B9BB6643EF6B28C /* Pods-SoilHue.debug.xcconfig */,
-				3F444466011F2CC172187EB5 /* Pods-SoilHue.release.xcconfig */,
+				B2809FC158DEABC660F1CA46 /* Pods-SoilHue.debug.xcconfig */,
+				014F9F738B03BB7977A054B7 /* Pods-SoilHue.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -68,7 +75,7 @@
 				EA42EB032DAC331D003FC91D /* SoilHue */,
 				EA42EB022DAC331D003FC91D /* Products */,
 				C6E17C33AC4F5D8611ED83C7 /* Pods */,
-				F9CE473E4257CD10CF6F625F /* Frameworks */,
+				2FFB272A66642ED45ED21C86 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -80,14 +87,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		F9CE473E4257CD10CF6F625F /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				018A8B3AAADBF70C5B0FA6AC /* Pods_SoilHue.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -95,11 +94,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EA42EB0D2DAC3320003FC91D /* Build configuration list for PBXNativeTarget "SoilHue" */;
 			buildPhases = (
-				8640D5CFA211818B89C3C00E /* [CP] Check Pods Manifest.lock */,
+				1FCE18CE2DCA174F94B850E5 /* [CP] Check Pods Manifest.lock */,
 				EA42EAFD2DAC331D003FC91D /* Sources */,
 				EA42EAFE2DAC331D003FC91D /* Frameworks */,
 				EA42EAFF2DAC331D003FC91D /* Resources */,
-				183090B8343F2D301EDE5F15 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -158,24 +156,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		183090B8343F2D301EDE5F15 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SoilHue/Pods-SoilHue-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SoilHue/Pods-SoilHue-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SoilHue/Pods-SoilHue-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8640D5CFA211818B89C3C00E /* [CP] Check Pods Manifest.lock */ = {
+		1FCE18CE2DCA174F94B850E5 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -244,6 +225,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = JQSU333Z24;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -308,6 +290,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = JQSU333Z24;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -332,7 +315,7 @@
 		};
 		EA42EB0E2DAC3320003FC91D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9DBF24A54B9BB6643EF6B28C /* Pods-SoilHue.debug.xcconfig */;
+			baseConfigurationReference = B2809FC158DEABC660F1CA46 /* Pods-SoilHue.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -341,6 +324,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = JQSU333Z24;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -369,7 +353,7 @@
 		};
 		EA42EB0F2DAC3320003FC91D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3F444466011F2CC172187EB5 /* Pods-SoilHue.release.xcconfig */;
+			baseConfigurationReference = 014F9F738B03BB7977A054B7 /* Pods-SoilHue.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -378,6 +362,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = JQSU333Z24;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;

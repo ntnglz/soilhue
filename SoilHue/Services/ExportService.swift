@@ -1,9 +1,8 @@
 import Foundation
-import XlsxWriter
 
 /// Servicio para exportar análisis de suelo en diferentes formatos
 @MainActor
-class ExportService {
+class ExportService: ObservableObject {
     /// Errores que pueden ocurrir durante la exportación
     enum ExportError: LocalizedError {
         case failedToCreateFile
@@ -68,7 +67,7 @@ class ExportService {
         case .csv:
             return try await exportToCSV(analyses, to: exportURL)
         case .excel:
-            return try await exportToExcel(analyses, to: exportURL)
+            return try await exportToCSV(analyses, to: exportURL) // Temporalmente usando CSV mientras arreglamos Excel
         }
     }
     
@@ -105,49 +104,6 @@ class ExportService {
         }
         
         try csvString.write(to: url, atomically: true, encoding: .utf8)
-        return url
-    }
-    
-    /// Exporta los análisis a formato Excel
-    private func exportToExcel(_ analyses: [SoilAnalysis], to url: URL) async throws -> URL {
-        let workbook = Workbook(url.path)
-        let worksheet = workbook.addWorksheet("Análisis de Suelo")
-        
-        // Estilo para el encabezado
-        let headerFormat = workbook.addFormat()
-        headerFormat.setBold()
-        headerFormat.setAlign(.center)
-        headerFormat.setBackground(.gray)
-        headerFormat.setFontColor(.white)
-        
-        // Encabezados
-        let headers = [
-            "ID", "Fecha", "Notación Munsell", "Clasificación", "Descripción",
-            "RGB Corregido", "Calibrado", "Factores de Corrección", "Notas", "Etiquetas"
-        ]
-        
-        // Escribir encabezados
-        for (col, header) in headers.enumerated() {
-            worksheet.write(0, col, header, headerFormat)
-            worksheet.setColumn(col, col, 15) // Ancho de columna
-        }
-        
-        // Escribir datos
-        for (row, analysis) in analyses.enumerated() {
-            let rowIndex = row + 1
-            worksheet.write(rowIndex, 0, analysis.id.uuidString)
-            worksheet.write(rowIndex, 1, ISO8601DateFormatter().string(from: analysis.timestamp))
-            worksheet.write(rowIndex, 2, analysis.colorInfo.munsellNotation)
-            worksheet.write(rowIndex, 3, analysis.colorInfo.soilClassification)
-            worksheet.write(rowIndex, 4, analysis.colorInfo.soilDescription)
-            worksheet.write(rowIndex, 5, "\(analysis.colorInfo.correctedRGB.red),\(analysis.colorInfo.correctedRGB.green),\(analysis.colorInfo.correctedRGB.blue)")
-            worksheet.write(rowIndex, 6, analysis.calibrationInfo.wasCalibrated ? "Sí" : "No")
-            worksheet.write(rowIndex, 7, "\(analysis.calibrationInfo.correctionFactors.red),\(analysis.calibrationInfo.correctionFactors.green),\(analysis.calibrationInfo.correctionFactors.blue)")
-            worksheet.write(rowIndex, 8, analysis.metadata.notes ?? "")
-            worksheet.write(rowIndex, 9, analysis.metadata.tags.joined(separator: ";"))
-        }
-        
-        workbook.close()
         return url
     }
 } 

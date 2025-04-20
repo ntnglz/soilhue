@@ -11,7 +11,7 @@ struct ExportView: View {
         }
     }()
     
-    @State private var selectedFormat: ExportService.ExportFormat = .excel
+    @State private var selectedFormat: ExportService.ExportFormat = .csv
     @State private var isExporting = false
     @State private var showError = false
     @State private var errorMessage = ""
@@ -23,7 +23,6 @@ struct ExportView: View {
             Form {
                 Section(header: Text("Formato de Exportación")) {
                     Picker("Formato", selection: $selectedFormat) {
-                        Text("Excel").tag(ExportService.ExportFormat.excel)
                         Text("CSV").tag(ExportService.ExportFormat.csv)
                         Text("JSON").tag(ExportService.ExportFormat.json)
                     }
@@ -45,17 +44,9 @@ struct ExportView: View {
                 
                 Section(header: Text("Información")) {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Excel (.xlsx)")
-                            .font(.headline)
-                        Text("Formato compatible con Microsoft Excel y otras hojas de cálculo. Incluye formato y estilos.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                        
-                        Divider()
-                        
                         Text("CSV (.csv)")
                             .font(.headline)
-                        Text("Formato de texto simple separado por comas. Compatible con la mayoría de programas.")
+                        Text("Formato de texto simple separado por comas. Compatible con Excel, Numbers y otras hojas de cálculo.")
                             .font(.caption)
                             .foregroundColor(.secondary)
                         

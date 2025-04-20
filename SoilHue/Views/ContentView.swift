@@ -78,6 +78,7 @@ struct ContentView: View {
     private var settingsButton: some View {
         Button(action: { showSettings = true }) {
             Image(systemName: "gear")
+                .imageScale(.medium)
         }
     }
     
@@ -85,6 +86,7 @@ struct ContentView: View {
     private var exportButton: some View {
         Button(action: { showExport = true }) {
             Image(systemName: "square.and.arrow.up")
+                .imageScale(.medium)
         }
     }
     
@@ -125,7 +127,7 @@ struct ContentView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    HStack {
+                    HStack(spacing: 16) {
                         exportButton
                         settingsButton
                     }
