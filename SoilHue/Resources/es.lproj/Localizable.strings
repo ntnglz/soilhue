@@ -120,6 +120,17 @@
 "Failed to load image" = "Error al cargar la imagen";
 "Failed to export data" = "Error al exportar los datos";
 "No data to export" = "No hay datos para exportar";
+"error.title" = "Error";
+"error.generic" = "Ha ocurrido un error: %@";
+"error.camera.permission.denied" = "No hay acceso a la cámara. Por favor, habilite el acceso en Ajustes.";
+"error.camera.capture" = "Error al capturar la foto";
+"error.camera.invalid.device" = "Dispositivo de cámara no válido";
+"error.camera.configuration" = "Error al configurar la cámara";
+"error.camera.session.not.running" = "La sesión de la cámara no está activa";
+"error.camera.resolution.not.supported" = "Resolución de cámara no soportada";
+"error.camera.invalid.resolution" = "Resolución de cámara no válida";
+"error.camera.no.permission" = "No hay permiso para usar la cámara";
+"error.camera.setup.failed" = "Error al configurar la cámara";
 
 // Mensajes de permisos
 "Camera Access Required" = "Acceso a Cámara Requerido";
@@ -293,7 +304,6 @@
 "analysis.save.title" = "Guardar Análisis";
 
 /* Common */
-"error.title" = "Error";
 "ok" = "OK";
 "cancel" = "Cancelar";
 "save" = "Guardar";
@@ -310,133 +320,98 @@
 "calibration.card.recommendation" = "Para resultados profesionales, se recomienda usar el X-Rite ColorChecker Classic.";
 
 /* Calibration Service */
-"calibration.patch.dark.skin" = "Piel oscura";
-"calibration.patch.light.skin" = "Piel clara";
-"calibration.patch.blue.sky" = "Cielo azul";
-"calibration.patch.foliage" = "Follaje";
-"calibration.patch.blue.flower" = "Flor azul";
-"calibration.patch.bluish.green" = "Verde azulado";
-"calibration.patch.orange" = "Naranja";
-"calibration.patch.purplish.blue" = "Azul púrpura";
-"calibration.patch.moderate.red" = "Rojo moderado";
-"calibration.patch.purple" = "Púrpura";
-"calibration.patch.yellow.green" = "Verde amarillo";
-"calibration.patch.orange.yellow" = "Amarillo naranja";
-"calibration.patch.blue" = "Azul";
-"calibration.patch.green" = "Verde";
-"calibration.patch.red" = "Rojo";
-"calibration.patch.yellow" = "Amarillo";
-"calibration.patch.magenta" = "Magenta";
-"calibration.patch.cyan" = "Cian";
-"calibration.patch.white" = "Blanco";
-"calibration.patch.neutral.8" = "Neutral 8";
-"calibration.patch.neutral.6.5" = "Neutral 6.5";
-"calibration.patch.neutral.5" = "Neutral 5";
-"calibration.patch.neutral.3.5" = "Neutral 3.5";
-"calibration.patch.black" = "Negro";
+"calibration.service.patch.white" = "Parche blanco";
+"calibration.service.patch.black" = "Parche negro";
+"calibration.service.patch.gray" = "Parche gris";
+"calibration.service.patch.red" = "Parche rojo";
+"calibration.service.patch.green" = "Parche verde";
+"calibration.service.patch.blue" = "Parche azul";
 
-"calibration.error.image.processing" = "No se pudo procesar la imagen";
-"calibration.error.insufficient.patches" = "No se pudieron detectar suficientes parches de color";
+"calibration.service.log.start" = "Iniciando calibración...";
+"calibration.service.log.detect" = "Detectando tarjeta de calibración...";
+"calibration.service.log.analyze" = "Analizando parches de color...";
+"calibration.service.log.complete" = "Calibración completada";
+"calibration.service.log.error" = "Error en la calibración: %@";
 
-"calibration.log.start" = "Iniciando procesamiento de calibración...";
-"calibration.log.dimensions" = "Dimensiones de la imagen: %.0fx%.0f";
-"calibration.log.patch" = "Procesando parche %@:";
-"calibration.log.reference" = "  Referencia: R=%.3f, G=%.3f, B=%.3f";
-"calibration.log.measured" = "  Medido: R=%.3f, G=%.3f, B=%.3f";
-"calibration.log.factors" = "  Factores: R=%.3f, G=%.3f, B=%.3f";
-"calibration.log.valid.patches" = "Total de parches válidos: %d";
+"calibration.service.validation.size" = "Tamaño de tarjeta inválido";
+"calibration.service.validation.patches" = "No se detectaron todos los parches";
+"calibration.service.validation.values" = "Valores de color fuera de rango";
 
 /* Camera Service */
-"camera.error.permission.denied" = "No hay acceso a la cámara. Por favor, verifica los permisos en Ajustes.";
-"camera.error.capture" = "Error al capturar la foto.";
-"camera.error.invalid.device" = "No se pudo acceder a la cámara del dispositivo.";
-"camera.error.configuration" = "Error al configurar la cámara.";
-"camera.error.session.not.running" = "La sesión de la cámara no está activa.";
-"camera.error.resolution.not.supported" = "La resolución seleccionada no está soportada por este dispositivo.";
-"camera.error.invalid.resolution" = "No se pudo configurar la resolución deseada.";
-"camera.error.no.permission" = "No hay permiso para acceder a la cámara.";
-"camera.error.setup.failed" = "Error al configurar la cámara.";
+"camera.service.error.access" = "No se pudo acceder a la cámara";
+"camera.service.error.unavailable" = "Cámara no disponible";
+"camera.service.error.setup" = "Error al configurar la cámara";
+"camera.service.error.capture" = "Error al capturar la imagen";
 
 /* Color Analysis Service */
-"color.analysis.error.not.calibrated" = "La cámara no está calibrada. Por favor, realice la calibración antes de analizar imágenes.";
+"analysis.service.error.image" = "Error al procesar la imagen";
+"analysis.service.error.selection" = "Área de selección inválida";
+"analysis.service.error.calculation" = "Error al calcular el color Munsell";
 
 /* Export Service */
-"export.error.create.file" = "No se pudo crear el archivo de exportación";
-"export.error.write.data" = "Error al escribir los datos";
-"export.error.invalid.format" = "Formato de exportación no válido";
-"export.error.no.data" = "No hay datos para exportar";
-"export.csv.header" = "ID,Fecha,Notación Munsell,Clasificación,Descripción,Calibrado,Factores de Corrección,Latitud,Longitud,Altitud,Dirección,Notas,Etiquetas";
-"export.not.available" = "N/A";
-
-/* Common */
-"common.yes" = "Sí";
-"common.no" = "No";
-
-/* Calibration Validator */
-"calibration.quality.optimal" = "óptima";
-"calibration.quality.acceptable" = "aceptable";
-"calibration.quality.poor" = "pobre";
-"calibration.validation.result" = "Validación de calibración:\n- Calidad: %@\n- Error promedio: %@\n- Error máximo: %@\n- Colores problemáticos: %@\n- Dispositivo: %@";
-"calibration.validation.no.problems" = "ninguno";
+"export.service.error.data" = "Error al preparar los datos";
+"export.service.error.file" = "Error al crear el archivo";
+"export.service.error.write" = "Error al escribir los datos";
 
 /* Location Service */
-"location.error.permission.denied" = "El acceso a la ubicación está desactivado. Por favor, actívalo en Ajustes.";
-"location.error.invalid.device" = "No se pudo acceder al GPS del dispositivo.";
-"location.error.invalid.location" = "No se pudo obtener la ubicación actual.";
-"location.error.timeout" = "Tiempo de espera agotado al obtener la ubicación.";
-"location.error.unknown" = "Error desconocido al obtener la ubicación.";
+"location.service.error.access" = "No se pudo acceder a la ubicación";
+"location.service.error.disabled" = "Servicios de ubicación desactivados";
+"location.service.error.timeout" = "Tiempo de espera agotado";
 
 /* Storage Service */
-"storage.error.save.image" = "No se pudo guardar la imagen";
-"storage.error.save.analysis" = "No se pudo guardar el análisis";
-"storage.error.load.analysis" = "No se pudo cargar el análisis";
-"storage.error.analysis.not.found" = "Análisis no encontrado";
-"storage.error.icloud.not.available" = "iCloud no está disponible";
-"storage.error.invalid.directory" = "Directorio de almacenamiento no válido";
-"storage.error.directory.creation" = "No se pudo crear el directorio de almacenamiento";
-"storage.error.file.operation" = "Error en operación de archivo: %@";
+"storage.service.error.save" = "Error al guardar los datos";
+"storage.service.error.load" = "Error al cargar los datos";
+"storage.service.error.delete" = "Error al eliminar los datos";
+"storage.service.error.space" = "Espacio de almacenamiento insuficiente";
+
+/* Common */
+"yes" = "Sí";
+"no" = "No";
+"loading" = "Cargando...";
+"processing" = "Procesando...";
+"success" = "Éxito";
+"warning" = "Advertencia";
+"info" = "Información";
+"please.wait" = "Por favor, espere...";
+"try.again" = "Intentar de nuevo";
 
 /* Soil Colors */
-"soil.color.black" = "Negro";
-"soil.color.very.dark.gray" = "Gris muy oscuro";
-"soil.color.very.dark.brown" = "Marrón muy oscuro";
-"soil.color.dark.brown" = "Marrón oscuro";
-"soil.color.brown" = "Marrón";
-"soil.color.light.brown" = "Marrón claro";
-"soil.color.yellowish.brown" = "Marrón amarillento";
-"soil.color.reddish.brown" = "Marrón rojizo";
 "soil.color.red" = "Rojo";
-"soil.color.light.yellowish.brown" = "Marrón amarillento claro";
-"soil.color.pale.yellow" = "Amarillo pálido";
+"soil.color.yellow" = "Amarillo";
+"soil.color.brown" = "Marrón";
 "soil.color.gray" = "Gris";
-"soil.color.light.gray" = "Gris claro";
+"soil.color.black" = "Negro";
 "soil.color.white" = "Blanco";
-"soil.color.light.brownish.gray" = "Gris parduzco claro";
-"soil.color.pale.brown" = "Marrón pálido";
+
+/* Munsell Format */
+"munsell.format" = "%@ %@/%@";
+"munsell.hue" = "Matiz";
+"munsell.value" = "Valor";
+"munsell.chroma" = "Croma";
 
 /* Soil Classifications */
-"soil.classification.histosoles" = "Histosoles";
-"soil.classification.mollisoles" = "Mollisoles";
-"soil.classification.alfisoles" = "Alfisoles";
-"soil.classification.oxisoles" = "Oxisoles";
-"soil.classification.vertisoles" = "Vertisoles";
-"soil.classification.espodosoles" = "Espodosoles";
-"soil.classification.aridisoles" = "Aridisoles";
-"soil.classification.entisoles" = "Entisoles";
-"soil.classification.inceptisoles" = "Inceptisoles";
-"soil.classification.ultisoles" = "Ultisoles";
+"soil.classification.histosols" = "Histosoles";
+"soil.classification.mollisols" = "Mollisoles";
+"soil.classification.alfisols" = "Alfisoles";
+"soil.classification.oxisols" = "Oxisoles";
+"soil.classification.vertisols" = "Vertisoles";
+"soil.classification.spodosols" = "Espodosoles";
+"soil.classification.aridisols" = "Aridisoles";
+"soil.classification.entisols" = "Entisoles";
+"soil.classification.inceptisols" = "Inceptisoles";
+"soil.classification.ultisols" = "Ultisoles";
 
 /* Soil Descriptions */
-"soil.description.histosoles" = "Suelo orgánico con alto contenido en materia orgánica, típico de suelos de turba y horizontes O.";
-"soil.description.mollisoles" = "Suelo oscuro y fértil, rico en materia orgánica, típico de praderas y horizontes A.";
-"soil.description.alfisoles" = "Suelo con horizonte de arcilla, fértil, típico de regiones forestales y horizontes Bt.";
-"soil.description.oxisoles" = "Suelo muy meteorizado de regiones tropicales, con alto contenido en óxidos de hierro y aluminio.";
-"soil.description.vertisoles" = "Suelo arcilloso que se agrieta, con alto contenido en minerales arcillosos expansivos.";
-"soil.description.espodosoles" = "Suelo ácido con acumulación de hierro y aluminio, típico de regiones forestales húmedas.";
-"soil.description.aridisoles" = "Suelo de regiones áridas, con acumulación de sales y carbonatos en el subsuelo.";
-"soil.description.entisoles" = "Suelo joven con poco desarrollo de horizontes, típico de depósitos aluviales recientes.";
-"soil.description.inceptisoles" = "Suelo poco desarrollado con horizontes incipientes, típico de regiones montañosas.";
-"soil.description.ultisoles" = "Suelo ácido, muy meteorizado, con horizonte de arcilla, típico de regiones húmedas.";
+"soil.description.histosols" = "Suelo orgánico con alto contenido en materia orgánica, típico de suelos de turba y horizontes O.";
+"soil.description.mollisols" = "Suelo oscuro y fértil, rico en materia orgánica, típico de praderas y horizontes A.";
+"soil.description.alfisols" = "Suelo con horizonte de arcilla, fértil, típico de regiones forestales y horizontes Bt.";
+"soil.description.oxisols" = "Suelo muy meteorizado de regiones tropicales, con alto contenido en óxidos de hierro y aluminio.";
+"soil.description.vertisols" = "Suelo arcilloso que se agrieta, con alto contenido en minerales arcillosos expansivos.";
+"soil.description.spodosols" = "Suelo ácido con acumulación de hierro y aluminio, típico de regiones forestales húmedas.";
+"soil.description.aridisols" = "Suelo de regiones áridas, con acumulación de sales y carbonatos en el subsuelo.";
+"soil.description.entisols" = "Suelo joven con poco desarrollo de horizontes, típico de depósitos aluviales recientes.";
+"soil.description.inceptisols" = "Suelo poco desarrollado con horizontes incipientes, típico de regiones montañosas.";
+"soil.description.ultisols" = "Suelo ácido, muy meteorizado, con horizonte de arcilla, típico de regiones húmedas.";
 
 /* Debug Messages */
 "debug.location.decoding" = "DEBUG: Decodificando localización - lat: %f, lon: %f";
@@ -505,4 +480,63 @@
 "help.troubleshooting.results" = "Resultados inconsistentes: verifica la iluminación";
 "help.troubleshooting.camera" = "Error de cámara: revisa los permisos";
 
-"help.contact.title" = "Contacto y Soporte"; 
+"help.contact.title" = "Contacto y Soporte";
+
+/* Calibration Status */
+"calibration.status.notCalibrated.title" = "No calibrado";
+"calibration.status.notCalibrated.message" = "La cámara necesita ser calibrada para obtener resultados precisos. Por favor, calibre la cámara antes de continuar.";
+
+"calibration.status.calibrating.title" = "Calibrando";
+"calibration.status.calibrating.message" = "Por favor, mantenga la tarjeta de calibración en el marco y espere a que se complete el proceso.";
+
+"calibration.status.calibrated.title" = "Calibrado";
+"calibration.status.calibrated.message" = "La cámara está calibrada y lista para analizar muestras de suelo.";
+
+"calibration.status.error.title" = "Error de calibración";
+
+/* Calibration View */
+"calibration.title" = "Calibración";
+"calibration.recalibrate" = "Recalibrar";
+"button.done" = "Listo";
+"calibration.message" = "La cámara está calibrada y lista para analizar muestras de suelo.";
+
+// Mensajes de servicio
+"service.error.generic" = "Ha ocurrido un error. Por favor, inténtelo de nuevo.";
+"service.error.network" = "Error de red. Por favor, compruebe su conexión.";
+"service.error.permission" = "Permiso denegado. Por favor, revise la configuración.";
+"service.error.storage" = "Error de almacenamiento. Por favor, compruebe el espacio disponible.";
+"service.error.invalid.data" = "Formato de datos no válido.";
+"service.error.not.found" = "Recurso no encontrado.";
+"service.error.timeout" = "La operación ha excedido el tiempo límite.";
+"service.error.busy" = "El servicio está ocupado. Por favor, inténtelo más tarde.";
+
+// Mensajes de análisis
+"analysis.status.analyzing" = "Analizando muestra...";
+"analysis.status.complete" = "Análisis completado";
+"analysis.status.failed" = "Análisis fallido";
+
+// Resultados de análisis
+"analysis.result.munsell" = "Color Munsell: %@";
+"analysis.result.classification" = "Clasificación: %@";
+"analysis.result.description" = "Descripción: %@";
+
+// Errores de almacenamiento
+"error.storage.save.image" = "Error al guardar la imagen";
+"error.storage.save.analysis" = "Error al guardar el análisis";
+"error.storage.load.analysis" = "Error al cargar el análisis";
+"error.storage.analysis.not.found" = "Análisis no encontrado";
+"error.storage.icloud.not.available" = "iCloud no está disponible";
+"error.storage.invalid.directory" = "Directorio de almacenamiento no válido";
+"error.storage.directory.creation" = "Error al crear el directorio de almacenamiento";
+"error.storage.file.operation" = "Error en operación de archivo: %@";
+
+// Errores de análisis
+"error.analysis.no.sample" = "No hay muestra seleccionada";
+"error.analysis.generic" = "Error durante el análisis: %@";
+"error.analysis.not.calibrated" = "La cámara no está calibrada";
+
+// Errores de exportación
+"error.export.create.file" = "Error al crear el archivo de exportación";
+"error.export.write.data" = "Error al escribir los datos";
+"error.export.invalid.format" = "Formato de exportación no válido";
+"error.export.no.data" = "No hay datos para exportar"; 
