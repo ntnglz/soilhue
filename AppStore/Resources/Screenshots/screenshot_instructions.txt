@@ -1,0 +1,65 @@
+# Instrucciones para Capturas de Pantalla
+
+## Escena 1: Pantalla de Inicio/Calibración
+- Mostrar la pantalla de calibración con la tarjeta de calibración visible
+- Asegurar que el texto de instrucciones sea legible
+- Incluir el botón de calibración
+- Versión ES: "Calibración de la Cámara"
+- Versión EN: "Camera Calibration"
+
+## Escena 2: Captura de Muestra de Suelo
+- Mostrar la vista de la cámara con una muestra de suelo real
+- Incluir la guía de encuadre
+- Mostrar los controles de captura
+- Versión ES: "Captura de Muestra"
+- Versión EN: "Sample Capture"
+
+## Escena 3: Resultados del Análisis
+- Mostrar los resultados de una muestra de suelo
+- Incluir:
+  * Color Munsell
+  * Clasificación
+  * Descripción
+  * Muestra visual del color
+- Versión ES: "Resultados del Análisis"
+- Versión EN: "Analysis Results"
+
+## Escena 4: Historial de Muestras
+- Mostrar la lista de muestras analizadas
+- Incluir al menos 3 muestras diferentes
+- Mostrar fecha y clasificación de cada muestra
+- Versión ES: "Historial de Muestras"
+- Versión EN: "Sample History"
+
+## Escena 5: Exportación de Datos
+- Mostrar la pantalla de exportación
+- Incluir opciones de formato (CSV/JSON)
+- Mostrar ejemplo de datos exportados
+- Versión ES: "Exportar Datos"
+- Versión EN: "Export Data"
+
+## Escena 6: Configuración
+- Mostrar la pantalla de configuración
+- Incluir opciones de idioma y unidades
+- Mostrar información de la app
+- Versión ES: "Configuración"
+- Versión EN: "Settings"
+
+## Notas Técnicas
+1. Usar el simulador de iOS para capturas consistentes
+2. Asegurar que el estado de la barra de estado sea consistente
+3. Usar fondos reales de suelo para las capturas de muestra
+4. Mantener la coherencia visual entre todas las capturas
+5. Verificar que los textos sean legibles en todos los tamaños de pantalla
+
+## Proceso de Captura
+1. Configurar el simulador en el idioma deseado
+2. Navegar a la escena específica
+3. Ajustar el contenido según las instrucciones
+4. Capturar la pantalla
+5. Verificar la calidad y legibilidad
+6. Guardar en el directorio correspondiente
+
+## Nombrado de Archivos
+Formato: device_language_scene_number.png
+Ejemplo: iphone_es_1_1.png, ipad_en_3_1.png 

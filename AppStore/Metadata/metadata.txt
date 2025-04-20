@@ -1,0 +1,79 @@
+# App Store Metadata
+
+## Español (España)
+
+### Nombre de la App
+SoilHue
+
+### Subtítulo
+Análisis de Color de Suelos
+
+### Descripción
+SoilHue es una aplicación innovadora diseñada para profesionales y estudiantes de ciencias del suelo, que permite analizar y clasificar muestras de suelo utilizando el sistema de color Munsell.
+
+Características principales:
+• Captura y análisis de muestras de suelo en tiempo real
+• Clasificación automática según el sistema Munsell
+• Almacenamiento local de resultados y muestras
+• Exportación de datos en formatos CSV y JSON
+• Interfaz intuitiva y fácil de usar
+• Funciona sin conexión a internet
+
+Ideal para:
+• Geólogos y científicos del suelo
+• Estudiantes de ciencias ambientales
+• Profesionales de la agricultura
+• Investigadores y educadores
+
+La aplicación procesa todas las imágenes localmente en tu dispositivo, garantizando la privacidad de tus datos y permitiendo su uso sin conexión a internet.
+
+### Palabras clave
+suelo,munsell,color,análisis,geología,ciencia,clasificación,muestra,agricultura,investigación,educación,offline,local
+
+### URL de la Política de Privacidad
+https://ajgb.eu/privacy
+
+### Categoría
+Ciencia
+
+### Subcategoría
+Educación
+
+## English (United States)
+
+### App Name
+SoilHue
+
+### Subtitle
+Soil Color Analysis
+
+### Description
+SoilHue is an innovative application designed for soil science professionals and students, enabling soil sample analysis and classification using the Munsell color system.
+
+Key features:
+• Real-time soil sample capture and analysis
+• Automatic Munsell system classification
+• Local storage of results and samples
+• Data export in CSV and JSON formats
+• Intuitive and user-friendly interface
+• Works offline
+
+Perfect for:
+• Geologists and soil scientists
+• Environmental science students
+• Agriculture professionals
+• Researchers and educators
+
+The app processes all images locally on your device, ensuring data privacy and enabling offline use.
+
+### Keywords
+soil,munsell,color,analysis,geology,science,classification,sample,agriculture,research,education,offline,local
+
+### Privacy Policy URL
+https://ajgb.eu/privacy
+
+### Category
+Science
+
+### Subcategory
+Education 

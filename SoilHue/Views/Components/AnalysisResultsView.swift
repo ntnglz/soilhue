@@ -27,7 +27,7 @@ struct AnalysisResultsView: View {
         do {
             return try StorageService()
         } catch {
-            fatalError("Error inicializando StorageService: \(error.localizedDescription)")
+            fatalError("Error inicializando StorageService: \(String(format: NSLocalizedString("error.generic", comment: "Generic error message format"), String(describing: error)))")
         }
     }()
     
@@ -47,11 +47,11 @@ struct AnalysisResultsView: View {
                 )
                 ResultInfoRow(
                     title: NSLocalizedString("analysis.classification", comment: "Classification label"),
-                    value: soilClassification
+                    value: NSLocalizedString(soilClassification, comment: "Soil classification value")
                 )
                 ResultInfoRow(
                     title: NSLocalizedString("analysis.description", comment: "Description label"),
-                    value: soilDescription
+                    value: NSLocalizedString(soilDescription, comment: "Soil description value")
                 )
             }
             .padding(.horizontal)
@@ -113,7 +113,7 @@ struct AnalysisResultsView: View {
         .sheet(isPresented: $showSaveDialog) {
             SaveAnalysisSheet(isPresented: $showSaveDialog, onSave: saveAnalysis)
         }
-        .alert(NSLocalizedString("error.title", comment: "Error alert title"), isPresented: $showError) {
+        .alert(NSLocalizedString("alert.error.title", comment: "Error alert title"), isPresented: $showError) {
             Button(NSLocalizedString("ok", comment: "OK button"), role: .cancel) { }
         } message: {
             Text(errorMessage)
@@ -148,7 +148,7 @@ struct AnalysisResultsView: View {
                 try await storageService.saveAnalysis(analysis, image: image)
                 showSaveDialog = false
             } catch {
-                errorMessage = error.localizedDescription
+                errorMessage = String(format: NSLocalizedString("error.generic", comment: "Generic error message format"), String(describing: error))
                 showError = true
             }
         }

@@ -106,7 +106,7 @@ struct CameraCaptureView: View {
             } catch {
                 showAlert(
                     title: NSLocalizedString("alert.error.title", comment: "Error alert title"),
-                    message: error.localizedDescription
+                    message: String(format: NSLocalizedString("error.generic", comment: "Generic error message format"), String(describing: error))
                 )
             }
         }
@@ -157,7 +157,7 @@ struct CameraCaptureView: View {
             await MainActor.run {
                 showAlert(
                     title: NSLocalizedString("alert.error.title", comment: "Error alert title"),
-                    message: error.localizedDescription
+                    message: String(format: NSLocalizedString("error.generic", comment: "Generic error message format"), String(describing: error))
                 )
                 isCapturing = false
             }

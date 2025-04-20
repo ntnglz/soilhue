@@ -242,7 +242,7 @@ class StorageService: ObservableObject {
         }
         
         if let error = coordinatorError {
-            throw StorageError.fileOperationFailed(error.localizedDescription)
+            throw StorageError.fileOperationFailed(String(format: NSLocalizedString("error.generic", comment: "Generic error message format"), String(describing: error)))
         }
     }
 } 

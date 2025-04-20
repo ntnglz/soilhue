@@ -162,7 +162,8 @@ struct ResultView: View {
             } catch {
                 await MainActor.run {
                     isAnalyzing = false
-                    showAlert(title: NSLocalizedString("alert.error.title", comment: "Error alert title"), message: error.localizedDescription)
+                    showAlert(title: NSLocalizedString("alert.error.title", comment: "Error alert title"), 
+                             message: String(format: NSLocalizedString("error.generic", comment: "Generic error message format"), String(describing: error)))
                 }
             }
         }
@@ -196,7 +197,8 @@ struct ResultView: View {
             showingSaveDialog = false
             dismiss()
         } catch {
-            showAlert(title: NSLocalizedString("alert.error.title", comment: "Error alert title"), message: error.localizedDescription)
+            showAlert(title: NSLocalizedString("alert.error.title", comment: "Error alert title"), 
+                     message: String(format: NSLocalizedString("error.generic", comment: "Generic error message format"), String(describing: error)))
         }
     }
     
@@ -276,7 +278,7 @@ struct LocationDetailsView: View {
                 }
             }
         } catch {
-            print("Error getting placemark: \(error.localizedDescription)")
+            print("Error getting placemark: \(String(format: NSLocalizedString("error.generic", comment: "Generic error message format"), String(describing: error)))")
         }
     }
     

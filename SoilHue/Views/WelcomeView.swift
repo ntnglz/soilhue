@@ -4,6 +4,7 @@ import PhotosUI
 struct WelcomeView: View {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @State private var currentPage = 0
+    @State private var showHelp = false
     
     var body: some View {
         ZStack {
@@ -80,7 +81,20 @@ struct WelcomeView: View {
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 30)
+                
+                // Botón de ayuda
+                Button(action: { showHelp = true }) {
+                    HStack {
+                        Image(systemName: "questionmark.circle")
+                        Text(NSLocalizedString("button.help", comment: "Help button"))
+                    }
+                    .foregroundColor(.white.opacity(0.8))
+                }
+                .padding(.bottom, 10)
             }
+        }
+        .sheet(isPresented: $showHelp) {
+            HelpView()
         }
     }
     

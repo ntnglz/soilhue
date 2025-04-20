@@ -32,15 +32,15 @@ class MunsellClassificationService: ObservableObject {
         MunsellColor(
             notation: "10YR 2/1",
             name: NSLocalizedString("soil.color.black", comment: "Black soil color name"),
-            soilClassification: NSLocalizedString("soil.classification.histosoles", comment: "Histosoles soil classification"),
-            soilDescription: NSLocalizedString("soil.description.histosoles", comment: "Histosoles soil description"),
+            soilClassification: NSLocalizedString("soil.classification.histosols", comment: "Histosols soil classification"),
+            soilDescription: NSLocalizedString("soil.description.histosols", comment: "Histosols soil description"),
             rgbColor: Color(red: 0.1, green: 0.1, blue: 0.1)
         ),
         MunsellColor(
             notation: "10YR 3/1",
             name: NSLocalizedString("soil.color.very.dark.gray", comment: "Very dark gray soil color name"),
-            soilClassification: NSLocalizedString("soil.classification.histosoles", comment: "Histosoles soil classification"),
-            soilDescription: NSLocalizedString("soil.description.histosoles", comment: "Histosoles soil description"),
+            soilClassification: NSLocalizedString("soil.classification.histosols", comment: "Histosols soil classification"),
+            soilDescription: NSLocalizedString("soil.description.histosols", comment: "Histosols soil description"),
             rgbColor: Color(red: 0.2, green: 0.2, blue: 0.2)
         ),
         
@@ -48,22 +48,22 @@ class MunsellClassificationService: ObservableObject {
         MunsellColor(
             notation: "10YR 3/2",
             name: NSLocalizedString("soil.color.very.dark.brown", comment: "Very dark brown soil color name"),
-            soilClassification: NSLocalizedString("soil.classification.mollisoles", comment: "Mollisoles soil classification"),
-            soilDescription: NSLocalizedString("soil.description.mollisoles", comment: "Mollisoles soil description"),
+            soilClassification: NSLocalizedString("soil.classification.mollisols", comment: "Mollisols soil classification"),
+            soilDescription: NSLocalizedString("soil.description.mollisols", comment: "Mollisols soil description"),
             rgbColor: Color(red: 0.25, green: 0.2, blue: 0.15)
         ),
         MunsellColor(
             notation: "10YR 4/2",
             name: NSLocalizedString("soil.color.dark.brown", comment: "Dark brown soil color name"),
-            soilClassification: NSLocalizedString("soil.classification.mollisoles", comment: "Mollisoles soil classification"),
-            soilDescription: NSLocalizedString("soil.description.mollisoles", comment: "Mollisoles soil description"),
+            soilClassification: NSLocalizedString("soil.classification.mollisols", comment: "Mollisols soil classification"),
+            soilDescription: NSLocalizedString("soil.description.mollisols", comment: "Mollisols soil description"),
             rgbColor: Color(red: 0.35, green: 0.3, blue: 0.25)
         ),
         MunsellColor(
             notation: "10YR 4/3",
             name: NSLocalizedString("soil.color.brown", comment: "Brown soil color name"),
-            soilClassification: NSLocalizedString("soil.classification.mollisoles", comment: "Mollisoles soil classification"),
-            soilDescription: NSLocalizedString("soil.description.mollisoles", comment: "Mollisoles soil description"),
+            soilClassification: NSLocalizedString("soil.classification.mollisols", comment: "Mollisols soil classification"),
+            soilDescription: NSLocalizedString("soil.description.mollisols", comment: "Mollisols soil description"),
             rgbColor: Color(red: 0.4, green: 0.35, blue: 0.3)
         ),
         
@@ -71,15 +71,15 @@ class MunsellClassificationService: ObservableObject {
         MunsellColor(
             notation: "10YR 5/3",
             name: NSLocalizedString("soil.color.light.brown", comment: "Light brown soil color name"),
-            soilClassification: NSLocalizedString("soil.classification.alfisoles", comment: "Alfisoles soil classification"),
-            soilDescription: NSLocalizedString("soil.description.alfisoles", comment: "Alfisoles soil description"),
+            soilClassification: NSLocalizedString("soil.classification.alfisols", comment: "Alfisols soil classification"),
+            soilDescription: NSLocalizedString("soil.description.alfisols", comment: "Alfisols soil description"),
             rgbColor: Color(red: 0.5, green: 0.45, blue: 0.4)
         ),
         MunsellColor(
             notation: "10YR 5/4",
             name: NSLocalizedString("soil.color.yellowish.brown", comment: "Yellowish brown soil color name"),
-            soilClassification: NSLocalizedString("soil.classification.alfisoles", comment: "Alfisoles soil classification"),
-            soilDescription: NSLocalizedString("soil.description.alfisoles", comment: "Alfisoles soil description"),
+            soilClassification: NSLocalizedString("soil.classification.alfisols", comment: "Alfisols soil classification"),
+            soilDescription: NSLocalizedString("soil.description.alfisols", comment: "Alfisols soil description"),
             rgbColor: Color(red: 0.55, green: 0.5, blue: 0.45)
         ),
         
@@ -87,15 +87,15 @@ class MunsellClassificationService: ObservableObject {
         MunsellColor(
             notation: "5YR 4/6",
             name: NSLocalizedString("soil.color.reddish.brown", comment: "Reddish brown soil color name"),
-            soilClassification: NSLocalizedString("soil.classification.oxisoles", comment: "Oxisoles soil classification"),
-            soilDescription: NSLocalizedString("soil.description.oxisoles", comment: "Oxisoles soil description"),
+            soilClassification: NSLocalizedString("soil.classification.oxisols", comment: "Oxisols soil classification"),
+            soilDescription: NSLocalizedString("soil.description.oxisols", comment: "Oxisols soil description"),
             rgbColor: Color(red: 0.6, green: 0.3, blue: 0.2)
         ),
         MunsellColor(
             notation: "5YR 5/6",
             name: NSLocalizedString("soil.color.red", comment: "Red soil color name"),
-            soilClassification: NSLocalizedString("soil.classification.oxisoles", comment: "Oxisoles soil classification"),
-            soilDescription: NSLocalizedString("soil.description.oxisoles", comment: "Oxisoles soil description"),
+            soilClassification: NSLocalizedString("soil.classification.oxisols", comment: "Oxisols soil classification"),
+            soilDescription: NSLocalizedString("soil.description.oxisols", comment: "Oxisols soil description"),
             rgbColor: Color(red: 0.7, green: 0.4, blue: 0.3)
         ),
         
@@ -103,15 +103,15 @@ class MunsellClassificationService: ObservableObject {
         MunsellColor(
             notation: "2.5Y 6/4",
             name: NSLocalizedString("soil.color.light.yellowish.brown", comment: "Light yellowish brown soil color name"),
-            soilClassification: NSLocalizedString("soil.classification.vertisoles", comment: "Vertisoles soil classification"),
-            soilDescription: NSLocalizedString("soil.description.vertisoles", comment: "Vertisoles soil description"),
+            soilClassification: NSLocalizedString("soil.classification.vertisols", comment: "Vertisols soil classification"),
+            soilDescription: NSLocalizedString("soil.description.vertisols", comment: "Vertisols soil description"),
             rgbColor: Color(red: 0.7, green: 0.65, blue: 0.5)
         ),
         MunsellColor(
             notation: "2.5Y 7/4",
             name: NSLocalizedString("soil.color.pale.yellow", comment: "Pale yellow soil color name"),
-            soilClassification: NSLocalizedString("soil.classification.vertisoles", comment: "Vertisoles soil classification"),
-            soilDescription: NSLocalizedString("soil.description.vertisoles", comment: "Vertisoles soil description"),
+            soilClassification: NSLocalizedString("soil.classification.vertisols", comment: "Vertisols soil classification"),
+            soilDescription: NSLocalizedString("soil.description.vertisols", comment: "Vertisols soil description"),
             rgbColor: Color(red: 0.8, green: 0.75, blue: 0.6)
         ),
         
@@ -119,15 +119,15 @@ class MunsellClassificationService: ObservableObject {
         MunsellColor(
             notation: "5Y 5/1",
             name: NSLocalizedString("soil.color.gray", comment: "Gray soil color name"),
-            soilClassification: NSLocalizedString("soil.classification.espodosoles", comment: "Espodosoles soil classification"),
-            soilDescription: NSLocalizedString("soil.description.espodosoles", comment: "Espodosoles soil description"),
+            soilClassification: NSLocalizedString("soil.classification.spodosols", comment: "Spodosols soil classification"),
+            soilDescription: NSLocalizedString("soil.description.spodosols", comment: "Spodosols soil description"),
             rgbColor: Color(red: 0.5, green: 0.5, blue: 0.5)
         ),
         MunsellColor(
             notation: "5Y 6/1",
             name: NSLocalizedString("soil.color.light.gray", comment: "Light gray soil color name"),
-            soilClassification: NSLocalizedString("soil.classification.espodosoles", comment: "Espodosoles soil classification"),
-            soilDescription: NSLocalizedString("soil.description.espodosoles", comment: "Espodosoles soil description"),
+            soilClassification: NSLocalizedString("soil.classification.spodosols", comment: "Spodosols soil classification"),
+            soilDescription: NSLocalizedString("soil.description.spodosols", comment: "Spodosols soil description"),
             rgbColor: Color(red: 0.6, green: 0.6, blue: 0.6)
         ),
         
@@ -135,15 +135,15 @@ class MunsellClassificationService: ObservableObject {
         MunsellColor(
             notation: "10YR 8/1",
             name: NSLocalizedString("soil.color.white", comment: "White soil color name"),
-            soilClassification: NSLocalizedString("soil.classification.aridisoles", comment: "Aridisoles soil classification"),
-            soilDescription: NSLocalizedString("soil.description.aridisoles", comment: "Aridisoles soil description"),
+            soilClassification: NSLocalizedString("soil.classification.aridisols", comment: "Aridisols soil classification"),
+            soilDescription: NSLocalizedString("soil.description.aridisols", comment: "Aridisols soil description"),
             rgbColor: Color(red: 0.9, green: 0.9, blue: 0.9)
         ),
         MunsellColor(
             notation: "10YR 7/1",
             name: NSLocalizedString("soil.color.light.gray", comment: "Light gray soil color name"),
-            soilClassification: NSLocalizedString("soil.classification.aridisoles", comment: "Aridisoles soil classification"),
-            soilDescription: NSLocalizedString("soil.description.aridisoles", comment: "Aridisoles soil description"),
+            soilClassification: NSLocalizedString("soil.classification.aridisols", comment: "Aridisols soil classification"),
+            soilDescription: NSLocalizedString("soil.description.aridisols", comment: "Aridisols soil description"),
             rgbColor: Color(red: 0.8, green: 0.8, blue: 0.8)
         ),
         
@@ -151,8 +151,8 @@ class MunsellClassificationService: ObservableObject {
         MunsellColor(
             notation: "10YR 6/2",
             name: NSLocalizedString("soil.color.light.brownish.gray", comment: "Light brownish gray soil color name"),
-            soilClassification: NSLocalizedString("soil.classification.entisoles", comment: "Entisoles soil classification"),
-            soilDescription: NSLocalizedString("soil.description.entisoles", comment: "Entisoles soil description"),
+            soilClassification: NSLocalizedString("soil.classification.entisols", comment: "Entisols soil classification"),
+            soilDescription: NSLocalizedString("soil.description.entisols", comment: "Entisols soil description"),
             rgbColor: Color(red: 0.6, green: 0.55, blue: 0.5)
         ),
         
@@ -160,8 +160,8 @@ class MunsellClassificationService: ObservableObject {
         MunsellColor(
             notation: "10YR 6/3",
             name: NSLocalizedString("soil.color.pale.brown", comment: "Pale brown soil color name"),
-            soilClassification: NSLocalizedString("soil.classification.inceptisoles", comment: "Inceptisoles soil classification"),
-            soilDescription: NSLocalizedString("soil.description.inceptisoles", comment: "Inceptisoles soil description"),
+            soilClassification: NSLocalizedString("soil.classification.inceptisols", comment: "Inceptisols soil classification"),
+            soilDescription: NSLocalizedString("soil.description.inceptisols", comment: "Inceptisols soil description"),
             rgbColor: Color(red: 0.65, green: 0.6, blue: 0.55)
         ),
         
@@ -169,8 +169,8 @@ class MunsellClassificationService: ObservableObject {
         MunsellColor(
             notation: "7.5YR 5/4",
             name: NSLocalizedString("soil.color.brown", comment: "Brown soil color name"),
-            soilClassification: NSLocalizedString("soil.classification.ultisoles", comment: "Ultisoles soil classification"),
-            soilDescription: NSLocalizedString("soil.description.ultisoles", comment: "Ultisoles soil description"),
+            soilClassification: NSLocalizedString("soil.classification.ultisols", comment: "Ultisols soil classification"),
+            soilDescription: NSLocalizedString("soil.description.ultisols", comment: "Ultisols soil description"),
             rgbColor: Color(red: 0.6, green: 0.5, blue: 0.4)
         )
     ]

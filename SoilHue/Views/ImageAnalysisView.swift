@@ -163,7 +163,11 @@ struct ImageAnalysisView: View {
             defer { isAnalyzing = false }
             
             do {
-                guard let sample = viewModel.currentSample else { return }
+                guard let sample = viewModel.currentSample else {
+                    throw NSError(domain: "", code: 0, userInfo: [
+                        NSLocalizedDescriptionKey: NSLocalizedString("analysis.error.no.sample", comment: "No sample selected error")
+                    ])
+                }
                 
                 // Realizar el análisis según el modo de selección y si hay área seleccionada
                 let result: SoilAnalysisResult
@@ -198,8 +202,10 @@ struct ImageAnalysisView: View {
                     }
                 }
             } catch {
-                errorMessage = error.localizedDescription
-                showingErrorAlert = true
+                await MainActor.run {
+                    errorMessage = String(format: NSLocalizedString("error.generic", comment: "Generic error message format"), String(describing: error))
+                    showingErrorAlert = true
+                }
             }
         }
     }
@@ -215,10 +221,10 @@ struct ImageAnalysisView: View {
             print("DEBUG: Análisis guardado correctamente")
         } catch {
             await MainActor.run {
-                errorMessage = error.localizedDescription
+                errorMessage = String(format: NSLocalizedString("error.generic", comment: "Generic error message format"), String(describing: error))
                 showingErrorAlert = true
             }
-            print("DEBUG: Error al guardar análisis: \(error.localizedDescription)")
+            print("DEBUG: Error al guardar análisis: \(String(format: NSLocalizedString("error.generic", comment: "Generic error message format"), String(describing: error)))")
         }
     }
 }

@@ -40,7 +40,7 @@ struct SoilSampleDetailView: View {
                 }
                 
                 if let error = error {
-                    Text(error.localizedDescription)
+                    Text(String(format: NSLocalizedString("error.generic", comment: "Generic error message format"), String(describing: error)))
                         .foregroundColor(.red)
                         .padding()
                 }

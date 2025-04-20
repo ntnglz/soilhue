@@ -47,20 +47,23 @@ class ColorAnalysisService: ObservableObject {
     init(calibrationService: CalibrationService = CalibrationService()) {
         self.calibrationService = calibrationService
         
-        // Observar cambios en el servicio de calibración
-        calibrationService.addObserver { [weak self] service in
-            Task { @MainActor in
-                self?.isCalibrated = service.isCalibrated
-                self?.correctionFactors = service.correctionFactors
-                self?.calibrationError = nil
-            }
-        }
-        
         // Cargar el estado de calibración inicial
         Task { @MainActor in
             calibrationService.loadCalibrationFactors()
-            isCalibrated = calibrationService.isCalibrated
-            correctionFactors = calibrationService.correctionFactors
+            self.isCalibrated = calibrationService.isCalibrated
+            self.correctionFactors = calibrationService.correctionFactors
+        }
+        
+        // Observar cambios en el servicio de calibración
+        calibrationService.addObserver { [weak self] service in
+            Task { @MainActor in
+                print("Debug - Estado de calibración actualizado: \(service.isCalibrated)")
+                self?.isCalibrated = service.isCalibrated
+                self?.correctionFactors = service.correctionFactors
+                if service.isCalibrated {
+                    self?.calibrationError = nil
+                }
+            }
         }
     }
     
@@ -73,7 +76,9 @@ class ColorAnalysisService: ObservableObject {
     /// - Throws: CalibrationError si la cámara no está calibrada
     func analyzeImage(_ image: UIImage, region: CGRect? = nil, polygonPoints: [CGPoint]? = nil) async throws -> (munsellNotation: String, soilClassification: String, soilDescription: String) {
         // Verificar el estado de calibración
+        print("Debug - Verificando calibración: isCalibrated = \(isCalibrated)")
         guard isCalibrated else {
+            print("Debug - Error: Cámara no calibrada")
             throw CalibrationError.notCalibrated
         }
         

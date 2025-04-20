@@ -1,0 +1,49 @@
+# Requisitos de Recursos para App Store
+
+## Icono de la App
+- Formato: PNG
+- Tamaños requeridos:
+  * 1024x1024 px (App Store)
+  * 180x180 px (iPhone)
+  * 167x167 px (iPad Pro)
+  * 152x152 px (iPad)
+  * 120x120 px (iPhone)
+  * 87x87 px (iPhone Spotlight)
+  * 80x80 px (iPhone Spotlight)
+  * 60x60 px (iPhone)
+  * 58x58 px (Settings)
+  * 40x40 px (Spotlight)
+  * 29x29 px (Settings)
+
+## Capturas de Pantalla
+- Formato: PNG o JPEG
+- Tamaños requeridos para iPhone:
+  * 6.7" Display (1290x2796 px)
+  * 6.5" Display (1242x2688 px)
+  * 5.5" Display (1242x2208 px)
+  * 5.4" Display (1170x2532 px)
+  * 5.0" Display (1125x2436 px)
+  * 4.7" Display (750x1334 px)
+  * 4.0" Display (640x1136 px)
+
+- Tamaños requeridos para iPad:
+  * 12.9" Display (2048x2732 px)
+  * 11" Display (1668x2388 px)
+  * 10.5" Display (1668x2224 px)
+  * 9.7" Display (1536x2048 px)
+
+## Escenas Recomendadas para Capturas
+1. Pantalla de inicio/calibración
+2. Captura de muestra de suelo
+3. Resultados del análisis
+4. Historial de muestras
+5. Exportación de datos
+6. Configuración
+
+## Notas Importantes
+- Las capturas deben mostrar la app en uso real
+- Incluir ejemplos de diferentes tipos de suelo
+- Mostrar la interfaz en ambos idiomas (español e inglés)
+- Asegurar que los textos sean legibles
+- Evitar mostrar información sensible o personal
+- Mantener un diseño coherente en todas las capturas 

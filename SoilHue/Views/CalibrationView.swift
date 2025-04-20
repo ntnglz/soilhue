@@ -19,11 +19,11 @@ struct CalibrationView: View {
     /// Servicio de tarjeta de calibración
     private let cardService = CalibrationCardService()
     
+    @Environment(\.dismiss) private var dismiss
+    
     /// Enum para controlar qué sheet se muestra
-    private enum SheetType: Identifiable {
-        case camera
-        case imagePicker
-        case share(UIImage)
+    private enum ActiveSheet: Identifiable {
+        case camera, imagePicker, share(UIImage)
         
         var id: Int {
             switch self {
@@ -35,7 +35,7 @@ struct CalibrationView: View {
     }
     
     /// Estado actual del sheet
-    @State private var activeSheet: SheetType?
+    @State private var activeSheet: ActiveSheet?
     
     /// Imagen seleccionada para calibración
     @State private var selectedImage: UIImage?
@@ -50,7 +50,7 @@ struct CalibrationView: View {
     @State private var showSuccess = false
     
     /// Callback para cuando se completa la calibración
-    var onCalibrationComplete: (() -> Void)?
+    let onCalibrationComplete: (() -> Void)?
     
     init(onCalibrationComplete: (() -> Void)? = nil) {
         // Cargar factores de calibración al inicio
@@ -59,43 +59,60 @@ struct CalibrationView: View {
     }
     
     var body: some View {
-        ScrollView {
+        NavigationView {
             VStack(spacing: 20) {
                 // Estado de calibración
                 CalibrationStatusView(state: calibrationService.calibrationState)
                 
-                // Imagen capturada
-                if let image = selectedImage {
-                    CapturedImageView(image: image)
-                }
-                
-                // Botones de acción
-                ActionButtonsView(
-                    onCameraTap: { activeSheet = .camera },
-                    onGalleryTap: { activeSheet = .imagePicker }
-                )
-                
-                // Información de calibración
-                CalibrationInfoView()
-                
-                // Alternativa para aficionados
-                BasicCalibrationCardView(
-                    onDownloadTap: {
-                        if let image = cardService.generateCalibrationCard() {
-                            activeSheet = .share(image)
-                        } else {
-                            errorMessage = NSLocalizedString("calibration.error.generic", comment: "Error generating calibration card")
-                            showError = true
-                        }
+                if case .calibrated = calibrationService.calibrationState {
+                    // Si está calibrado, mostrar botón para recalibrar
+                    Button(action: {
+                        calibrationService.calibrationState = .notCalibrated
+                        selectedImage = nil
+                    }) {
+                        Text(NSLocalizedString("calibration.recalibrate", comment: "Recalibrate button"))
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .cornerRadius(10)
                     }
-                )
+                } else {
+                    // Si no está calibrado, mostrar opciones de captura
+                    if let image = selectedImage {
+                        CapturedImageView(image: image)
+                    } else {
+                        CalibrationInfoView()
+                    }
+                    
+                    // Botones de acción
+                    HStack(spacing: 20) {
+                        Button(action: { activeSheet = .camera }) {
+                            Label(NSLocalizedString("button.camera", comment: "Camera button"), systemImage: "camera")
+                        }
+                        .buttonStyle(.borderedProminent)
+                        
+                        Button(action: { activeSheet = .imagePicker }) {
+                            Label(NSLocalizedString("button.gallery", comment: "Gallery button"), systemImage: "photo.on.rectangle")
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                }
             }
             .padding()
+            .navigationTitle(NSLocalizedString("calibration.title", comment: "Calibration title"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    if case .calibrated = calibrationService.calibrationState {
+                        Button(NSLocalizedString("button.done", comment: "Done button")) {
+                            dismiss()
+                        }
+                    }
+                }
+            }
         }
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarItems(trailing: Button(NSLocalizedString("button.close", comment: "Close button")) {
-            onCalibrationComplete?()
-        })
         .sheet(item: $activeSheet) { sheet in
             switch sheet {
             case .camera:
@@ -118,6 +135,7 @@ struct CalibrationView: View {
         }
         .alert(NSLocalizedString("calibration.success.title", comment: "Calibration success title"), isPresented: $showSuccess) {
             Button(NSLocalizedString("button.ok", comment: "OK button"), role: .cancel) {
+                dismiss()
                 onCalibrationComplete?()
             }
         } message: {
@@ -160,36 +178,6 @@ struct CalibrationView: View {
 
 // MARK: - Vistas de Componentes
 
-/// Vista que muestra el estado actual de la calibración
-struct CalibrationStatusView: View {
-    let state: CalibrationService.CalibrationState
-    
-    var body: some View {
-        Group {
-            switch state {
-            case .notCalibrated:
-                Text(NSLocalizedString("calibration.status.notCalibrated", comment: "Not calibrated status"))
-                    .foregroundColor(.red)
-            case .calibrating:
-                HStack {
-                    ProgressView()
-                    Text(NSLocalizedString("calibration.status.calibrating", comment: "Calibrating status"))
-                }
-            case .calibrated:
-                Text(NSLocalizedString("calibration.status.calibrated", comment: "Calibrated status"))
-                    .foregroundColor(.green)
-            case .error(let message):
-                Text(String(format: NSLocalizedString("calibration.status.error", comment: "Error status with message"), message))
-                    .foregroundColor(.red)
-            }
-        }
-        .font(.headline)
-        .padding()
-        .frame(maxWidth: .infinity)
-        .background(Color.gray.opacity(0.1))
-        .cornerRadius(10)
-    }
-}
 
 /// Vista que muestra la imagen capturada
 struct CapturedImageView: View {
@@ -201,29 +189,6 @@ struct CapturedImageView: View {
             .scaledToFit()
             .frame(height: 200)
             .cornerRadius(10)
-    }
-}
-
-/// Vista con los botones de acción
-struct ActionButtonsView: View {
-    let onCameraTap: () -> Void
-    let onGalleryTap: () -> Void
-    
-    var body: some View {
-        HStack(spacing: 20) {
-            Button(action: onCameraTap) {
-                Label(NSLocalizedString("calibration.button.takePhoto", comment: "Take photo button"), systemImage: "camera")
-                    .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.borderedProminent)
-            
-            Button(action: onGalleryTap) {
-                Label(NSLocalizedString("calibration.button.selectPhoto", comment: "Select photo button"), systemImage: "photo.on.rectangle")
-                    .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.bordered)
-        }
-        .padding(.horizontal)
     }
 }
 

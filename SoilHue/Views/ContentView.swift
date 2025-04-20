@@ -77,6 +77,7 @@ struct ContentView: View {
     @State private var showExport = false
     @State private var showError = false
     @State private var errorMessage: String?
+    @State private var showHelp = false
     
     var mainContent: some View {
         VStack {
@@ -176,7 +177,7 @@ struct ContentView: View {
                     .padding(.horizontal, 30)
                     
                     // Botón de ayuda
-                    Button(action: { /* TODO: Implementar ayuda */ }) {
+                    Button(action: { showHelp = true }) {
                         HStack {
                             Image(systemName: "questionmark.circle")
                             Text(NSLocalizedString("button.help", comment: "Help button"))
@@ -234,6 +235,9 @@ struct ContentView: View {
             Button(NSLocalizedString("button.ok", comment: "OK button")) {}
         } message: { message in
             Text(message)
+        }
+        .sheet(isPresented: $showHelp) {
+            HelpView()
         }
     }
     

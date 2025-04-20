@@ -7,7 +7,7 @@ struct ExportView: View {
         do {
             return try StorageService()
         } catch {
-            fatalError("Error inicializando StorageService: \(error.localizedDescription)")
+            fatalError("Error inicializando StorageService: \(String(format: NSLocalizedString("error.generic", comment: "Generic error message format"), String(describing: error)))")
         }
     }()
     
@@ -93,7 +93,7 @@ struct ExportView: View {
                 exportedFileURL = exportURL
                 showShareSheet = true
             } catch {
-                errorMessage = error.localizedDescription
+                errorMessage = String(format: NSLocalizedString("error.generic", comment: "Generic error message format"), String(describing: error))
                 showError = true
             }
             isExporting = false

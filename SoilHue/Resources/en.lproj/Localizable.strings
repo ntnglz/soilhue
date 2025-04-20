@@ -10,7 +10,7 @@
 // Main titles and messages
 "app.name" = "SoilHue";
 "welcome.title" = "Welcome to SoilHue";
-"welcome.description" = "Analyze soil color accurately and get its Munsell classification";
+"welcome.description" = "Analyze soil color with precision and get its Munsell classification";
 "alert.error.title" = "Error";
 
 // Location status
@@ -140,6 +140,9 @@
 "Please calibrate the camera before taking samples." = "Please calibrate the camera before taking samples.";
 "Calibration card not detected" = "Calibration card not detected";
 "Position the calibration card in the frame" = "Position the calibration card in the frame";
+"calibration.title" = "Calibration";
+"calibration.recalibrate" = "Recalibrate";
+"button.done" = "Done";
 
 // Sample analysis
 "Analyzing sample..." = "Analyzing sample...";
@@ -173,12 +176,12 @@
 
 /* General Section */
 "help.general.what.title" = "What is SoilHue?";
-"help.general.what.content" = "SoilHue is an application designed to assist in soil color classification and analysis using the Munsell system, an international standard for color description.";
+"help.general.what.content" = "SoilHue is an application designed to help analyze soil color using the Munsell system, an international standard for color description.";
 
 "help.general.how.title" = "How does it work?";
-"help.general.how.content" = "1. Take a photo of the soil or select an existing one\n2. Select the specific area to analyze\n3. Get the Munsell color and soil classification";
+"help.general.how.content" = "1. Take a photo or select a soil sample\n2. Select the specific area to analyze\n3. Get the Munsell color and soil classification";
 
-"help.general.tips.title" = "Tips for better results";
+"help.general.tips.title" = "Tips for Best Results";
 "help.general.tips.content" = "• Take photos in natural light\n• Avoid shadows and reflections\n• Keep the sample clean and dry\n• Use a flat surface";
 
 "help.general.munsell.title" = "Munsell System";
@@ -299,14 +302,14 @@
 
 /* Calibration Card */
 "calibration.card.title" = "Basic Calibration Card";
-"calibration.card.instructions.title" = "Usage Instructions:";
-"calibration.card.instructions.print" = "1. Print this card on a quality printer";
+"calibration.card.instructions.title" = "Instructions:";
+"calibration.card.instructions.print" = "1. Print this card using a quality printer";
 "calibration.card.instructions.colors" = "2. Ensure colors are printed correctly";
 "calibration.card.instructions.placement" = "3. Place the card on a flat surface";
 "calibration.card.instructions.lighting" = "4. Avoid shadows and reflections";
-"calibration.card.instructions.parallel" = "5. Keep the card parallel to the camera when taking the photo";
+"calibration.card.instructions.parallel" = "5. Keep the card parallel to the camera";
 "calibration.card.note" = "Note: This basic card provides approximate calibration.";
-"calibration.card.recommendation" = "For professional results, using the X-Rite ColorChecker Classic is recommended.";
+"calibration.card.recommendation" = "For professional results, use the X-Rite ColorChecker Classic.";
 
 /* Calibration Service */
 "calibration.patch.dark.skin" = "Dark skin";
@@ -414,28 +417,28 @@
 "soil.color.pale.brown" = "Pale Brown";
 
 /* Soil Classifications */
-"soil.classification.histosoles" = "Histosols";
-"soil.classification.mollisoles" = "Mollisols";
-"soil.classification.alfisoles" = "Alfisols";
-"soil.classification.oxisoles" = "Oxisols";
-"soil.classification.vertisoles" = "Vertisols";
-"soil.classification.espodosoles" = "Spodosols";
-"soil.classification.aridisoles" = "Aridisols";
-"soil.classification.entisoles" = "Entisols";
-"soil.classification.inceptisoles" = "Inceptisols";
-"soil.classification.ultisoles" = "Ultisols";
+"soil.classification.histosols" = "Histosols";
+"soil.classification.mollisols" = "Mollisols";
+"soil.classification.alfisols" = "Alfisols";
+"soil.classification.oxisols" = "Oxisols";
+"soil.classification.vertisols" = "Vertisols";
+"soil.classification.spodosols" = "Spodosols";
+"soil.classification.aridisols" = "Aridisols";
+"soil.classification.entisols" = "Entisols";
+"soil.classification.inceptisols" = "Inceptisols";
+"soil.classification.ultisols" = "Ultisols";
 
 /* Soil Descriptions */
-"soil.description.histosoles" = "Organic soil with high organic matter content, typical of peat soils and O horizons.";
-"soil.description.mollisoles" = "Dark and fertile soil, rich in organic matter, typical of grasslands and A horizons.";
-"soil.description.alfisoles" = "Soil with clay horizon, fertile, typical of forest regions and Bt horizons.";
-"soil.description.oxisoles" = "Highly weathered soil from tropical regions, with high content of iron and aluminum oxides.";
-"soil.description.vertisoles" = "Clay soil that cracks, with high content of expansive clay minerals.";
-"soil.description.espodosoles" = "Acidic soil with accumulation of iron and aluminum, typical of humid forest regions.";
-"soil.description.aridisoles" = "Soil from arid regions, with accumulation of salts and carbonates in the subsoil.";
-"soil.description.entisoles" = "Young soil with little horizon development, typical of recent alluvial deposits.";
-"soil.description.inceptisoles" = "Slightly developed soil with incipient horizons, typical of mountainous regions.";
-"soil.description.ultisoles" = "Acidic, highly weathered soil with clay horizon, typical of humid regions.";
+"soil.description.histosols" = "Organic soil with high organic matter content, typical of peat soils and O horizons.";
+"soil.description.mollisols" = "Dark, fertile soil rich in organic matter, typical of prairies and A horizons.";
+"soil.description.alfisols" = "Soil with clay horizon, fertile, typical of forest regions and Bt horizons.";
+"soil.description.oxisols" = "Highly weathered soil from tropical regions, high in iron and aluminum oxides.";
+"soil.description.vertisols" = "Clay soil that cracks, with high content of expansive clay minerals.";
+"soil.description.spodosols" = "Acidic soil with iron and aluminum accumulation, typical of humid forest regions.";
+"soil.description.aridisols" = "Soil from arid regions, with salt and carbonate accumulation in subsoil.";
+"soil.description.entisols" = "Young soil with little horizon development, typical of recent alluvial deposits.";
+"soil.description.inceptisols" = "Slightly developed soil with incipient horizons, typical of mountainous regions.";
+"soil.description.ultisols" = "Acidic, highly weathered soil with clay horizon, typical of humid regions.";
 
 /* Debug Messages */
 "debug.location.decoding" = "DEBUG: Decoding location - lat: %f, lon: %f";
@@ -505,3 +508,15 @@
 "help.troubleshooting.camera" = "Camera error: check permissions";
 
 "help.contact.title" = "Contact & Support";
+
+/* Calibration Status */
+"calibration.status.notCalibrated.title" = "Not calibrated";
+"calibration.status.notCalibrated.message" = "The camera needs to be calibrated for accurate results. Please calibrate the camera before continuing.";
+
+"calibration.status.calibrating.title" = "Calibrating";
+"calibration.status.calibrating.message" = "Please keep the calibration card in the frame and wait for the process to complete.";
+
+"calibration.status.calibrated.title" = "Calibrated";
+"calibration.status.calibrated.message" = "The camera is calibrated and ready to analyze soil samples.";
+
+"calibration.status.error.title" = "Calibration error";

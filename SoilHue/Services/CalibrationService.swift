@@ -58,6 +58,7 @@ class CalibrationService: ObservableObject {
     
     /// Carga los factores de corrección desde UserDefaults
     func loadCalibrationFactors() {
+        print("Debug - Cargando factores de calibración")
         let defaults = UserDefaults.standard
         if defaults.bool(forKey: "isCalibrated") {
             correctionFactors = CorrectionFactors(
@@ -67,12 +68,13 @@ class CalibrationService: ObservableObject {
             )
             lastCalibrationDate = defaults.object(forKey: "lastCalibrationDate") as? Date
             calibrationState = .calibrated
-            notifyObservers()
+            print("Debug - Calibración cargada: Factores R=\(correctionFactors.red), G=\(correctionFactors.green), B=\(correctionFactors.blue)")
         } else {
             calibrationState = .notCalibrated
             lastCalibrationDate = nil
-            notifyObservers()
+            print("Debug - No hay calibración guardada")
         }
+        notifyObservers()
     }
     
     init() {
@@ -142,6 +144,8 @@ class CalibrationService: ObservableObject {
         let width = ciImage.extent.width
         let height = ciImage.extent.height
         
+        print("Debug - Dimensiones de la imagen: \(width)x\(height)")
+        
         // Asumimos una disposición 4x6 de la tarjeta ColorChecker
         let patchWidth = width / 6
         let patchHeight = height / 4
@@ -150,21 +154,30 @@ class CalibrationService: ObservableObject {
         var greenCorrection = 0.0
         var blueCorrection = 0.0
         var validPatches = 0
+        var totalPatches = 0
         
         print(NSLocalizedString("calibration.log.start", comment: "Starting calibration processing"))
         print(String(format: NSLocalizedString("calibration.log.dimensions", comment: "Image dimensions log"), width, height))
         
         // Procesar cada parche
         for patch in colorCheckerPatches {
+            totalPatches += 1
             let row = patch.position / 6
             let col = patch.position % 6
             
+            // Calcular las coordenadas del parche
+            let margin = min(patchWidth, patchHeight) * 0.2 // 20% de margen
+            let x = CGFloat(col) * patchWidth + margin
+            let y = CGFloat(row) * patchHeight + margin
+            
             let region = CGRect(
-                x: CGFloat(col) * patchWidth,
-                y: height - (CGFloat(row + 1) * patchHeight), // Invertido porque CoreImage usa coordenadas desde abajo
-                width: patchWidth,
-                height: patchHeight
+                x: x,
+                y: y,
+                width: patchWidth - (margin * 2),
+                height: patchHeight - (margin * 2)
             )
+            
+            print("Debug - Procesando parche \(patch.name) en región: \(region)")
             
             // Obtener el color promedio del parche
             let measuredColor = getAverageColor(in: ciImage, region: region, context: context)
@@ -173,23 +186,33 @@ class CalibrationService: ObservableObject {
             print(String(format: NSLocalizedString("calibration.log.reference", comment: "Reference values log"), patch.referenceValues.red, patch.referenceValues.green, patch.referenceValues.blue))
             print(String(format: NSLocalizedString("calibration.log.measured", comment: "Measured values log"), measuredColor.red, measuredColor.green, measuredColor.blue))
             
-            // Calcular factores de corrección para este parche
-            if measuredColor.red > 0 && measuredColor.green > 0 && measuredColor.blue > 0 {
+            // Calcular factores de corrección para este parche si los valores son válidos
+            if measuredColor.red > 0.05 && measuredColor.green > 0.05 && measuredColor.blue > 0.05 &&
+               measuredColor.red < 0.95 && measuredColor.green < 0.95 && measuredColor.blue < 0.95 {
                 let redFactor = patch.referenceValues.red / measuredColor.red
                 let greenFactor = patch.referenceValues.green / measuredColor.green
                 let blueFactor = patch.referenceValues.blue / measuredColor.blue
                 
-                print(String(format: NSLocalizedString("calibration.log.factors", comment: "Correction factors log"), redFactor, greenFactor, blueFactor))
-                
-                redCorrection += redFactor
-                greenCorrection += greenFactor
-                blueCorrection += blueFactor
-                validPatches += 1
+                // Verificar que los factores estén dentro de rangos razonables
+                if redFactor > 0.1 && redFactor < 10.0 &&
+                   greenFactor > 0.1 && greenFactor < 10.0 &&
+                   blueFactor > 0.1 && blueFactor < 10.0 {
+                    print(String(format: NSLocalizedString("calibration.log.factors", comment: "Correction factors log"), redFactor, greenFactor, blueFactor))
+                    
+                    redCorrection += redFactor
+                    greenCorrection += greenFactor
+                    blueCorrection += blueFactor
+                    validPatches += 1
+                }
             }
         }
         
-        // Verificar que tengamos suficientes parches válidos
-        guard validPatches > 0 else {
+        print("Total patches processed: \(totalPatches)")
+        print("Valid patches found: \(validPatches)")
+        
+        // Verificar que tengamos suficientes parches válidos (al menos 25% de los parches)
+        let minimumValidPatches = Int(Double(totalPatches) * 0.25)
+        guard validPatches >= minimumValidPatches else {
             calibrationState = .error(NSLocalizedString("calibration.error.insufficient.patches", comment: "Error insufficient color patches"))
             return
         }
@@ -214,12 +237,15 @@ class CalibrationService: ObservableObject {
     
     /// Guarda los factores de corrección en UserDefaults
     private func saveCalibrationFactors() {
+        print("Debug - Guardando factores de calibración")
         let defaults = UserDefaults.standard
         defaults.set(true, forKey: "isCalibrated")
         defaults.set(correctionFactors.red, forKey: "calibrationRedFactor")
         defaults.set(correctionFactors.green, forKey: "calibrationGreenFactor")
         defaults.set(correctionFactors.blue, forKey: "calibrationBlueFactor")
         defaults.set(lastCalibrationDate, forKey: "lastCalibrationDate")
+        defaults.synchronize()
+        print("Debug - Calibración guardada: Factores R=\(correctionFactors.red), G=\(correctionFactors.green), B=\(correctionFactors.blue)")
     }
     
     /// Obtiene el color promedio de una región de la imagen
@@ -230,58 +256,31 @@ class CalibrationService: ObservableObject {
     /// - Returns: Color promedio en formato RGB
     private func getAverageColor(in image: CIImage, region: CGRect, context: CIContext) -> (red: Double, green: Double, blue: Double) {
         // Crear un filtro para recortar la región
-        guard let cropFilter = CIFilter(name: "CICrop") else {
-            return (0, 0, 0)
-        }
-        cropFilter.setValue(image, forKey: kCIInputImageKey)
-        cropFilter.setValue(region, forKey: "inputRectangle")
+        let croppedImage = image.cropped(to: region)
         
-        guard let outputImage = cropFilter.outputImage else {
-            return (0, 0, 0)
-        }
+        // Usar CIAreaAverage para obtener el color promedio
+        let filter = CIFilter.areaAverage()
+        filter.inputImage = croppedImage
+        filter.extent = croppedImage.extent
         
-        // Crear un filtro para reducir la imagen a 1x1 píxel
-        guard let scaleFilter = CIFilter(name: "CIAffineTransform") else {
-            return (0, 0, 0)
-        }
-        scaleFilter.setValue(outputImage, forKey: kCIInputImageKey)
-        
-        // Crear una transformación de escala
-        let scale = CGAffineTransform(scaleX: 0.0001, y: 0.0001)
-        scaleFilter.setValue(scale, forKey: kCIInputTransformKey)
-        
-        guard let scaledImage = scaleFilter.outputImage,
-              let cgImage = context.createCGImage(scaledImage, from: scaledImage.extent) else {
+        guard let outputImage = filter.outputImage,
+              let cgImage = context.createCGImage(outputImage, from: outputImage.extent) else {
+            print("Error: No se pudo crear la imagen de salida")
             return (0, 0, 0)
         }
         
-        // Obtener el color del píxel único
-        let bitmapInfo = CGImageAlphaInfo.premultipliedLast.rawValue
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let width = 1
-        let height = 1
-        let bytesPerPixel = 4
-        let bytesPerRow = bytesPerPixel * width
-        let bitsPerComponent = 8
-        var pixelData = [UInt8](repeating: 0, count: width * height * bytesPerPixel)
-        
-        guard let context = CGContext(
-            data: &pixelData,
-            width: width,
-            height: height,
-            bitsPerComponent: bitsPerComponent,
-            bytesPerRow: bytesPerRow,
-            space: colorSpace,
-            bitmapInfo: bitmapInfo
-        ) else {
+        let dataProvider = cgImage.dataProvider
+        guard let data = dataProvider?.data,
+              let bytes = CFDataGetBytePtr(data) else {
+            print("Error: No se pudieron obtener los datos de la imagen")
             return (0, 0, 0)
         }
         
-        context.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
+        let red = Double(bytes[0]) / 255.0
+        let green = Double(bytes[1]) / 255.0
+        let blue = Double(bytes[2]) / 255.0
         
-        let red = Double(pixelData[0]) / 255.0
-        let green = Double(pixelData[1]) / 255.0
-        let blue = Double(pixelData[2]) / 255.0
+        print("Debug - Color promedio obtenido: R=\(red), G=\(green), B=\(blue)")
         
         return (red, green, blue)
     }
