@@ -25,10 +25,12 @@ struct ImageAnalysisView: View {
         span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
     )
     
+    @State private var showSuccess = false
+    
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView {
-                VStack(spacing: 16) {
+                VStack(spacing: 24) {
                     // Selector de modo
                     SelectionModePickerView(selectionMode: $selectionMode)
                         .padding(.horizontal)
@@ -41,14 +43,13 @@ struct ImageAnalysisView: View {
                         polygonPoints: $polygonPoints
                     )
                     .frame(height: 300)
+                    .padding(.bottom, 40) // Espacio extra para la leyenda
                     
                     // Mapa con localización
-                    if let sample = viewModel.currentSample,
-                       let location = sample.location {
+                    if let location = viewModel.currentSample?.location {
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Ubicación de la muestra")
                                 .font(.headline)
-                                .padding(.top, 8)
                             
                             LocationView(location: location, region: $mapRegion)
                                 .frame(height: 200)
@@ -59,6 +60,12 @@ struct ImageAnalysisView: View {
                                 )
                         }
                         .padding(.horizontal)
+                        .onAppear {
+                            mapRegion = MKCoordinateRegion(
+                                center: location.coordinate,
+                                span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                            )
+                        }
                     }
                     
                     // Botón de análisis
@@ -73,7 +80,7 @@ struct ImageAnalysisView: View {
                     if let sample = viewModel.currentSample,
                        let munsellColor = sample.munsellColor,
                        !munsellColor.isEmpty {
-                        VStack(spacing: 16) {
+                        VStack(spacing: 24) {
                             Text("Resultados del Análisis")
                                 .font(.title)
                                 .fontWeight(.bold)
@@ -94,7 +101,11 @@ struct ImageAnalysisView: View {
                                 }
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding()
+                            .background(Color.secondary.opacity(0.1))
+                            .cornerRadius(10)
                             
+                            // Botones de acción
                             VStack(spacing: 15) {
                                 Button(action: {
                                     showingSaveDialog = true
@@ -139,20 +150,26 @@ struct ImageAnalysisView: View {
                                     }
                                 }
                             }
-                            .padding(.top, 8)
                         }
                         .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color(.systemBackground))
-                        .cornerRadius(12)
-                        .shadow(radius: 2)
+                        .background(Color.secondary.opacity(0.05))
+                        .cornerRadius(15)
                         .padding(.horizontal)
+                        .transition(.opacity.combined(with: .move(edge: .bottom)))
                         .id("results")
                     }
                 }
+                .padding(.vertical, 24)
             }
             .onAppear {
                 scrollProxy = proxy
+                if let sample = viewModel.currentSample,
+                   let location = sample.location {
+                    mapRegion = MKCoordinateRegion(
+                        center: location.coordinate,
+                        span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                    )
+                }
             }
         }
         .sheet(isPresented: $showHelp) {
@@ -170,9 +187,17 @@ struct ImageAnalysisView: View {
             )
         }
         .alert("Error", isPresented: $showError) {
+            Button("Calibrar ahora") {
+                showCalibration = true
+            }
             Button("OK", role: .cancel) { }
         } message: {
             Text(errorMessage ?? "")
+        }
+        .alert("Éxito", isPresented: $showSuccess) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("Análisis guardado correctamente")
         }
         .sheet(isPresented: $showCalibration) {
             CalibrationView()
@@ -232,8 +257,8 @@ struct ImageAnalysisView: View {
             try await viewModel.saveSample(notes: notes, tags: tags.split(separator: ",").map(String.init))
             await MainActor.run {
                 showingSaveDialog = false
-                errorMessage = "Análisis guardado correctamente"
-                showError = true
+                showError = false
+                showSuccess = true
             }
             print("DEBUG: Análisis guardado correctamente")
         } catch {

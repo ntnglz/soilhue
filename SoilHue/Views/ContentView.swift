@@ -25,11 +25,33 @@ enum SelectionMode {
 ///
 /// La vista integra la cámara y el selector de fotos, manteniendo
 /// el estado de la imagen seleccionada y el ViewModel de la muestra.
+struct ToolbarView: ToolbarContent {
+    var showSettings: () -> Void
+    var showExport: () -> Void
+    var hasImage: Bool
+    
+    var body: some ToolbarContent {
+        ToolbarItemGroup(placement: .navigationBarTrailing) {
+            Button(action: showSettings) {
+                Image(systemName: "gear")
+            }
+            
+            if hasImage {
+                Button(action: showExport) {
+                    Image(systemName: "square.and.arrow.up")
+                }
+            }
+        }
+    }
+}
+
 struct ContentView: View {
     /// ViewModel que gestiona la lógica de las muestras de suelo.
     @StateObject private var viewModel = SoilSampleViewModel()
     @StateObject private var onboardingModel = OnboardingModel()
     @EnvironmentObject private var settingsModel: SettingsModel
+    @StateObject private var locationService = LocationService()
+    @StateObject private var colorAnalysisService = ColorAnalysisService()
     
     /// Item seleccionado del selector de fotos.
     @State private var selectedItem: PhotosPickerItem?
@@ -43,7 +65,6 @@ struct ContentView: View {
     /// Indica si la vista de resultados está activa.
     @State private var isResultActive = false
     
-    @StateObject private var colorAnalysisService = ColorAnalysisService()
     @State private var munsellNotation: String = ""
     @State private var soilClassification: String = ""
     @State private var soilDescription: String = ""
@@ -56,139 +77,95 @@ struct ContentView: View {
     @State private var showSettings = false
     @State private var showExport = false
     
-    /// Contenido principal de la vista.
-    var body: some View {
-        Group {
-            if onboardingModel.hasSeenOnboarding {
-                mainContent
+    var mainContent: some View {
+        VStack {
+            if let image = selectedImage {
+                ImageAnalysisView(
+                    viewModel: viewModel,
+                    colorAnalysisService: colorAnalysisService,
+                    image: image,
+                    selectionMode: $selectionMode,
+                    onNewSample: {
+                        selectedImage = nil
+                    }
+                )
             } else {
-                OnboardingView(model: onboardingModel)
-                    .transition(.opacity)
-            }
-        }
-        .animation(.easeInOut, value: onboardingModel.hasSeenOnboarding)
-        .onAppear {
-            if settingsModel.autoCalibration {
-                showCalibration = true
-            }
-        }
-        .preferredColorScheme(colorScheme)
-    }
-    
-    /// Botón de configuración para el toolbar
-    private var settingsButton: some View {
-        Button(action: { showSettings = true }) {
-            Image(systemName: "gear")
-                .imageScale(.medium)
-        }
-    }
-    
-    /// Botón de exportación para el toolbar
-    private var exportButton: some View {
-        Button(action: { showExport = true }) {
-            Image(systemName: "square.and.arrow.up")
-                .imageScale(.medium)
-        }
-    }
-    
-    /// Vista principal de la aplicación
-    private var mainContent: some View {
-        NavigationStack {
-            ZStack {
-                Color(.systemBackground)
-                    .ignoresSafeArea()
-
-                VStack(spacing: 0) {
-                    ScrollView {
-                        VStack(spacing: 0) {
-                            if let image = selectedImage {
-                                ImageAnalysisView(
-                                    viewModel: viewModel,
-                                    colorAnalysisService: colorAnalysisService,
-                                    image: image,
-                                    selectionMode: $selectionMode,
-                                    onNewSample: resetState
-                                )
-                                .frame(maxHeight: .infinity)
-                            } else {
-                                ImageSelectionView(
-                                    isCameraActive: $isCameraActive,
-                                    showImagePicker: $showImagePicker,
-                                    showCalibration: $showCalibration,
-                                    onImageSelected: { image in
-                                        selectedImage = image
-                                    }
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-            .navigationTitle("SoilHue")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    HStack(spacing: 16) {
-                        exportButton
-                        settingsButton
-                    }
-                }
-            }
-            .sheet(isPresented: $showImagePicker) {
-                ImagePicker(image: $selectedImage)
-            }
-            .sheet(isPresented: $isCameraActive) {
-                CameraCaptureView(
-                    capturedImage: Binding(
-                        get: { viewModel.currentSample?.image },
-                        set: { newImage in
-                            if let image = newImage {
-                                viewModel.addSample(image: image)
-                                isCameraActive = false
-                                selectedImage = image
-                            }
-                        }
-                    ),
-                    capturedLocation: Binding(
-                        get: { viewModel.currentSample?.location },
-                        set: { newLocation in
-                            if let location = newLocation {
-                                viewModel.currentSample?.location = location
-                            }
-                        }
-                    ),
-                    resolution: .high,
-                    showGuide: false
+                WelcomeView(
+                    isCameraActive: $isCameraActive,
+                    selectedItem: $selectedItem,
+                    showCalibration: $showCalibration
                 )
             }
-            .sheet(isPresented: $showCalibration) {
-                CalibrationView(onCalibrationComplete: {
-                    showCalibration = false
-                })
-            }
-            .sheet(isPresented: $showSettings) {
-                SettingsView(model: settingsModel)
-            }
-            .sheet(isPresented: $showExport) {
-                ExportView()
-            }
         }
     }
     
-    private func resetState() {
-        selectedImage = nil
-        viewModel.currentSample = nil
+    /// Contenido principal de la vista.
+    var body: some View {
+        NavigationView {
+            mainContent
+                .navigationTitle("SoilHue")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar(id: "mainToolbar") {
+                    ToolbarItem(id: "settingsButton", placement: .primaryAction) {
+                        Button(action: { showSettings = true }) {
+                            Image(systemName: "gear")
+                        }
+                    }
+                    
+                    if selectedImage != nil {
+                        ToolbarItem(id: "exportButton", placement: .primaryAction) {
+                            Button(action: { showExport = true }) {
+                                Image(systemName: "square.and.arrow.up")
+                            }
+                        }
+                    }
+                }
+        }
+        .onAppear {
+            // Solicitar permisos de ubicación al iniciar
+            locationService.requestAuthorization()
+        }
+        .onChange(of: selectedItem) { item in
+            if let item = item {
+                loadTransferable(from: item)
+            }
+        }
+        .sheet(isPresented: $isCameraActive) {
+            CameraCaptureView(
+                capturedImage: $selectedImage,
+                capturedLocation: Binding(
+                    get: { viewModel.currentSample?.location },
+                    set: { location in
+                        if viewModel.currentSample == nil {
+                            viewModel.addSample(image: selectedImage ?? UIImage())
+                        }
+                        viewModel.currentSample?.location = location
+                    }
+                ),
+                resolution: settingsModel.cameraResolution,
+                showGuide: false
+            )
+        }
+        .sheet(isPresented: $showCalibration) {
+            CalibrationView()
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsView(model: settingsModel)
+        }
+        .sheet(isPresented: $showExport) {
+            ExportView()
+        }
+        .fullScreenCover(isPresented: .constant(!onboardingModel.hasSeenOnboarding)) {
+            OnboardingView(model: onboardingModel)
+        }
     }
     
-    /// Esquema de color basado en los ajustes
-    private var colorScheme: ColorScheme? {
-        switch settingsModel.darkMode {
-        case .light:
-            return .light
-        case .dark:
-            return .dark
-        case .system:
-            return nil
+    private func loadTransferable(from item: PhotosPickerItem) {
+        Task { @MainActor in
+            if let data = try? await item.loadTransferable(type: Data.self),
+               let image = UIImage(data: data) {
+                selectedImage = image
+            }
         }
     }
 }
@@ -196,4 +173,5 @@ struct ContentView: View {
 #Preview {
     ContentView()
         .environmentObject(SettingsModel())
+        .environmentObject(CalibrationService())
 }

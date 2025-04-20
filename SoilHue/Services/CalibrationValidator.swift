@@ -98,19 +98,8 @@ class CalibrationValidator {
         
         let averageError = totalError / Double(referenceColors.count)
         
-        // Variables para el resultado
-        var isValid: Bool
-        var quality: CalibrationQuality
-        var resultProblematicColors: [String]
-        
-        #if DEBUG
-        // En debug, siempre aceptar la calibración
-        print("DEBUG: Aceptando calibración con error máximo: \(maxError * 100)% y error promedio: \(averageError * 100)%")
-        isValid = true
-        quality = .optimal
-        resultProblematicColors = []
-        #else
         // Determinar la calidad de la calibración
+        let quality: CalibrationQuality
         if maxError <= Thresholds.optimal {
             quality = .optimal
         } else if maxError <= Thresholds.acceptable && problematicColors.count <= Thresholds.maxProblematicColors {
@@ -119,16 +108,14 @@ class CalibrationValidator {
             quality = .poor
         }
         
-        isValid = quality != .poor
-        resultProblematicColors = problematicColors
-        #endif
+        let isValid = quality != .poor
         
         return ValidationResult(
             isValid: isValid,
             quality: quality,
             averageError: averageError,
             maxError: maxError,
-            problematicColors: resultProblematicColors,
+            problematicColors: problematicColors,
             deviceInfo: .current
         )
     }

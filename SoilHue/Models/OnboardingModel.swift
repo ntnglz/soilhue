@@ -20,7 +20,7 @@ class OnboardingModel: ObservableObject {
         TutorialStep(
             title: "Bienvenido a SoilHue",
             description: "Descubre el color y las características de tus muestras de suelo de forma precisa y sencilla.",
-            imageName: "soil.sample"
+            imageName: "leaf.fill"
         ),
         TutorialStep(
             title: "Calibración",

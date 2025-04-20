@@ -39,68 +39,61 @@ struct CameraCaptureView: View {
     @State private var isLocationEnabled = false
     
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                // Vista de la cámara
-                if let preview = previewImage {
-                    Image(uiImage: preview)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .ignoresSafeArea()
+        ZStack {
+            // Vista de la cámara
+            if let preview = previewImage {
+                Image(uiImage: preview)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .ignoresSafeArea()
+            }
+            
+            // Guía de calibración
+            if showGuide {
+                CalibrationGuideView()
+            }
+            
+            // Controles de la cámara
+            VStack {
+                // Indicador de localización
+                HStack(spacing: 8) {
+                    Image(systemName: isLocationEnabled ? "location.fill" : "location.slash.fill")
+                        .foregroundColor(isLocationEnabled ? .green : .red)
+                    Text(isLocationEnabled ? "Ubicación activada" : "Ubicación desactivada")
+                        .font(.caption)
+                        .foregroundColor(.white)
                 }
+                .padding(8)
+                .background(.black.opacity(0.6))
+                .cornerRadius(8)
+                .padding(.top, 44)
                 
-                // Guía de calibración
-                if showGuide {
-                    CalibrationGuideView()
-                }
+                Spacer()
                 
-                // Controles de la cámara
-                VStack {
-                    // Indicador de localización
-                    HStack {
-                        Image(systemName: isLocationEnabled ? "location.fill" : "location.slash.fill")
-                            .foregroundColor(isLocationEnabled ? .green : .red)
-                        Text(isLocationEnabled ? "Ubicación activada" : "Ubicación desactivada")
-                            .font(.caption)
-                            .foregroundColor(.white)
+                // Botón de captura
+                Button {
+                    Task {
+                        await capturePhoto()
                     }
-                    .padding(8)
-                    .background(.black.opacity(0.6))
-                    .cornerRadius(8)
-                    .padding(.top, 44)
-                    
-                    Spacer()
-                    
-                    HStack {
-                        Spacer()
-                        
-                        // Botón de captura
-                        Button {
-                            Task {
-                                await capturePhoto()
-                            }
-                        } label: {
+                } label: {
+                    Circle()
+                        .fill(.white)
+                        .frame(width: 80, height: 80)
+                        .overlay(
                             Circle()
-                                .fill(.white)
-                                .frame(width: 80, height: 80)
-                                .overlay(
-                                    Circle()
-                                        .stroke(.black.opacity(0.8), lineWidth: 2)
-                                )
-                                .shadow(radius: 4)
-                        }
-                        .disabled(isCapturing)
-                        
-                        Spacer()
-                    }
-                    .padding(.bottom, 30)
+                                .stroke(.black.opacity(0.8), lineWidth: 2)
+                        )
+                        .shadow(radius: 4)
                 }
-                
-                if isCapturing {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                        .scaleEffect(1.5)
-                }
+                .disabled(isCapturing)
+                .padding(.bottom, 30)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            
+            if isCapturing {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    .scaleEffect(1.5)
             }
         }
         .task {
@@ -153,6 +146,7 @@ struct CameraCaptureView: View {
                 capturedImage = image
                 capturedLocation = location
                 isCapturing = false
+                dismiss()
             }
         } catch {
             await MainActor.run {

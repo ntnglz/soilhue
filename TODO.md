@@ -6,9 +6,9 @@
 - [x] Implementar validación de calibración
 - [ ] Verificar que la calibración funcione correctamente en diferentes dispositivos
 - [ ] Mejorar la detección de la tarjeta de calibración en condiciones de poca luz
-- [ ] Añadir una guía visual más clara para la calibración
-  - [ ] Implementar overlay con instrucciones paso a paso
-  - [ ] Añadir indicadores visuales de alineación
+- [x] Añadir una guía visual más clara para la calibración
+  - [x] Implementar overlay con instrucciones paso a paso
+  - [x] Añadir indicadores visuales de alineación
   - [ ] Incluir feedback visual del estado de la calibración
   - [ ] Proporcionar ejemplos visuales de posicionamiento correcto
 - [ ] Implementar un sistema de calibración automática periódica
@@ -28,7 +28,8 @@
 
 ### Almacenamiento local
 - [ ] Implementar copia de seguridad automática de los análisis
-- [ ] Añadir opción para exportar/importar datos
+- [ ] Añadir opción para exportar datos
+- [ ] Añadir opción para importar datos
 - [ ] Optimizar el almacenamiento de imágenes
 
 ### iCloud

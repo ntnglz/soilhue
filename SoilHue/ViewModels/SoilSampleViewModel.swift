@@ -179,6 +179,8 @@ class SoilSampleViewModel: ObservableObject {
             throw SampleError.noSampleSelected
         }
         
+        print("DEBUG: SoilSampleViewModel - Guardando muestra con localización: \(String(describing: sample.location))")
+        
         let analysis = SoilAnalysis(
             id: UUID(),
             timestamp: Date(),
@@ -195,13 +197,14 @@ class SoilSampleViewModel: ObservableObject {
                 lastCalibrationDate: calibrationService.lastCalibrationDate ?? Date()
             ),
             environmentalConditions: EnvironmentalConditions(
-                temperature: nil,  // TODO: Implementar obtención de temperatura
-                humidity: nil,     // TODO: Implementar obtención de humedad
-                lightConditions: nil,  // TODO: Implementar detección de condiciones de luz
-                weatherConditions: nil  // TODO: Implementar detección de condiciones climáticas
+                temperature: nil,
+                humidity: nil,
+                lightConditions: nil,
+                weatherConditions: nil
             )
         )
         
+        print("DEBUG: SoilSampleViewModel - Análisis creado con locationInfo: \(String(describing: analysis.locationInfo))")
         try await storageService.saveAnalysis(analysis, image: sample.image)
     }
     

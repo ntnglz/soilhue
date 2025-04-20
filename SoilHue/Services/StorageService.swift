@@ -103,14 +103,15 @@ class StorageService: ObservableObject {
         let baseURL = try getCurrentBaseURL()
         let analysisDirectory = baseURL.appendingPathComponent(analysis.id.uuidString)
         
-        print("DEBUG: Intentando guardar análisis en: \(analysisDirectory)")
+        print("DEBUG: StorageService - Guardando análisis con locationInfo: \(String(describing: analysis.locationInfo))")
+        print("DEBUG: StorageService - Intentando guardar análisis en: \(analysisDirectory)")
         
         // Crear directorio para este análisis
         do {
             try FileManager.default.createDirectory(at: analysisDirectory, withIntermediateDirectories: true)
-            print("DEBUG: Directorio creado correctamente")
+            print("DEBUG: StorageService - Directorio creado correctamente")
         } catch {
-            print("DEBUG: Error al crear directorio: \(error)")
+            print("DEBUG: StorageService - Error al crear directorio: \(error)")
             throw StorageError.directoryCreationFailed
         }
         
