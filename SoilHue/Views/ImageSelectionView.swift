@@ -36,9 +36,9 @@ struct ImageSelectionView: View {
             
             // Características principales
             HStack(spacing: 25) {
-                FeatureItem(icon: "camera.viewfinder", text: "Captura\nPrecisa")
-                FeatureItem(icon: "eyedropper.halffull", text: "Análisis\nMunsell")
-                FeatureItem(icon: "square.stack.3d.up", text: "Clasificación\nde Suelos")
+                FeatureItem(icon: "camera.viewfinder", title: "Captura\nPrecisa")
+                FeatureItem(icon: "eyedropper.halffull", title: "Análisis\nMunsell")
+                FeatureItem(icon: "square.stack.3d.up", title: "Clasificación\nde Suelos")
             }
             .padding(.horizontal, 30)
             .padding(.top, 30)

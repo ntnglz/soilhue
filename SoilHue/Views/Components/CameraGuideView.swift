@@ -19,7 +19,7 @@ struct CameraGuideView: View {
                 // Texto guía
                 VStack {
                     Spacer()
-                    Text("Alinea la tarjeta de calibración\ndentro del marco")
+                    Text(NSLocalizedString("calibration.guide.frame", comment: "Instruction to align the calibration card within the frame"))
                         .font(.headline)
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)

@@ -56,7 +56,7 @@ struct ResultView: View {
                             .padding(.horizontal)
                         
                         if isAnalyzing {
-                            ProgressView("Analizando muestra...")
+                            ProgressView(NSLocalizedString("analysis.analyzing", comment: "Analyzing progress"))
                                 .padding()
                         } else if let result = analysisResult {
                             ResultInfoView(
@@ -70,13 +70,13 @@ struct ResultView: View {
                         
                         if let location = location, let region = region {
                             VStack(alignment: .leading, spacing: 10) {
-                                Text("Ubicación de la muestra")
+                                Text(NSLocalizedString("analysis.location", comment: "Location section title"))
                                     .font(.headline)
                                     .padding(.horizontal)
                                 
                                 if #available(iOS 17.0, *) {
                                     Map(position: .constant(MapCameraPosition.region(region))) {
-                                        Marker("Ubicación de la muestra", coordinate: location.coordinate)
+                                        Marker(NSLocalizedString("analysis.location", comment: "Location marker"), coordinate: location.coordinate)
                                             .tint(.red)
                                     }
                                     .frame(height: 200)
@@ -99,7 +99,7 @@ struct ResultView: View {
                             Button(action: {
                                 showingSaveDialog = true
                             }) {
-                                Label("Guardar análisis", systemImage: "square.and.arrow.down")
+                                Label(NSLocalizedString("analysis.save", comment: "Save analysis button"), systemImage: "square.and.arrow.down")
                                     .frame(maxWidth: .infinity)
                                     .padding()
                                     .background(Color.blue)
@@ -110,7 +110,7 @@ struct ResultView: View {
                             Button(action: {
                                 dismiss()
                             }) {
-                                Label("Nueva muestra", systemImage: "camera")
+                                Label(NSLocalizedString("analysis.new.sample", comment: "New sample button"), systemImage: "camera")
                                     .frame(maxWidth: .infinity)
                                     .padding()
                                     .background(Color.secondary.opacity(0.2))
@@ -127,7 +127,7 @@ struct ResultView: View {
                     analyzeImage()
                 }
             }
-            .navigationTitle("Resultados")
+            .navigationTitle(NSLocalizedString("analysis.results.title", comment: "Analysis results title"))
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showingSaveDialog) {
                 SaveAnalysisView(notes: $notes, tags: $tags) {
@@ -137,7 +137,7 @@ struct ResultView: View {
                 }
             }
             .alert(alertTitle, isPresented: $showingAlert) {
-                Button("OK", role: .cancel) { }
+                Button(NSLocalizedString("button.ok", comment: "OK button"), role: .cancel) { }
             } message: {
                 Text(alertMessage)
             }
@@ -162,7 +162,7 @@ struct ResultView: View {
             } catch {
                 await MainActor.run {
                     isAnalyzing = false
-                    showAlert(title: "Error", message: error.localizedDescription)
+                    showAlert(title: NSLocalizedString("alert.error.title", comment: "Error alert title"), message: error.localizedDescription)
                 }
             }
         }
@@ -171,7 +171,7 @@ struct ResultView: View {
     private func saveAnalysis() async {
         do {
             guard let result = analysisResult else {
-                throw NSError(domain: "SoilHue", code: -1, userInfo: [NSLocalizedDescriptionKey: "No hay resultados de análisis disponibles"])
+                throw NSError(domain: "SoilHue", code: -1, userInfo: [NSLocalizedDescriptionKey: NSLocalizedString("analysis.error", comment: "Analysis error")])
             }
             
             let analysis = SoilAnalysis(
@@ -196,7 +196,7 @@ struct ResultView: View {
             showingSaveDialog = false
             dismiss()
         } catch {
-            showAlert(title: "Error", message: error.localizedDescription)
+            showAlert(title: NSLocalizedString("alert.error.title", comment: "Error alert title"), message: error.localizedDescription)
         }
     }
     
@@ -225,7 +225,7 @@ struct LocationDetailsView: View {
             
             HStack {
                 VStack(alignment: .leading) {
-                    Text("Latitud")
+                    Text(NSLocalizedString("analysis.latitude", comment: "Latitude label"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                     Text(String(format: "%.6f°", location.coordinate.latitude))
@@ -235,7 +235,7 @@ struct LocationDetailsView: View {
                 Spacer()
                 
                 VStack(alignment: .leading) {
-                    Text("Longitud")
+                    Text(NSLocalizedString("analysis.longitude", comment: "Longitude label"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                     Text(String(format: "%.6f°", location.coordinate.longitude))
@@ -245,7 +245,7 @@ struct LocationDetailsView: View {
             
             if location.altitude != 0 {
                 VStack(alignment: .leading) {
-                    Text("Altitud")
+                    Text(NSLocalizedString("analysis.altitude", comment: "Altitude label"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                     Text(String(format: "%.1f m", location.altitude))
@@ -253,7 +253,7 @@ struct LocationDetailsView: View {
                 }
             }
             
-            Text("Precisión: \(String(format: "±%.0f m", location.horizontalAccuracy))")
+            Text(String(format: NSLocalizedString("analysis.accuracy", comment: "Accuracy format"), location.horizontalAccuracy))
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -308,19 +308,19 @@ struct ResultInfoView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Munsell Notation:")
+            Text(NSLocalizedString("Munsell Notation", comment: "Munsell notation label") + ":")
                 .font(.headline)
             Text(munsellNotation)
             
-            Text("Clasificación del suelo:")
+            Text(NSLocalizedString("Soil Classification", comment: "Soil classification label") + ":")
                 .font(.headline)
             Text(soilClassification)
             
-            Text("Descripción del suelo:")
+            Text(NSLocalizedString("Description", comment: "Description label") + ":")
                 .font(.headline)
             Text(soilDescription)
             
-            Text("Valores RGB:")
+            Text("RGB:")
                 .font(.headline)
             
             HStack(spacing: 20) {
@@ -365,25 +365,26 @@ struct SaveAnalysisView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Notas")) {
+                Section(header: Text(NSLocalizedString("Notes", comment: "Notes section header"))) {
                     TextEditor(text: $notes)
                         .frame(height: 100)
                 }
                 
-                Section(header: Text("Etiquetas"), footer: Text("Separadas por comas")) {
-                    TextField("ej: muestra1, jardín, arcilloso", text: $tags)
+                Section(header: Text(NSLocalizedString("Tags", comment: "Tags section header")), 
+                        footer: Text(NSLocalizedString("Tags separated by commas", comment: "Tags section footer"))) {
+                    TextField(NSLocalizedString("e.g. sample1, garden, clay", comment: "Tags placeholder"), text: $tags)
                 }
             }
-            .navigationTitle("Guardar análisis")
+            .navigationTitle(NSLocalizedString("Save Analysis", comment: "Save analysis title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancelar") {
+                    Button(NSLocalizedString("Cancel", comment: "Cancel button")) {
                         dismiss()
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Guardar") {
+                    Button(NSLocalizedString("Save", comment: "Save button")) {
                         onSave()
                     }
                 }

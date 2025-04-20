@@ -77,11 +77,11 @@ enum CameraResolution: Int, CaseIterable, Identifiable, Codable {
     
     var id: Int { rawValue }
     
-    var description: String {
+    var localizationKey: String {
         switch self {
-        case .low: return "Baja (720p)"
-        case .medium: return "Media (1080p)"
-        case .high: return "Alta (4K)"
+        case .low: return "Low (720p)"
+        case .medium: return "Medium (1080p)"
+        case .high: return "High (4K)"
         }
     }
 }
@@ -93,9 +93,9 @@ enum SaveLocation: Int, CaseIterable, Identifiable {
     
     var id: Int { rawValue }
     
-    var description: String {
+    var localizationKey: String {
         switch self {
-        case .local: return "Almacenamiento Local"
+        case .local: return "Local Storage"
         case .iCloud: return "iCloud"
         }
     }
@@ -109,11 +109,11 @@ enum DarkMode: Int, CaseIterable, Identifiable {
     
     var id: Int { rawValue }
     
-    var description: String {
+    var localizationKey: String {
         switch self {
-        case .light: return "Claro"
-        case .dark: return "Oscuro"
-        case .system: return "Sistema"
+        case .light: return "Light"
+        case .dark: return "Dark"
+        case .system: return "System"
         }
     }
 }
@@ -126,7 +126,7 @@ enum ExportFormat: Int, CaseIterable, Identifiable {
     
     var id: Int { rawValue }
     
-    var description: String {
+    var localizationKey: String {
         switch self {
         case .csv: return "CSV"
         case .json: return "JSON"

@@ -21,8 +21,8 @@ struct ExportView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Formato de Exportación")) {
-                    Picker("Formato", selection: $selectedFormat) {
+                Section(header: Text(NSLocalizedString("Export Format", comment: "Export format section header"))) {
+                    Picker(NSLocalizedString("Export Format", comment: "Export format picker"), selection: $selectedFormat) {
                         Text("CSV").tag(ExportService.ExportFormat.csv)
                         Text("JSON").tag(ExportService.ExportFormat.json)
                     }
@@ -35,18 +35,18 @@ struct ExportView: View {
                             ProgressView()
                                 .progressViewStyle(.circular)
                         } else {
-                            Text("Exportar Datos")
+                            Text(NSLocalizedString("Export Data", comment: "Export data button"))
                         }
                     }
                     .frame(maxWidth: .infinity)
                     .disabled(isExporting)
                 }
                 
-                Section(header: Text("Información")) {
+                Section(header: Text(NSLocalizedString("Information", comment: "Information section header"))) {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("CSV (.csv)")
                             .font(.headline)
-                        Text("Formato de texto simple separado por comas. Compatible con Excel, Numbers y otras hojas de cálculo.")
+                        Text(NSLocalizedString("export.format.csv.description", comment: "CSV format description"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                         
@@ -54,24 +54,24 @@ struct ExportView: View {
                         
                         Text("JSON (.json)")
                             .font(.headline)
-                        Text("Formato estructurado ideal para procesamiento de datos y desarrollo.")
+                        Text(NSLocalizedString("export.format.json.description", comment: "JSON format description"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
                     .padding(.vertical, 8)
                 }
             }
-            .navigationTitle("Exportar Datos")
+            .navigationTitle(NSLocalizedString("Export Data", comment: "Export view title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cerrar") {
+                    Button(NSLocalizedString("button.close", comment: "Close button")) {
                         dismiss()
                     }
                 }
             }
-            .alert("Error", isPresented: $showError) {
-                Button("OK", role: .cancel) { }
+            .alert(NSLocalizedString("alert.error.title", comment: "Error alert title"), isPresented: $showError) {
+                Button(NSLocalizedString("button.ok", comment: "OK button"), role: .cancel) { }
             } message: {
                 Text(errorMessage)
             }

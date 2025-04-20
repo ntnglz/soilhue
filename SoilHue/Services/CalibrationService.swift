@@ -90,36 +90,36 @@ class CalibrationService: ObservableObject {
     /// Estos son los valores sRGB estandarizados para cada parche
     private let colorCheckerPatches: [ColorPatch] = [
         // Primera fila - Colores naturales
-        ColorPatch(name: "dark skin", position: 0, referenceValues: (0.400, 0.350, 0.336)),
-        ColorPatch(name: "light skin", position: 1, referenceValues: (0.713, 0.586, 0.524)),
-        ColorPatch(name: "blue sky", position: 2, referenceValues: (0.247, 0.251, 0.378)),
-        ColorPatch(name: "foliage", position: 3, referenceValues: (0.337, 0.422, 0.286)),
-        ColorPatch(name: "blue flower", position: 4, referenceValues: (0.265, 0.240, 0.329)),
-        ColorPatch(name: "bluish green", position: 5, referenceValues: (0.261, 0.343, 0.359)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.dark.skin", comment: "Dark skin patch name"), position: 0, referenceValues: (0.400, 0.350, 0.336)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.light.skin", comment: "Light skin patch name"), position: 1, referenceValues: (0.713, 0.586, 0.524)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.blue.sky", comment: "Blue sky patch name"), position: 2, referenceValues: (0.247, 0.251, 0.378)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.foliage", comment: "Foliage patch name"), position: 3, referenceValues: (0.337, 0.422, 0.286)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.blue.flower", comment: "Blue flower patch name"), position: 4, referenceValues: (0.265, 0.240, 0.329)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.bluish.green", comment: "Bluish green patch name"), position: 5, referenceValues: (0.261, 0.343, 0.359)),
         
         // Segunda fila - Colores misceláneos
-        ColorPatch(name: "orange", position: 6, referenceValues: (0.638, 0.445, 0.164)),
-        ColorPatch(name: "purplish blue", position: 7, referenceValues: (0.242, 0.238, 0.475)),
-        ColorPatch(name: "moderate red", position: 8, referenceValues: (0.449, 0.127, 0.127)),
-        ColorPatch(name: "purple", position: 9, referenceValues: (0.288, 0.187, 0.292)),
-        ColorPatch(name: "yellow green", position: 10, referenceValues: (0.491, 0.484, 0.169)),
-        ColorPatch(name: "orange yellow", position: 11, referenceValues: (0.656, 0.484, 0.156)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.orange", comment: "Orange patch name"), position: 6, referenceValues: (0.638, 0.445, 0.164)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.purplish.blue", comment: "Purplish blue patch name"), position: 7, referenceValues: (0.242, 0.238, 0.475)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.moderate.red", comment: "Moderate red patch name"), position: 8, referenceValues: (0.449, 0.127, 0.127)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.purple", comment: "Purple patch name"), position: 9, referenceValues: (0.288, 0.187, 0.292)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.yellow.green", comment: "Yellow green patch name"), position: 10, referenceValues: (0.491, 0.484, 0.169)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.orange.yellow", comment: "Orange yellow patch name"), position: 11, referenceValues: (0.656, 0.484, 0.156)),
         
         // Tercera fila - Colores primarios y secundarios
-        ColorPatch(name: "blue", position: 12, referenceValues: (0.153, 0.198, 0.558)),
-        ColorPatch(name: "green", position: 13, referenceValues: (0.283, 0.484, 0.247)),
-        ColorPatch(name: "red", position: 14, referenceValues: (0.558, 0.158, 0.147)),
-        ColorPatch(name: "yellow", position: 15, referenceValues: (0.890, 0.798, 0.196)),
-        ColorPatch(name: "magenta", position: 16, referenceValues: (0.558, 0.188, 0.372)),
-        ColorPatch(name: "cyan", position: 17, referenceValues: (0.168, 0.302, 0.484)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.blue", comment: "Blue patch name"), position: 12, referenceValues: (0.153, 0.198, 0.558)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.green", comment: "Green patch name"), position: 13, referenceValues: (0.283, 0.484, 0.247)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.red", comment: "Red patch name"), position: 14, referenceValues: (0.558, 0.158, 0.147)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.yellow", comment: "Yellow patch name"), position: 15, referenceValues: (0.890, 0.798, 0.196)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.magenta", comment: "Magenta patch name"), position: 16, referenceValues: (0.558, 0.188, 0.372)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.cyan", comment: "Cyan patch name"), position: 17, referenceValues: (0.168, 0.302, 0.484)),
         
         // Cuarta fila - Escala de grises
-        ColorPatch(name: "white", position: 18, referenceValues: (0.950, 0.950, 0.950)),
-        ColorPatch(name: "neutral 8", position: 19, referenceValues: (0.773, 0.773, 0.773)),
-        ColorPatch(name: "neutral 6.5", position: 20, referenceValues: (0.604, 0.604, 0.604)),
-        ColorPatch(name: "neutral 5", position: 21, referenceValues: (0.422, 0.422, 0.422)),
-        ColorPatch(name: "neutral 3.5", position: 22, referenceValues: (0.249, 0.249, 0.249)),
-        ColorPatch(name: "black", position: 23, referenceValues: (0.104, 0.104, 0.104))
+        ColorPatch(name: NSLocalizedString("calibration.patch.white", comment: "White patch name"), position: 18, referenceValues: (0.950, 0.950, 0.950)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.neutral.8", comment: "Neutral 8 patch name"), position: 19, referenceValues: (0.773, 0.773, 0.773)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.neutral.6.5", comment: "Neutral 6.5 patch name"), position: 20, referenceValues: (0.604, 0.604, 0.604)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.neutral.5", comment: "Neutral 5 patch name"), position: 21, referenceValues: (0.422, 0.422, 0.422)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.neutral.3.5", comment: "Neutral 3.5 patch name"), position: 22, referenceValues: (0.249, 0.249, 0.249)),
+        ColorPatch(name: NSLocalizedString("calibration.patch.black", comment: "Black patch name"), position: 23, referenceValues: (0.104, 0.104, 0.104))
     ]
     
     /// Inicia el proceso de calibración
@@ -131,7 +131,7 @@ class CalibrationService: ObservableObject {
     /// - Parameter image: Imagen de la tarjeta de calibración
     func processCalibrationImage(_ image: UIImage) {
         guard let cgImage = image.cgImage else {
-            calibrationState = .error("No se pudo procesar la imagen")
+            calibrationState = .error(NSLocalizedString("calibration.error.image.processing", comment: "Error processing calibration image"))
             return
         }
         
@@ -151,8 +151,8 @@ class CalibrationService: ObservableObject {
         var blueCorrection = 0.0
         var validPatches = 0
         
-        print("Iniciando procesamiento de calibración...")
-        print("Dimensiones de la imagen: \(width)x\(height)")
+        print(NSLocalizedString("calibration.log.start", comment: "Starting calibration processing"))
+        print(String(format: NSLocalizedString("calibration.log.dimensions", comment: "Image dimensions log"), width, height))
         
         // Procesar cada parche
         for patch in colorCheckerPatches {
@@ -169,9 +169,9 @@ class CalibrationService: ObservableObject {
             // Obtener el color promedio del parche
             let measuredColor = getAverageColor(in: ciImage, region: region, context: context)
             
-            print("Procesando parche \(patch.name):")
-            print("  Referencia: R=\(patch.referenceValues.red), G=\(patch.referenceValues.green), B=\(patch.referenceValues.blue)")
-            print("  Medido: R=\(measuredColor.red), G=\(measuredColor.green), B=\(measuredColor.blue)")
+            print(String(format: NSLocalizedString("calibration.log.patch", comment: "Processing patch log"), patch.name))
+            print(String(format: NSLocalizedString("calibration.log.reference", comment: "Reference values log"), patch.referenceValues.red, patch.referenceValues.green, patch.referenceValues.blue))
+            print(String(format: NSLocalizedString("calibration.log.measured", comment: "Measured values log"), measuredColor.red, measuredColor.green, measuredColor.blue))
             
             // Calcular factores de corrección para este parche
             if measuredColor.red > 0 && measuredColor.green > 0 && measuredColor.blue > 0 {
@@ -179,7 +179,7 @@ class CalibrationService: ObservableObject {
                 let greenFactor = patch.referenceValues.green / measuredColor.green
                 let blueFactor = patch.referenceValues.blue / measuredColor.blue
                 
-                print("  Factores: R=\(redFactor), G=\(greenFactor), B=\(blueFactor)")
+                print(String(format: NSLocalizedString("calibration.log.factors", comment: "Correction factors log"), redFactor, greenFactor, blueFactor))
                 
                 redCorrection += redFactor
                 greenCorrection += greenFactor
@@ -190,11 +190,11 @@ class CalibrationService: ObservableObject {
         
         // Verificar que tengamos suficientes parches válidos
         guard validPatches > 0 else {
-            calibrationState = .error("No se pudieron detectar suficientes parches de color")
+            calibrationState = .error(NSLocalizedString("calibration.error.insufficient.patches", comment: "Error insufficient color patches"))
             return
         }
         
-        print("Total de parches válidos: \(validPatches)")
+        print(String(format: NSLocalizedString("calibration.log.valid.patches", comment: "Valid patches count log"), validPatches))
         
         // Calcular los factores de corrección promedio
         correctionFactors = CorrectionFactors(
@@ -203,112 +203,86 @@ class CalibrationService: ObservableObject {
             blue: blueCorrection / Double(validPatches)
         )
         
-        print("Factores de corrección finales:")
-        print("R: \(correctionFactors.red)")
-        print("G: \(correctionFactors.green)")
-        print("B: \(correctionFactors.blue)")
+        // Guardar los factores de corrección
+        saveCalibrationFactors()
         
-        // Validar la calidad de la calibración
-        var measuredColors: [String: CorrectionFactors] = [:]
-        var referenceColors: [String: CorrectionFactors] = [:]
-        
-        for patch in colorCheckerPatches {
-            let measured = getAverageColor(in: ciImage, region: CGRect(
-                x: CGFloat(patch.position % 6) * patchWidth,
-                y: CGFloat(patch.position / 6) * patchHeight,
-                width: patchWidth,
-                height: patchHeight
-            ), context: context)
-            
-            measuredColors[patch.name] = CorrectionFactors(red: measured.red, green: measured.green, blue: measured.blue)
-            referenceColors[patch.name] = CorrectionFactors(red: patch.referenceValues.red, green: patch.referenceValues.green, blue: patch.referenceValues.blue)
-        }
-        
-        let validator = CalibrationValidator()
-        let validationResult = validator.validateCalibration(measuredColors: measuredColors, referenceColors: referenceColors)
-        
-        if validationResult.isValid {
-            print(validationResult.description)
-            // Guardar los factores de corrección
-            saveCalibrationFactors()
-            calibrationState = .calibrated
-            notifyObservers()
-        } else {
-            let errorMessage = "La calibración no cumple con los requisitos mínimos de calidad:\n" +
-                              "Error máximo: \(String(format: "%.1f%%", validationResult.maxError * 100))\n" +
-                              "Error promedio: \(String(format: "%.1f%%", validationResult.averageError * 100))\n" +
-                              "Colores problemáticos: \(validationResult.problematicColors.joined(separator: ", "))"
-            calibrationState = .error(errorMessage)
-            notifyObservers()
-        }
-    }
-    
-    /// Obtiene el color promedio en una región específica de la imagen
-    private func getAverageColor(in image: CIImage, region: CGRect, context: CIContext) -> (red: Double, green: Double, blue: Double) {
-        // Crear un filtro para recortar la región
-        let cropFilter = CIFilter(name: "CICrop")
-        cropFilter?.setValue(image, forKey: kCIInputImageKey)
-        cropFilter?.setValue(CIVector(cgRect: region), forKey: "inputRectangle")
-        
-        guard let croppedImage = cropFilter?.outputImage else {
-            return (0, 0, 0)
-        }
-        
-        // Obtener el color promedio
-        let extentVector = CIVector(x: region.origin.x, y: region.origin.y, z: region.width, w: region.height)
-        let filter = CIFilter(name: "CIAreaAverage", parameters: [
-            kCIInputImageKey: croppedImage,
-            kCIInputExtentKey: extentVector
-        ])
-        
-        guard let outputImage = filter?.outputImage else {
-            return (0, 0, 0)
-        }
-        
-        var bitmap = [UInt8](repeating: 0, count: 4)
-        context.render(outputImage, toBitmap: &bitmap, rowBytes: 4, bounds: CGRect(x: 0, y: 0, width: 1, height: 1), format: .RGBA8, colorSpace: CGColorSpaceCreateDeviceRGB())
-        
-        return (
-            Double(bitmap[0]) / 255.0,
-            Double(bitmap[1]) / 255.0,
-            Double(bitmap[2]) / 255.0
-        )
-    }
-    
-    /// Aplica los factores de corrección a un color RGB
-    /// - Parameters:
-    ///   - red: Componente rojo (0-1)
-    ///   - green: Componente verde (0-1)
-    ///   - blue: Componente azul (0-1)
-    /// - Returns: Color RGB corregido
-    func applyCalibration(red: Double, green: Double, blue: Double) -> (red: Double, green: Double, blue: Double) {
-        return (
-            min(max(red * correctionFactors.red, 0), 1),
-            min(max(green * correctionFactors.green, 0), 1),
-            min(max(blue * correctionFactors.blue, 0), 1)
-        )
+        // Actualizar el estado
+        calibrationState = .calibrated
+        lastCalibrationDate = Date()
+        notifyObservers()
     }
     
     /// Guarda los factores de corrección en UserDefaults
     private func saveCalibrationFactors() {
         let defaults = UserDefaults.standard
+        defaults.set(true, forKey: "isCalibrated")
         defaults.set(correctionFactors.red, forKey: "calibrationRedFactor")
         defaults.set(correctionFactors.green, forKey: "calibrationGreenFactor")
         defaults.set(correctionFactors.blue, forKey: "calibrationBlueFactor")
-        defaults.set(true, forKey: "isCalibrated")
-        defaults.set(Date(), forKey: "lastCalibrationDate")
-        lastCalibrationDate = Date()
+        defaults.set(lastCalibrationDate, forKey: "lastCalibrationDate")
     }
     
-    /// Reinicia la calibración
-    func resetCalibration() {
-        correctionFactors = CorrectionFactors(red: 1.0, green: 1.0, blue: 1.0)
-        let defaults = UserDefaults.standard
-        defaults.removeObject(forKey: "calibrationRedFactor")
-        defaults.removeObject(forKey: "calibrationGreenFactor")
-        defaults.removeObject(forKey: "calibrationBlueFactor")
-        defaults.removeObject(forKey: "isCalibrated")
-        calibrationState = .notCalibrated
-        notifyObservers()
+    /// Obtiene el color promedio de una región de la imagen
+    /// - Parameters:
+    ///   - image: Imagen de la que obtener el color
+    ///   - region: Región de la imagen a analizar
+    ///   - context: Contexto de CoreImage
+    /// - Returns: Color promedio en formato RGB
+    private func getAverageColor(in image: CIImage, region: CGRect, context: CIContext) -> (red: Double, green: Double, blue: Double) {
+        // Crear un filtro para recortar la región
+        let cropFilter = CIFilter.crop()
+        cropFilter.inputImage = image
+        cropFilter.rectangle = region
+        
+        guard let outputImage = cropFilter.outputImage else {
+            return (0, 0, 0)
+        }
+        
+        // Crear un filtro para reducir la imagen a 1x1 píxel
+        let scaleFilter = CIFilter.lanczosScaleTransform()
+        scaleFilter.inputImage = outputImage
+        scaleFilter.scale = 0.0001
+        scaleFilter.aspectRatio = 1.0
+        
+        guard let scaledImage = scaleFilter.outputImage,
+              let cgImage = context.createCGImage(scaledImage, from: scaledImage.extent) else {
+            return (0, 0, 0)
+        }
+        
+        // Obtener el color del píxel único
+        let color = UIColor(cgImage: cgImage)
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        
+        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        
+        return (Double(red), Double(green), Double(blue))
+    }
+    
+    /// Aplica los factores de corrección a una imagen
+    /// - Parameter image: Imagen a corregir
+    /// - Returns: Imagen corregida
+    func applyCorrection(to image: UIImage) -> UIImage? {
+        guard let cgImage = image.cgImage else { return nil }
+        
+        let ciImage = CIImage(cgImage: cgImage)
+        let context = CIContext(options: nil)
+        
+        // Crear un filtro de matriz de color para aplicar los factores de corrección
+        let colorMatrix = CIFilter.colorMatrix()
+        colorMatrix.inputImage = ciImage
+        colorMatrix.rVector = CIVector(x: Float(correctionFactors.red), y: 0, z: 0, w: 0)
+        colorMatrix.gVector = CIVector(x: 0, y: Float(correctionFactors.green), z: 0, w: 0)
+        colorMatrix.bVector = CIVector(x: 0, y: 0, z: Float(correctionFactors.blue), w: 0)
+        colorMatrix.aVector = CIVector(x: 0, y: 0, z: 0, w: 1)
+        
+        guard let outputImage = colorMatrix.outputImage,
+              let cgImage = context.createCGImage(outputImage, from: outputImage.extent) else {
+            return nil
+        }
+        
+        return UIImage(cgImage: cgImage)
     }
 } 

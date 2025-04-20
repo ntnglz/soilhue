@@ -50,7 +50,7 @@ struct ColorSelectionView: View {
                 
                 // Instrucciones para el usuario
                 if currentRect == nil {
-                    Text("Arrastra para seleccionar un área")
+                    Text(NSLocalizedString("analysis.drag.select", comment: "Drag to select area instruction"))
                         .font(.caption)
                         .foregroundColor(.white)
                         .padding(8)

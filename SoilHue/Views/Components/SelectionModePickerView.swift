@@ -5,8 +5,10 @@ struct SelectionModePickerView: View {
     
     var body: some View {
         Picker("Modo de selección", selection: $selectionMode) {
-            Text("Rectángulo").tag(SelectionMode.rectangle)
-            Text("Polígono").tag(SelectionMode.polygon)
+            Text(NSLocalizedString("selection.mode.rectangle", comment: "Rectangle selection mode"))
+                .tag(SelectionMode.rectangle)
+            Text(NSLocalizedString("selection.mode.polygon", comment: "Polygon selection mode"))
+                .tag(SelectionMode.polygon)
         }
         .pickerStyle(SegmentedPickerStyle())
         .padding(.horizontal)

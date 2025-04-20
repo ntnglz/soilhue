@@ -20,7 +20,7 @@ struct LocationView: View {
         VStack(spacing: 0) {
             if #available(iOS 17.0, *) {
                 Map {
-                    Marker("Ubicación", coordinate: location.coordinate)
+                    Marker(NSLocalizedString("location.marker", comment: "Location marker"), coordinate: location.coordinate)
                         .tint(.red)
                 }
                 .mapStyle(.standard)
@@ -39,14 +39,14 @@ struct LocationView: View {
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Label {
-                        Text("Latitud: \(location.coordinate.latitude, specifier: "%.6f")°")
+                        Text(String(format: NSLocalizedString("analysis.latitude", comment: "Latitude format"), location.coordinate.latitude))
                     } icon: {
                         Image(systemName: "location.north.fill")
                             .foregroundColor(.blue)
                     }
                     Spacer()
                     Label {
-                        Text("Longitud: \(location.coordinate.longitude, specifier: "%.6f")°")
+                        Text(String(format: NSLocalizedString("analysis.longitude", comment: "Longitude format"), location.coordinate.longitude))
                     } icon: {
                         Image(systemName: "location.fill")
                             .foregroundColor(.blue)
@@ -55,7 +55,7 @@ struct LocationView: View {
                 
                 HStack {
                     Label {
-                        Text("Altitud: \(location.altitude, specifier: "%.1f") m")
+                        Text(String(format: NSLocalizedString("analysis.altitude", comment: "Altitude format"), location.altitude))
                     } icon: {
                         Image(systemName: "arrow.up.forward")
                             .foregroundColor(.blue)
@@ -64,7 +64,7 @@ struct LocationView: View {
                     Spacer()
                     
                     Label {
-                        Text("Precisión: \(location.horizontalAccuracy, specifier: "%.1f") m")
+                        Text(String(format: NSLocalizedString("analysis.accuracy", comment: "Accuracy format"), location.horizontalAccuracy))
                     } icon: {
                         Image(systemName: "scope")
                             .foregroundColor(.blue)

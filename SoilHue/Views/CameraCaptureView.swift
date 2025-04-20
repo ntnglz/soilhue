@@ -59,7 +59,9 @@ struct CameraCaptureView: View {
                 HStack(spacing: 8) {
                     Image(systemName: isLocationEnabled ? "location.fill" : "location.slash.fill")
                         .foregroundColor(isLocationEnabled ? .green : .red)
-                    Text(isLocationEnabled ? "Ubicación activada" : "Ubicación desactivada")
+                    Text(isLocationEnabled ? 
+                         NSLocalizedString("location.status.enabled", comment: "Location enabled status") :
+                         NSLocalizedString("location.status.disabled", comment: "Location disabled status"))
                         .font(.caption)
                         .foregroundColor(.white)
                 }
@@ -102,14 +104,17 @@ struct CameraCaptureView: View {
                 locationService.requestAuthorization()
                 updateLocationStatus()
             } catch {
-                showAlert(title: "Error", message: error.localizedDescription)
+                showAlert(
+                    title: NSLocalizedString("alert.error.title", comment: "Error alert title"),
+                    message: error.localizedDescription
+                )
             }
         }
         .onDisappear {
             cameraService.stopSession()
         }
         .alert(alertTitle, isPresented: $showingAlert) {
-            Button("OK", role: .cancel) { }
+            Button(NSLocalizedString("button.ok", comment: "OK button"), role: .cancel) { }
         } message: {
             Text(alertMessage)
         }
@@ -150,7 +155,10 @@ struct CameraCaptureView: View {
             }
         } catch {
             await MainActor.run {
-                showAlert(title: "Error", message: error.localizedDescription)
+                showAlert(
+                    title: NSLocalizedString("alert.error.title", comment: "Error alert title"),
+                    message: error.localizedDescription
+                )
                 isCapturing = false
             }
         }

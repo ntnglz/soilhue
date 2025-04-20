@@ -17,26 +17,10 @@ class OnboardingModel: ObservableObject {
     
     /// Información de cada paso del tutorial
     let tutorialSteps = [
-        TutorialStep(
-            title: "Bienvenido a SoilHue",
-            description: "Descubre el color y las características de tus muestras de suelo de forma precisa y sencilla.",
-            imageName: "leaf.fill"
-        ),
-        TutorialStep(
-            title: "Calibración",
-            description: "Antes de empezar, calibra la cámara usando la tarjeta de color. Esto asegurará resultados precisos.",
-            imageName: "camera.metering.center.weighted"
-        ),
-        TutorialStep(
-            title: "Captura de Muestras",
-            description: "Toma fotos de tus muestras de suelo o selecciona imágenes existentes de tu galería.",
-            imageName: "camera.fill"
-        ),
-        TutorialStep(
-            title: "¡Listo para Empezar!",
-            description: "Ya estás preparado para analizar tus muestras de suelo. ¿Comenzamos?",
-            imageName: "checkmark.circle.fill"
-        )
+        TutorialStep(imageName: "leaf.fill"),
+        TutorialStep(imageName: "camera.metering.center.weighted"),
+        TutorialStep(imageName: "camera.fill"),
+        TutorialStep(imageName: "checkmark.circle.fill")
     ]
     
     init() {
@@ -74,7 +58,5 @@ class OnboardingModel: ObservableObject {
 /// Estructura que representa un paso del tutorial
 struct TutorialStep: Identifiable {
     let id = UUID()
-    let title: String
-    let description: String
     let imageName: String
 } 

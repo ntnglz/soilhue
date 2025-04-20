@@ -46,23 +46,23 @@ class CameraService: NSObject, ObservableObject {
         var errorDescription: String? {
             switch self {
             case .permissionDenied:
-                return "No hay acceso a la cámara. Por favor, verifica los permisos en Ajustes."
+                return NSLocalizedString("camera.error.permission.denied", comment: "Camera permission denied error message")
             case .captureError:
-                return "Error al capturar la foto."
+                return NSLocalizedString("camera.error.capture", comment: "Photo capture error message")
             case .invalidDevice:
-                return "No se pudo acceder a la cámara del dispositivo."
+                return NSLocalizedString("camera.error.invalid.device", comment: "Invalid camera device error message")
             case .configurationError:
-                return "Error al configurar la cámara."
+                return NSLocalizedString("camera.error.configuration", comment: "Camera configuration error message")
             case .sessionNotRunning:
-                return "La sesión de la cámara no está activa."
+                return NSLocalizedString("camera.error.session.not.running", comment: "Camera session not running error message")
             case .resolutionNotSupported:
-                return "La resolución seleccionada no está soportada por este dispositivo."
+                return NSLocalizedString("camera.error.resolution.not.supported", comment: "Camera resolution not supported error message")
             case .invalidResolution:
-                return "No se pudo configurar la resolución deseada."
+                return NSLocalizedString("camera.error.invalid.resolution", comment: "Invalid camera resolution error message")
             case .noPermission:
-                return "No hay permiso para acceder a la cámara."
+                return NSLocalizedString("camera.error.no.permission", comment: "No camera permission error message")
             case .setupFailed:
-                return "Error al configurar la cámara."
+                return NSLocalizedString("camera.error.setup.failed", comment: "Camera setup failed error message")
             }
         }
     }

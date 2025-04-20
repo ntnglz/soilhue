@@ -98,19 +98,18 @@ class CalibrationCardService {
             
             // Ahora dibujamos todo el texto
             // Título
-            let title = "Tarjeta de Calibración Básica"
+            let title = NSLocalizedString("calibration.card.title", comment: "Basic calibration card title")
             let titleRect = CGRect(x: 50, y: 50, width: pageSize.width - 100, height: 30)
             (title as NSString).draw(in: titleRect, withAttributes: titleAttributes)
             
             // Instrucciones antes de la cuadrícula
             let instructionsBefore = [
-                "Instrucciones de uso:",
-                "1. Imprime esta tarjeta en una impresora de calidad",
-                "2. Asegúrate de que los colores se impriman correctamente",
-                "3. Coloca la tarjeta sobre una superficie plana",
-                "4. Evita sombras y reflejos",
-                "5. Usa iluminación uniforme (preferiblemente luz natural indirecta)",
-                "6. Mantén la tarjeta paralela a la cámara al tomar la foto"
+                NSLocalizedString("calibration.card.instructions.title", comment: "Instructions title"),
+                NSLocalizedString("calibration.card.instructions.print", comment: "Print instruction"),
+                NSLocalizedString("calibration.card.instructions.colors", comment: "Colors instruction"),
+                NSLocalizedString("calibration.card.instructions.placement", comment: "Placement instruction"),
+                NSLocalizedString("calibration.card.instructions.lighting", comment: "Lighting instruction"),
+                NSLocalizedString("calibration.card.instructions.parallel", comment: "Parallel instruction")
             ]
             
             var yPosition: CGFloat = 100
@@ -123,8 +122,8 @@ class CalibrationCardService {
             // Instrucciones después de la cuadrícula
             let instructionsAfter = [
                 "",
-                "Nota: Esta tarjeta básica proporciona una calibración aproximada.",
-                "Para resultados profesionales, se recomienda usar el X-Rite ColorChecker Classic."
+                NSLocalizedString("calibration.card.note", comment: "Calibration card note"),
+                NSLocalizedString("calibration.card.recommendation", comment: "Professional card recommendation")
             ]
             
             yPosition = startY + (4 * (gridSize + gridSpacing)) + 40 // Posición después de la cuadrícula

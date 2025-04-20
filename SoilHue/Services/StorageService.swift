@@ -18,21 +18,21 @@ class StorageService: ObservableObject {
         var errorDescription: String? {
             switch self {
             case .failedToSaveImage:
-                return "No se pudo guardar la imagen"
+                return NSLocalizedString("storage.error.save.image", comment: "Failed to save image error message")
             case .failedToSaveAnalysis:
-                return "No se pudo guardar el análisis"
+                return NSLocalizedString("storage.error.save.analysis", comment: "Failed to save analysis error message")
             case .failedToLoadAnalysis:
-                return "No se pudo cargar el análisis"
+                return NSLocalizedString("storage.error.load.analysis", comment: "Failed to load analysis error message")
             case .analysisNotFound:
-                return "Análisis no encontrado"
+                return NSLocalizedString("storage.error.analysis.not.found", comment: "Analysis not found error message")
             case .iCloudNotAvailable:
-                return "iCloud no está disponible"
+                return NSLocalizedString("storage.error.icloud.not.available", comment: "iCloud not available error message")
             case .invalidDirectory:
-                return "Directorio de almacenamiento no válido"
+                return NSLocalizedString("storage.error.invalid.directory", comment: "Invalid storage directory error message")
             case .directoryCreationFailed:
-                return "No se pudo crear el directorio de almacenamiento"
+                return NSLocalizedString("storage.error.directory.creation", comment: "Failed to create storage directory error message")
             case .fileOperationFailed(let message):
-                return "Error en operación de archivo: \(message)"
+                return String(format: NSLocalizedString("storage.error.file.operation", comment: "File operation error message"), message)
             }
         }
     }

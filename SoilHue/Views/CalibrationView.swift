@@ -84,7 +84,7 @@ struct CalibrationView: View {
                         if let image = cardService.generateCalibrationCard() {
                             activeSheet = .share(image)
                         } else {
-                            errorMessage = "Error al generar la tarjeta de calibración"
+                            errorMessage = NSLocalizedString("calibration.error.generic", comment: "Error generating calibration card")
                             showError = true
                         }
                     }
@@ -93,7 +93,7 @@ struct CalibrationView: View {
             .padding()
         }
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarItems(trailing: Button("Cerrar") {
+        .navigationBarItems(trailing: Button(NSLocalizedString("button.close", comment: "Close button")) {
             onCalibrationComplete?()
         })
         .sheet(item: $activeSheet) { sheet in
@@ -111,19 +111,18 @@ struct CalibrationView: View {
                 ActivityViewController(activityItems: [image])
             }
         }
-        .alert("Error", isPresented: $showError) {
-            Button("OK", role: .cancel) { }
+        .alert(NSLocalizedString("alert.error.title", comment: "Error alert title"), isPresented: $showError) {
+            Button(NSLocalizedString("button.ok", comment: "OK button"), role: .cancel) { }
         } message: {
             Text(errorMessage)
         }
-        .alert("Calibración Exitosa", isPresented: $showSuccess) {
-            Button("OK", role: .cancel) {
+        .alert(NSLocalizedString("calibration.success.title", comment: "Calibration success title"), isPresented: $showSuccess) {
+            Button(NSLocalizedString("button.ok", comment: "OK button"), role: .cancel) {
                 onCalibrationComplete?()
             }
         } message: {
-            Text("La cámara ha sido calibrada correctamente.")
+            Text(NSLocalizedString("calibration.success.message", comment: "Calibration success message"))
         }
-
         .onChange(of: selectedImage) { oldImage, newImage in
             if let image = newImage {
                 processCalibrationImage(image)
@@ -153,7 +152,7 @@ struct CalibrationView: View {
             // Esperar a que termine la calibración
             break
         case .notCalibrated:
-            errorMessage = "La calibración no se completó correctamente"
+            errorMessage = NSLocalizedString("calibration.error.generic", comment: "Error generating calibration card")
             showError = true
         }
     }
@@ -169,18 +168,18 @@ struct CalibrationStatusView: View {
         Group {
             switch state {
             case .notCalibrated:
-                Text("No calibrado")
+                Text(NSLocalizedString("calibration.status.notCalibrated", comment: "Not calibrated status"))
                     .foregroundColor(.red)
             case .calibrating:
                 HStack {
                     ProgressView()
-                    Text("Calibrando...")
+                    Text(NSLocalizedString("calibration.status.calibrating", comment: "Calibrating status"))
                 }
             case .calibrated:
-                Text("Calibrado")
+                Text(NSLocalizedString("calibration.status.calibrated", comment: "Calibrated status"))
                     .foregroundColor(.green)
             case .error(let message):
-                Text("Error: \(message)")
+                Text(String(format: NSLocalizedString("calibration.status.error", comment: "Error status with message"), message))
                     .foregroundColor(.red)
             }
         }
@@ -213,13 +212,13 @@ struct ActionButtonsView: View {
     var body: some View {
         HStack(spacing: 20) {
             Button(action: onCameraTap) {
-                Label("Tomar Foto", systemImage: "camera")
+                Label(NSLocalizedString("calibration.button.takePhoto", comment: "Take photo button"), systemImage: "camera")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
             
             Button(action: onGalleryTap) {
-                Label("Seleccionar", systemImage: "photo.on.rectangle")
+                Label(NSLocalizedString("calibration.button.selectPhoto", comment: "Select photo button"), systemImage: "photo.on.rectangle")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.bordered)
@@ -232,21 +231,21 @@ struct ActionButtonsView: View {
 struct CalibrationInfoView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Tarjeta de Calibración")
+            Text(NSLocalizedString("calibration.info.title", comment: "Calibration card info title"))
                 .font(.headline)
             
-            Text("Se recomienda usar el X-Rite ColorChecker Classic con 24 parches para obtener resultados precisos.")
+            Text(NSLocalizedString("calibration.info.description", comment: "Calibration card description"))
                 .font(.subheadline)
             
             VStack(alignment: .leading, spacing: 8) {
-                Text("Características:")
+                Text(NSLocalizedString("calibration.info.features.title", comment: "Features title"))
                     .font(.subheadline)
                     .bold()
                 
-                Text("• Colores certificados y estables")
-                Text("• Resistente a UV")
-                Text("• 24 parches de color específicos")
-                Text("• Valores de referencia sRGB precisos")
+                Text(NSLocalizedString("calibration.info.features.certified", comment: "Certified colors feature"))
+                Text(NSLocalizedString("calibration.info.features.resistant", comment: "UV resistant feature"))
+                Text(NSLocalizedString("calibration.info.features.patches", comment: "Color patches feature"))
+                Text(NSLocalizedString("calibration.info.features.values", comment: "sRGB values feature"))
             }
             .font(.subheadline)
         }
@@ -262,19 +261,19 @@ struct BasicCalibrationCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Alternativa para Aficionados")
+            Text(NSLocalizedString("calibration.alternative.title", comment: "Alternative card title"))
                 .font(.headline)
             
-            Text("Si no tienes acceso a una tarjeta profesional, puedes usar nuestra tarjeta básica de calibración.")
+            Text(NSLocalizedString("calibration.alternative.description", comment: "Alternative card description"))
                 .font(.subheadline)
             
             Button(action: onDownloadTap) {
-                Label("Descargar Tarjeta Básica", systemImage: "arrow.down.doc")
+                Label(NSLocalizedString("calibration.alternative.download", comment: "Download basic card button"), systemImage: "arrow.down.doc")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.bordered)
             
-            Text("Nota: La tarjeta básica proporciona una calibración aproximada. Para resultados profesionales, se recomienda usar el ColorChecker certificado.")
+            Text(NSLocalizedString("calibration.alternative.note", comment: "Alternative card note"))
                 .font(.caption)
                 .foregroundColor(.secondary)
         }

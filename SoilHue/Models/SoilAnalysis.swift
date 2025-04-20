@@ -80,7 +80,7 @@ struct SoilAnalysis: Identifiable, Codable {
         
         // Decode location if present
         if let locationData = try container.decodeIfPresent(LocationData.self, forKey: .locationData) {
-            print("DEBUG: Decodificando localización - lat: \(locationData.latitude), lon: \(locationData.longitude)")
+            print(String(format: NSLocalizedString("debug.location.decoding", comment: "Debug message for decoding location"), locationData.latitude, locationData.longitude))
             locationInfo = CLLocation(
                 coordinate: CLLocationCoordinate2D(
                     latitude: locationData.latitude,
@@ -93,7 +93,7 @@ struct SoilAnalysis: Identifiable, Codable {
             )
         } else {
             locationInfo = nil
-            print("DEBUG: No se encontró información de localización en el JSON")
+            print(NSLocalizedString("debug.location.not.found", comment: "Debug message when location is not found in JSON"))
         }
         
         munsellColor = try container.decodeIfPresent(String.self, forKey: .munsellColor)
@@ -114,11 +114,11 @@ struct SoilAnalysis: Identifiable, Codable {
         
         // Encode location if present
         if let location = locationInfo {
-            print("DEBUG: Codificando localización - lat: \(location.coordinate.latitude), lon: \(location.coordinate.longitude)")
+            print(String(format: NSLocalizedString("debug.location.encoding", comment: "Debug message for encoding location"), location.coordinate.latitude, location.coordinate.longitude))
             let locationData = LocationData(from: location)
             try container.encode(locationData, forKey: .locationData)
         } else {
-            print("DEBUG: No hay localización para codificar")
+            print(NSLocalizedString("debug.location.none", comment: "Debug message when there is no location to encode"))
         }
         
         try container.encodeIfPresent(munsellColor, forKey: .munsellColor)

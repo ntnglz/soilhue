@@ -31,146 +31,146 @@ class MunsellClassificationService: ObservableObject {
         // Suelos oscuros (materia orgánica) - Histosoles
         MunsellColor(
             notation: "10YR 2/1",
-            name: "Black",
-            soilClassification: "Histosoles",
-            soilDescription: "Suelo orgánico con alto contenido en materia orgánica, típico de suelos de turba y horizontes O.",
+            name: NSLocalizedString("soil.color.black", comment: "Black soil color name"),
+            soilClassification: NSLocalizedString("soil.classification.histosoles", comment: "Histosoles soil classification"),
+            soilDescription: NSLocalizedString("soil.description.histosoles", comment: "Histosoles soil description"),
             rgbColor: Color(red: 0.1, green: 0.1, blue: 0.1)
         ),
         MunsellColor(
             notation: "10YR 3/1",
-            name: "Very Dark Gray",
-            soilClassification: "Histosoles",
-            soilDescription: "Suelo orgánico con alto contenido en materia orgánica, típico de suelos de turba y horizontes O.",
+            name: NSLocalizedString("soil.color.very.dark.gray", comment: "Very dark gray soil color name"),
+            soilClassification: NSLocalizedString("soil.classification.histosoles", comment: "Histosoles soil classification"),
+            soilDescription: NSLocalizedString("soil.description.histosoles", comment: "Histosoles soil description"),
             rgbColor: Color(red: 0.2, green: 0.2, blue: 0.2)
         ),
         
         // Suelos marrones oscuros (materia orgánica y minerales) - Mollisoles
         MunsellColor(
             notation: "10YR 3/2",
-            name: "Very Dark Brown",
-            soilClassification: "Mollisoles",
-            soilDescription: "Suelo oscuro y fértil, rico en materia orgánica, típico de praderas y horizontes A.",
+            name: NSLocalizedString("soil.color.very.dark.brown", comment: "Very dark brown soil color name"),
+            soilClassification: NSLocalizedString("soil.classification.mollisoles", comment: "Mollisoles soil classification"),
+            soilDescription: NSLocalizedString("soil.description.mollisoles", comment: "Mollisoles soil description"),
             rgbColor: Color(red: 0.25, green: 0.2, blue: 0.15)
         ),
         MunsellColor(
             notation: "10YR 4/2",
-            name: "Dark Brown",
-            soilClassification: "Mollisoles",
-            soilDescription: "Suelo oscuro y fértil, con contenido moderado-alto en materia orgánica, típico de praderas y horizontes A.",
+            name: NSLocalizedString("soil.color.dark.brown", comment: "Dark brown soil color name"),
+            soilClassification: NSLocalizedString("soil.classification.mollisoles", comment: "Mollisoles soil classification"),
+            soilDescription: NSLocalizedString("soil.description.mollisoles", comment: "Mollisoles soil description"),
             rgbColor: Color(red: 0.35, green: 0.3, blue: 0.25)
         ),
         MunsellColor(
             notation: "10YR 4/3",
-            name: "Brown",
-            soilClassification: "Mollisoles",
-            soilDescription: "Suelo oscuro y fértil, con contenido moderado en materia orgánica, típico de praderas y horizontes A.",
+            name: NSLocalizedString("soil.color.brown", comment: "Brown soil color name"),
+            soilClassification: NSLocalizedString("soil.classification.mollisoles", comment: "Mollisoles soil classification"),
+            soilDescription: NSLocalizedString("soil.description.mollisoles", comment: "Mollisoles soil description"),
             rgbColor: Color(red: 0.4, green: 0.35, blue: 0.3)
         ),
         
         // Suelos marrones claros (minerales con algo de materia orgánica) - Alfisoles
         MunsellColor(
             notation: "10YR 5/3",
-            name: "Light Brown",
-            soilClassification: "Alfisoles",
-            soilDescription: "Suelo con horizonte de arcilla, fértil, típico de regiones forestales y horizontes Bt.",
+            name: NSLocalizedString("soil.color.light.brown", comment: "Light brown soil color name"),
+            soilClassification: NSLocalizedString("soil.classification.alfisoles", comment: "Alfisoles soil classification"),
+            soilDescription: NSLocalizedString("soil.description.alfisoles", comment: "Alfisoles soil description"),
             rgbColor: Color(red: 0.5, green: 0.45, blue: 0.4)
         ),
         MunsellColor(
             notation: "10YR 5/4",
-            name: "Yellowish Brown",
-            soilClassification: "Alfisoles",
-            soilDescription: "Suelo con horizonte de arcilla, fértil, típico de regiones forestales y horizontes Bt.",
+            name: NSLocalizedString("soil.color.yellowish.brown", comment: "Yellowish brown soil color name"),
+            soilClassification: NSLocalizedString("soil.classification.alfisoles", comment: "Alfisoles soil classification"),
+            soilDescription: NSLocalizedString("soil.description.alfisoles", comment: "Alfisoles soil description"),
             rgbColor: Color(red: 0.55, green: 0.5, blue: 0.45)
         ),
         
         // Suelos rojizos (óxidos de hierro) - Oxisoles
         MunsellColor(
             notation: "5YR 4/6",
-            name: "Reddish Brown",
-            soilClassification: "Oxisoles",
-            soilDescription: "Suelo muy meteorizado de regiones tropicales, con alto contenido en óxidos de hierro y aluminio.",
+            name: NSLocalizedString("soil.color.reddish.brown", comment: "Reddish brown soil color name"),
+            soilClassification: NSLocalizedString("soil.classification.oxisoles", comment: "Oxisoles soil classification"),
+            soilDescription: NSLocalizedString("soil.description.oxisoles", comment: "Oxisoles soil description"),
             rgbColor: Color(red: 0.6, green: 0.3, blue: 0.2)
         ),
         MunsellColor(
             notation: "5YR 5/6",
-            name: "Red",
-            soilClassification: "Oxisoles",
-            soilDescription: "Suelo muy meteorizado de regiones tropicales, con alto contenido en óxidos de hierro y aluminio.",
+            name: NSLocalizedString("soil.color.red", comment: "Red soil color name"),
+            soilClassification: NSLocalizedString("soil.classification.oxisoles", comment: "Oxisoles soil classification"),
+            soilDescription: NSLocalizedString("soil.description.oxisoles", comment: "Oxisoles soil description"),
             rgbColor: Color(red: 0.7, green: 0.4, blue: 0.3)
         ),
         
         // Suelos amarillentos (minerales arcillosos) - Vertisoles
         MunsellColor(
             notation: "2.5Y 6/4",
-            name: "Light Yellowish Brown",
-            soilClassification: "Vertisoles",
-            soilDescription: "Suelo arcilloso que se agrieta, con alto contenido en minerales arcillosos expansivos.",
+            name: NSLocalizedString("soil.color.light.yellowish.brown", comment: "Light yellowish brown soil color name"),
+            soilClassification: NSLocalizedString("soil.classification.vertisoles", comment: "Vertisoles soil classification"),
+            soilDescription: NSLocalizedString("soil.description.vertisoles", comment: "Vertisoles soil description"),
             rgbColor: Color(red: 0.7, green: 0.65, blue: 0.5)
         ),
         MunsellColor(
             notation: "2.5Y 7/4",
-            name: "Pale Yellow",
-            soilClassification: "Vertisoles",
-            soilDescription: "Suelo arcilloso que se agrieta, con alto contenido en minerales arcillosos expansivos.",
+            name: NSLocalizedString("soil.color.pale.yellow", comment: "Pale yellow soil color name"),
+            soilClassification: NSLocalizedString("soil.classification.vertisoles", comment: "Vertisoles soil classification"),
+            soilDescription: NSLocalizedString("soil.description.vertisoles", comment: "Vertisoles soil description"),
             rgbColor: Color(red: 0.8, green: 0.75, blue: 0.6)
         ),
         
         // Suelos grises (reducción) - Espodosoles
         MunsellColor(
             notation: "5Y 5/1",
-            name: "Gray",
-            soilClassification: "Espodosoles",
-            soilDescription: "Suelo ácido con acumulación de hierro y aluminio, típico de regiones forestales húmedas.",
+            name: NSLocalizedString("soil.color.gray", comment: "Gray soil color name"),
+            soilClassification: NSLocalizedString("soil.classification.espodosoles", comment: "Espodosoles soil classification"),
+            soilDescription: NSLocalizedString("soil.description.espodosoles", comment: "Espodosoles soil description"),
             rgbColor: Color(red: 0.5, green: 0.5, blue: 0.5)
         ),
         MunsellColor(
             notation: "5Y 6/1",
-            name: "Light Gray",
-            soilClassification: "Espodosoles",
-            soilDescription: "Suelo ácido con acumulación de hierro y aluminio, típico de regiones forestales húmedas.",
+            name: NSLocalizedString("soil.color.light.gray", comment: "Light gray soil color name"),
+            soilClassification: NSLocalizedString("soil.classification.espodosoles", comment: "Espodosoles soil classification"),
+            soilDescription: NSLocalizedString("soil.description.espodosoles", comment: "Espodosoles soil description"),
             rgbColor: Color(red: 0.6, green: 0.6, blue: 0.6)
         ),
         
         // Suelos blancos (carbonatos) - Aridisoles
         MunsellColor(
             notation: "10YR 8/1",
-            name: "White",
-            soilClassification: "Aridisoles",
-            soilDescription: "Suelo de regiones áridas, con acumulación de sales y carbonatos en el subsuelo.",
+            name: NSLocalizedString("soil.color.white", comment: "White soil color name"),
+            soilClassification: NSLocalizedString("soil.classification.aridisoles", comment: "Aridisoles soil classification"),
+            soilDescription: NSLocalizedString("soil.description.aridisoles", comment: "Aridisoles soil description"),
             rgbColor: Color(red: 0.9, green: 0.9, blue: 0.9)
         ),
         MunsellColor(
             notation: "10YR 7/1",
-            name: "Light Gray",
-            soilClassification: "Aridisoles",
-            soilDescription: "Suelo de regiones áridas, con acumulación de sales y carbonatos en el subsuelo.",
+            name: NSLocalizedString("soil.color.light.gray", comment: "Light gray soil color name"),
+            soilClassification: NSLocalizedString("soil.classification.aridisoles", comment: "Aridisoles soil classification"),
+            soilDescription: NSLocalizedString("soil.description.aridisoles", comment: "Aridisoles soil description"),
             rgbColor: Color(red: 0.8, green: 0.8, blue: 0.8)
         ),
         
         // Suelos jóvenes - Entisoles
         MunsellColor(
             notation: "10YR 6/2",
-            name: "Light Brownish Gray",
-            soilClassification: "Entisoles",
-            soilDescription: "Suelo joven con poco desarrollo de horizontes, típico de depósitos aluviales recientes.",
+            name: NSLocalizedString("soil.color.light.brownish.gray", comment: "Light brownish gray soil color name"),
+            soilClassification: NSLocalizedString("soil.classification.entisoles", comment: "Entisoles soil classification"),
+            soilDescription: NSLocalizedString("soil.description.entisoles", comment: "Entisoles soil description"),
             rgbColor: Color(red: 0.6, green: 0.55, blue: 0.5)
         ),
         
         // Suelos poco desarrollados - Inceptisoles
         MunsellColor(
             notation: "10YR 6/3",
-            name: "Pale Brown",
-            soilClassification: "Inceptisoles",
-            soilDescription: "Suelo poco desarrollado con horizontes incipientes, típico de regiones montañosas.",
+            name: NSLocalizedString("soil.color.pale.brown", comment: "Pale brown soil color name"),
+            soilClassification: NSLocalizedString("soil.classification.inceptisoles", comment: "Inceptisoles soil classification"),
+            soilDescription: NSLocalizedString("soil.description.inceptisoles", comment: "Inceptisoles soil description"),
             rgbColor: Color(red: 0.65, green: 0.6, blue: 0.55)
         ),
         
         // Suelos ácidos - Ultisoles
         MunsellColor(
             notation: "7.5YR 5/4",
-            name: "Brown",
-            soilClassification: "Ultisoles",
-            soilDescription: "Suelo ácido, muy meteorizado, con horizonte de arcilla, típico de regiones húmedas.",
+            name: NSLocalizedString("soil.color.brown", comment: "Brown soil color name"),
+            soilClassification: NSLocalizedString("soil.classification.ultisoles", comment: "Ultisoles soil classification"),
+            soilDescription: NSLocalizedString("soil.description.ultisoles", comment: "Ultisoles soil description"),
             rgbColor: Color(red: 0.6, green: 0.5, blue: 0.4)
         )
     ]

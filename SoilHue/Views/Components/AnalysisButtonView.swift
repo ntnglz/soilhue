@@ -8,10 +8,9 @@ struct AnalysisButtonView: View {
     var body: some View {
         Button(action: onAnalyze) {
             if isAnalyzing {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle())
+                ProgressView(NSLocalizedString("analysis.analyzing", comment: "Analyzing progress"))
             } else {
-                Text("Analizar Color")
+                Text(NSLocalizedString("analysis.button.analyze", comment: "Analyze button"))
                     .font(.headline)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)

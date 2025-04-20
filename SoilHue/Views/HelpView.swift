@@ -14,10 +14,10 @@ struct HelpView: View {
         NavigationView {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    Picker("Sección", selection: $selectedSection) {
-                        Text("General").tag(0)
-                        Text("Suelos").tag(1)
-                        Text("Horizontes").tag(2)
+                    Picker(NSLocalizedString("help.section", comment: "Section picker title"), selection: $selectedSection) {
+                        Text(NSLocalizedString("help.section.general", comment: "General section")).tag(0)
+                        Text(NSLocalizedString("help.section.soils", comment: "Soils section")).tag(1)
+                        Text(NSLocalizedString("help.section.horizons", comment: "Horizons section")).tag(2)
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     .padding(.horizontal)
@@ -32,11 +32,11 @@ struct HelpView: View {
                 }
                 .padding()
             }
-            .navigationTitle("Ayuda")
+            .navigationTitle(NSLocalizedString("help.title", comment: "Help view title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Cerrar") {
+                    Button(NSLocalizedString("button.close", comment: "Close button")) {
                         dismiss()
                     }
                 }
@@ -47,23 +47,23 @@ struct HelpView: View {
     private var generalSection: some View {
         VStack(alignment: .leading, spacing: 20) {
             helpSection(
-                title: "¿Qué es SoilHue?",
-                content: "SoilHue es una aplicación diseñada para ayudar en la clasificación y análisis del color del suelo utilizando el sistema Munsell, un estándar internacional para la descripción del color."
+                title: NSLocalizedString("help.general.what.title", comment: "What is SoilHue title"),
+                content: NSLocalizedString("help.general.what.content", comment: "What is SoilHue content")
             )
             
             helpSection(
-                title: "¿Cómo funciona?",
-                content: "1. Captura una foto del suelo o selecciona una existente\n2. Selecciona el área específica a analizar\n3. Obtén el color Munsell y la clasificación del suelo"
+                title: NSLocalizedString("help.general.how.title", comment: "How it works title"),
+                content: NSLocalizedString("help.general.how.content", comment: "How it works content")
             )
             
             helpSection(
-                title: "Consejos para mejores resultados",
-                content: "• Toma las fotos con luz natural\n• Evita sombras y reflejos\n• Mantén la muestra limpia y seca\n• Usa una superficie plana"
+                title: NSLocalizedString("help.general.tips.title", comment: "Tips title"),
+                content: NSLocalizedString("help.general.tips.content", comment: "Tips content")
             )
             
             helpSection(
-                title: "Sistema Munsell",
-                content: "El sistema Munsell describe el color usando tres componentes:\n• Matiz (hue): el color base\n• Valor (value): la luminosidad\n• Croma (chroma): la saturación"
+                title: NSLocalizedString("help.general.munsell.title", comment: "Munsell system title"),
+                content: NSLocalizedString("help.general.munsell.content", comment: "Munsell system content")
             )
         }
     }
@@ -71,41 +71,18 @@ struct HelpView: View {
     private var soilTypesSection: some View {
         VStack(alignment: .leading, spacing: 20) {
             helpSection(
-                title: "Tipos Principales de Suelo",
-                content: """
-                • Entisoles: Suelos jóvenes con poco desarrollo de horizontes
-                • Inceptisoles: Suelos poco desarrollados con horizontes incipientes
-                • Mollisoles: Suelos oscuros, fértiles, ricos en materia orgánica
-                • Alfisoles: Suelos con horizonte de arcilla, fértiles
-                • Ultisoles: Suelos ácidos, muy meteorizados
-                • Oxisoles: Suelos muy meteorizados de regiones tropicales
-                • Vertisoles: Suelos arcillosos que se agrietan
-                • Aridisoles: Suelos de regiones áridas
-                • Espodosoles: Suelos ácidos con acumulación de hierro
-                • Histosoles: Suelos orgánicos (turbas)
-                """
+                title: NSLocalizedString("help.soils.types.title", comment: "Main soil types title"),
+                content: NSLocalizedString("help.soils.types.content", comment: "Main soil types content")
             )
             
             helpSection(
-                title: "Características del Color",
-                content: """
-                • Rojo: Indica presencia de óxidos de hierro, buena aireación
-                • Amarillo: Presencia de óxidos de hierro hidratados
-                • Gris: Condiciones de reducción, mal drenaje
-                • Negro/Marrón oscuro: Alto contenido en materia orgánica
-                • Blanco: Presencia de carbonatos, sales o sílice
-                """
+                title: NSLocalizedString("help.soils.color.title", comment: "Color characteristics title"),
+                content: NSLocalizedString("help.soils.color.content", comment: "Color characteristics content")
             )
             
             helpSection(
-                title: "Factores que Influyen",
-                content: """
-                • Materia orgánica
-                • Minerales presentes
-                • Contenido de humedad
-                • Grado de oxidación
-                • Actividad biológica
-                """
+                title: NSLocalizedString("help.soils.factors.title", comment: "Influencing factors title"),
+                content: NSLocalizedString("help.soils.factors.content", comment: "Influencing factors content")
             )
         }
     }
@@ -113,56 +90,23 @@ struct HelpView: View {
     private var horizonsSection: some View {
         VStack(alignment: .leading, spacing: 20) {
             helpSection(
-                title: "Horizontes Principales",
-                content: """
-                • O - Horizonte orgánico: Restos vegetales en descomposición
-                • A - Horizonte mineral superficial: Rico en materia orgánica
-                • E - Horizonte de eluviación: Pérdida de materiales por lavado
-                • B - Horizonte de iluviación: Acumulación de materiales
-                • C - Material parental: Roca madre poco alterada
-                • R - Roca madre: Material original sin alterar
-                """
+                title: NSLocalizedString("help.horizons.main.title", comment: "Main horizons title"),
+                content: NSLocalizedString("help.horizons.main.content", comment: "Main horizons content")
             )
             
             helpSection(
-                title: "Horizonte A",
-                content: """
-                • A1: Mayor contenido de materia orgánica
-                • A2: Transición, menos materia orgánica
-                • A3: Transición al horizonte B
-                
-                Características:
-                • Color oscuro por materia orgánica
-                • Alta actividad biológica
-                • Buena estructura del suelo
-                """
+                title: NSLocalizedString("help.horizons.a.title", comment: "A horizon title"),
+                content: NSLocalizedString("help.horizons.a.content", comment: "A horizon content")
             )
             
             helpSection(
-                title: "Horizonte B",
-                content: """
-                • Bt: Acumulación de arcillas
-                • Bs: Acumulación de sesquióxidos
-                • Bh: Acumulación de humus
-                • Bk: Acumulación de carbonatos
-                
-                Características:
-                • Mayor desarrollo estructural
-                • Colores más intensos
-                • Menor contenido orgánico
-                """
+                title: NSLocalizedString("help.horizons.b.title", comment: "B horizon title"),
+                content: NSLocalizedString("help.horizons.b.content", comment: "B horizon content")
             )
             
             helpSection(
-                title: "Importancia del Color",
-                content: """
-                El color es un indicador importante de:
-                • Contenido de materia orgánica
-                • Condiciones de drenaje
-                • Procesos de oxidación-reducción
-                • Presencia de minerales específicos
-                • Historia del desarrollo del suelo
-                """
+                title: NSLocalizedString("help.horizons.color.title", comment: "Color importance title"),
+                content: NSLocalizedString("help.horizons.color.content", comment: "Color importance content")
             )
         }
     }

@@ -72,14 +72,14 @@ struct PolygonSelectionView: View {
                 
                 // Instrucciones para el usuario
                 if currentPoints.isEmpty {
-                    Text("Toca para añadir vértices del polígono")
+                    Text(NSLocalizedString("selection.polygon.instruction", comment: "Polygon selection instruction"))
                         .font(.caption)
                         .foregroundColor(.white)
                         .padding(8)
                         .background(Color.black.opacity(0.6))
                         .cornerRadius(8)
                 } else if !isPolygonComplete {
-                    Text("Doble toque para completar el polígono")
+                    Text(NSLocalizedString("selection.polygon.complete", comment: "Complete polygon instruction"))
                         .font(.caption)
                         .foregroundColor(.white)
                         .padding(8)

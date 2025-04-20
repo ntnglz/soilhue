@@ -16,11 +16,11 @@ struct ImageSelectionAreaView: View {
                     .padding()
                 
                 if let rect = selectionRect {
-                    Text("Área seleccionada: \(Int(rect.width * 100))% x \(Int(rect.height * 100))%")
+                    Text(String(format: NSLocalizedString("analysis.area.selected", comment: "Selected area format"), Int(rect.width * 100), Int(rect.height * 100)))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 } else {
-                    Text("Arrastra para seleccionar un área\no pulsa Analizar para procesar la imagen completa")
+                    Text(NSLocalizedString("analysis.drag.select", comment: "Drag to select instruction"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)

@@ -9,39 +9,39 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 // Sección de Cámara
-                Section("Cámara") {
-                    Picker("Resolución", selection: $model.cameraResolution) {
+                Section(NSLocalizedString("Camera", comment: "Camera section title")) {
+                    Picker(NSLocalizedString("Camera Resolution", comment: "Camera resolution picker"), selection: $model.cameraResolution) {
                         ForEach(CameraResolution.allCases) { resolution in
-                            Text(resolution.description)
+                            Text(NSLocalizedString(resolution.localizationKey, comment: "Camera resolution option"))
                                 .tag(resolution)
                         }
                     }
                     
-                    Toggle("Calibración automática", isOn: $model.autoCalibration)
+                    Toggle(NSLocalizedString("Auto Calibration", comment: "Auto calibration toggle"), isOn: $model.autoCalibration)
                 }
                 
                 // Sección de Almacenamiento
-                Section("Almacenamiento") {
-                    Picker("Ubicación", selection: $model.saveLocation) {
+                Section(NSLocalizedString("Storage Location", comment: "Storage section title")) {
+                    Picker(NSLocalizedString("Storage Location", comment: "Storage location picker"), selection: $model.saveLocation) {
                         ForEach(SaveLocation.allCases) { location in
-                            Text(location.description)
+                            Text(NSLocalizedString(location.localizationKey, comment: "Storage location option"))
                                 .tag(location)
                         }
                     }
                     
-                    Picker("Formato de exportación", selection: $model.exportFormat) {
+                    Picker(NSLocalizedString("Export Format", comment: "Export format picker"), selection: $model.exportFormat) {
                         ForEach(ExportFormat.allCases) { format in
-                            Text(format.description)
+                            Text(NSLocalizedString(format.localizationKey, comment: "Export format option"))
                                 .tag(format)
                         }
                     }
                 }
                 
                 // Sección de Apariencia
-                Section("Apariencia") {
-                    Picker("Modo oscuro", selection: $model.darkMode) {
+                Section(NSLocalizedString("Dark Mode", comment: "Appearance section title")) {
+                    Picker(NSLocalizedString("Dark Mode", comment: "Dark mode picker"), selection: $model.darkMode) {
                         ForEach(DarkMode.allCases) { mode in
-                            Text(mode.description)
+                            Text(NSLocalizedString(mode.localizationKey, comment: "Dark mode option"))
                                 .tag(mode)
                         }
                     }
@@ -51,29 +51,29 @@ struct SettingsView: View {
                 Section {
                     Button(role: .destructive, action: { showResetAlert = true }) {
                         HStack {
-                            Text("Restablecer ajustes")
+                            Text(NSLocalizedString("Reset to Defaults", comment: "Reset settings button"))
                             Spacer()
                             Image(systemName: "arrow.counterclockwise")
                         }
                     }
                 }
             }
-            .navigationTitle("Ajustes")
+            .navigationTitle(NSLocalizedString("Settings", comment: "Settings view title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Listo") {
+                    Button(NSLocalizedString("Done", comment: "Done button")) {
                         dismiss()
                     }
                 }
             }
-            .alert("¿Restablecer ajustes?", isPresented: $showResetAlert) {
-                Button("Cancelar", role: .cancel) { }
-                Button("Restablecer", role: .destructive) {
+            .alert(NSLocalizedString("settings.reset.alert.title", comment: "Reset settings alert title"), isPresented: $showResetAlert) {
+                Button(NSLocalizedString("Cancel", comment: "Cancel button"), role: .cancel) { }
+                Button(NSLocalizedString("Reset", comment: "Reset button"), role: .destructive) {
                     model.resetToDefaults()
                 }
             } message: {
-                Text("Esta acción restablecerá todos los ajustes a sus valores predeterminados.")
+                Text(NSLocalizedString("settings.reset.alert.message", comment: "Reset settings alert message"))
             }
         }
     }

@@ -24,7 +24,7 @@ struct SoilSampleDetailView: View {
                 }) {
                     HStack {
                         Image(systemName: "eyedropper")
-                        Text("Analizar Muestra")
+                        Text(NSLocalizedString("sample.analyze", comment: "Analyze sample button"))
                     }
                     .frame(maxWidth: .infinity)
                     .padding()
@@ -35,7 +35,7 @@ struct SoilSampleDetailView: View {
                 .disabled(isAnalyzing)
                 
                 if isAnalyzing {
-                    ProgressView("Analizando...")
+                    ProgressView(NSLocalizedString("sample.analyzing", comment: "Analyzing progress"))
                         .frame(maxWidth: .infinity)
                 }
                 
@@ -47,16 +47,16 @@ struct SoilSampleDetailView: View {
                 
                 // Información del color Munsell
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Color Munsell")
+                    Text(NSLocalizedString("sample.munsell.title", comment: "Munsell color title"))
                         .font(.headline)
-                    Text(sample.munsellColor ?? "No analizado")
+                    Text(sample.munsellColor ?? NSLocalizedString("sample.not.analyzed", comment: "Not analyzed text"))
                         .font(.body)
                 }
                 
                 // Clasificación del suelo
                 if let classification = sample.soilClassification {
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("Clasificación del Suelo")
+                        Text(NSLocalizedString("sample.classification.title", comment: "Soil classification title"))
                             .font(.headline)
                         Text(classification)
                             .font(.body)
@@ -66,7 +66,7 @@ struct SoilSampleDetailView: View {
                 // Descripción del suelo
                 if let description = sample.soilDescription {
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("Descripción")
+                        Text(NSLocalizedString("sample.description.title", comment: "Description title"))
                             .font(.headline)
                         Text(description)
                             .font(.body)
@@ -76,23 +76,23 @@ struct SoilSampleDetailView: View {
                 // Ubicación
                 if let location = sample.location {
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("Ubicación")
+                        Text(NSLocalizedString("sample.location.title", comment: "Location title"))
                             .font(.headline)
-                        Text("Latitud: \(location.coordinate.latitude)")
-                        Text("Longitud: \(location.coordinate.longitude)")
+                        Text(String(format: NSLocalizedString("sample.latitude.format", comment: "Latitude format"), location.coordinate.latitude))
+                        Text(String(format: NSLocalizedString("sample.longitude.format", comment: "Longitude format"), location.coordinate.longitude))
                     }
                 }
                 
                 // Fecha de muestreo
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Fecha de Muestreo")
+                    Text(NSLocalizedString("sample.date.title", comment: "Sampling date title"))
                         .font(.headline)
                     Text(sample.timestamp, style: .date)
                 }
             }
             .padding()
         }
-        .navigationTitle("Detalles de la Muestra")
+        .navigationTitle(NSLocalizedString("sample.details.title", comment: "Sample details title"))
     }
     
     private func analyzeSample() async {
@@ -113,7 +113,7 @@ struct SoilSampleDetailView: View {
     SoilSampleDetailView(sample: SoilSample(
         image: UIImage(systemName: "photo")!,
         munsellColor: "10YR 4/3",
-        soilClassification: "Suelo arcilloso",
-        soilDescription: "Suelo con alto contenido de arcilla, color pardo oscuro"
+        soilClassification: NSLocalizedString("preview.soil.classification", comment: "Preview soil classification"),
+        soilDescription: NSLocalizedString("preview.soil.description", comment: "Preview soil description")
     ))
 } 

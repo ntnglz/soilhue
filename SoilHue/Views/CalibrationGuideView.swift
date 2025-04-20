@@ -57,7 +57,7 @@ struct CalibrationGuideView: View {
                     
                     // Texto de instrucciones
                     VStack {
-                        Text("Alinee la tarjeta\nde calibración con el rectángulo")
+                        Text(NSLocalizedString("calibration.guide.align", comment: "Instruction to align the calibration card"))
                             .foregroundColor(.white)
                             .font(.headline)
                             .multilineTextAlignment(.center)

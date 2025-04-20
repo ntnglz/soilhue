@@ -57,7 +57,7 @@ struct ImageAnalysisView: View {
                     .padding(.horizontal)
                     
                     if let locationInfo = viewModel.currentSample?.location {
-                        Section("Ubicación") {
+                        Section(NSLocalizedString("analysis.location", comment: "Location section title")) {
                             LocationView(location: locationInfo)
                                 .frame(height: 100)
                                 .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -65,18 +65,18 @@ struct ImageAnalysisView: View {
                             
                             VStack(alignment: .leading, spacing: 4) {
                                 HStack {
-                                    Label("Latitud: \(locationInfo.coordinate.latitude, specifier: "%.6f")°", systemImage: "location.north.fill")
+                                    Label(String(format: NSLocalizedString("analysis.latitude", comment: "Latitude format"), locationInfo.coordinate.latitude), systemImage: "location.north.fill")
                                         .foregroundColor(.blue)
                                     Spacer()
-                                    Label("Longitud: \(locationInfo.coordinate.longitude, specifier: "%.6f")°", systemImage: "location.fill")
+                                    Label(String(format: NSLocalizedString("analysis.longitude", comment: "Longitude format"), locationInfo.coordinate.longitude), systemImage: "location.fill")
                                         .foregroundColor(.blue)
                                 }
                                 
                                 HStack {
-                                    Label("Altitud: \(locationInfo.altitude, specifier: "%.1f") m", systemImage: "arrow.up.forward")
+                                    Label(String(format: NSLocalizedString("analysis.altitude", comment: "Altitude format"), locationInfo.altitude), systemImage: "arrow.up.forward")
                                         .foregroundColor(.blue)
                                     Spacer()
-                                    Label("Precisión: \(locationInfo.horizontalAccuracy, specifier: "%.1f") m", systemImage: "scope")
+                                    Label(String(format: NSLocalizedString("analysis.accuracy", comment: "Accuracy format"), locationInfo.horizontalAccuracy), systemImage: "scope")
                                         .foregroundColor(.blue)
                                 }
                             }
@@ -90,21 +90,21 @@ struct ImageAnalysisView: View {
                        let munsellColor = sample.munsellColor,
                        !munsellColor.isEmpty {
                         VStack(spacing: 24) {
-                            Text("Resultados del Análisis")
+                            Text(NSLocalizedString("analysis.results.title", comment: "Analysis results title"))
                                 .font(.title)
                                 .fontWeight(.bold)
                             
                             VStack(alignment: .leading, spacing: 12) {
-                                Text("Color Munsell: \(munsellColor)")
+                                Text(String(format: NSLocalizedString("analysis.munsell.color", comment: "Munsell color format"), munsellColor))
                                     .font(.title3)
                                 
                                 if let classification = sample.soilClassification {
-                                    Text("Clasificación: \(classification)")
+                                    Text(String(format: NSLocalizedString("analysis.classification", comment: "Classification format"), classification))
                                         .font(.title3)
                                 }
                                 
                                 if let description = sample.soilDescription {
-                                    Text("Descripción: \(description)")
+                                    Text(String(format: NSLocalizedString("analysis.description", comment: "Description format"), description))
                                         .font(.body)
                                         .fixedSize(horizontal: false, vertical: true)
                                 }
@@ -119,7 +119,7 @@ struct ImageAnalysisView: View {
                                 Button(action: {
                                     showingSaveDialog = true
                                 }) {
-                                    Label("Guardar análisis", systemImage: "square.and.arrow.down")
+                                    Label(NSLocalizedString("analysis.save", comment: "Save analysis button"), systemImage: "square.and.arrow.down")
                                         .frame(maxWidth: .infinity)
                                         .padding()
                                         .background(Color.blue)
@@ -134,7 +134,7 @@ struct ImageAnalysisView: View {
                                         VStack {
                                             Image(systemName: "book.fill")
                                                 .font(.title2)
-                                            Text("Más\nInfor-\nmación")
+                                            Text(NSLocalizedString("analysis.more.info", comment: "More info button"))
                                                 .multilineTextAlignment(.center)
                                         }
                                         .frame(maxWidth: .infinity)
@@ -148,7 +148,7 @@ struct ImageAnalysisView: View {
                                         VStack {
                                             Image(systemName: "camera.fill")
                                                 .font(.title2)
-                                            Text("Nueva\nMues-\ntra")
+                                            Text(NSLocalizedString("analysis.new.sample", comment: "New sample button"))
                                                 .multilineTextAlignment(.center)
                                         }
                                         .frame(maxWidth: .infinity)
@@ -195,18 +195,18 @@ struct ImageAnalysisView: View {
                 }
             )
         }
-        .alert("Error", isPresented: $showingErrorAlert) {
-            Button("Calibrar ahora") {
+        .alert(NSLocalizedString("analysis.error", comment: "Error alert title"), isPresented: $showingErrorAlert) {
+            Button(NSLocalizedString("analysis.calibrate.now", comment: "Calibrate now button")) {
                 showCalibration = true
             }
             Button("OK", role: .cancel) { }
         } message: {
             Text(errorMessage)
         }
-        .alert("Éxito", isPresented: $showingSaveAlert) {
+        .alert(NSLocalizedString("analysis.success", comment: "Success alert title"), isPresented: $showingSaveAlert) {
             Button("OK", role: .cancel) { }
         } message: {
-            Text("Análisis guardado correctamente")
+            Text(NSLocalizedString("analysis.saved", comment: "Analysis saved message"))
         }
         .sheet(isPresented: $showCalibration) {
             CalibrationView()

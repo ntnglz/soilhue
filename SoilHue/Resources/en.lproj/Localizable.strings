@@ -7,7 +7,59 @@
 "Analysis" = "Analysis";
 "Calibration" = "Calibration";
 
+// Main titles and messages
+"app.name" = "SoilHue";
+"welcome.title" = "Welcome to SoilHue";
+"welcome.description" = "Analyze soil color accurately and get its Munsell classification";
+"alert.error.title" = "Error";
+
+// Location status
+"location.status.enabled" = "Location enabled";
+"location.status.disabled" = "Location disabled";
+
+// Calibration Guide
+"calibration.guide.align" = "Align the calibration\ncard with the rectangle";
+"calibration.guide.frame" = "Align the calibration card\nwithin the frame";
+"calibration.status.notCalibrated" = "Not calibrated";
+"calibration.status.calibrating" = "Calibrating...";
+"calibration.status.calibrated" = "Calibrated";
+"calibration.status.error" = "Error: %@";
+"calibration.button.takePhoto" = "Take Photo";
+"calibration.button.selectPhoto" = "Select";
+"calibration.button.close" = "Close";
+"calibration.error.generic" = "Error generating calibration card";
+"calibration.success.title" = "Calibration Successful";
+"calibration.success.message" = "The camera has been calibrated successfully.";
+"calibration.info.title" = "Calibration Card";
+"calibration.info.description" = "It is recommended to use the X-Rite ColorChecker Classic with 24 patches for accurate results.";
+"calibration.info.features.title" = "Features:";
+"calibration.info.features.certified" = "• Certified and stable colors";
+"calibration.info.features.resistant" = "• UV resistant";
+"calibration.info.features.patches" = "• 24 specific color patches";
+"calibration.info.features.values" = "• Accurate sRGB reference values";
+"calibration.alternative.title" = "Alternative for Hobbyists";
+"calibration.alternative.description" = "If you don't have access to a professional card, you can use our basic calibration card.";
+"calibration.alternative.download" = "Download Basic Card";
+"calibration.alternative.note" = "Note: The basic card provides approximate calibration. For professional results, using the certified ColorChecker is recommended.";
+
+// Main features
+"feature.capture.title" = "Precise\nCapture";
+"feature.analysis.title" = "Munsell\nAnalysis";
+"feature.classification.title" = "Soil\nClassification";
+
+/* Feature Descriptions */
+"feature.capture.description" = "Capture soil samples with precision using the camera or selecting existing images";
+"feature.analysis.description" = "Analyze soil color using the Munsell system for accurate classification";
+"feature.classification.description" = "Classify soil based on its characteristics and get detailed information about its composition";
+
 // Buttons and actions
+"button.gallery" = "Gallery";
+"button.camera" = "Camera";
+"button.calibrate" = "Calibrate Camera";
+"button.export" = "Export";
+"button.settings" = "Settings";
+"button.help" = "Help";
+"button.ok" = "OK";
 "Take Photo" = "Take Photo";
 "Select Photo" = "Select Photo";
 "Save" = "Save";
@@ -18,6 +70,7 @@
 "Back" = "Back";
 "More Info" = "More Info";
 "New Sample" = "New Sample";
+"button.close" = "Close";
 
 // Analysis
 "Munsell Notation" = "Munsell Notation";
@@ -58,6 +111,8 @@
 "CSV" = "CSV";
 "JSON" = "JSON";
 "Excel" = "Excel";
+"export.format.csv.description" = "Simple comma-separated text format. Compatible with Excel, Numbers, and other spreadsheets.";
+"export.format.json.description" = "Structured format ideal for data processing and development.";
 
 // Error messages
 "Camera Error" = "Camera Error";
@@ -107,4 +162,283 @@
 "About" = "About";
 "Help & Support" = "Help & Support";
 "Privacy Policy" = "Privacy Policy";
-"Terms of Use" = "Terms of Use"; 
+"Terms of Use" = "Terms of Use";
+
+/* Help View */
+"help.title" = "Help";
+"help.section" = "Section";
+"help.section.general" = "General";
+"help.section.soils" = "Soils";
+"help.section.horizons" = "Horizons";
+
+/* General Section */
+"help.general.what.title" = "What is SoilHue?";
+"help.general.what.content" = "SoilHue is an application designed to assist in soil color classification and analysis using the Munsell system, an international standard for color description.";
+
+"help.general.how.title" = "How does it work?";
+"help.general.how.content" = "1. Take a photo of the soil or select an existing one\n2. Select the specific area to analyze\n3. Get the Munsell color and soil classification";
+
+"help.general.tips.title" = "Tips for better results";
+"help.general.tips.content" = "• Take photos in natural light\n• Avoid shadows and reflections\n• Keep the sample clean and dry\n• Use a flat surface";
+
+"help.general.munsell.title" = "Munsell System";
+"help.general.munsell.content" = "The Munsell system describes color using three components:\n• Hue: the base color\n• Value: the lightness\n• Chroma: the saturation";
+
+/* Soils Section */
+"help.soils.types.title" = "Main Soil Types";
+"help.soils.types.content" = "• Entisols: Young soils with little horizon development\n• Inceptisols: Slightly developed soils with incipient horizons\n• Mollisols: Dark, fertile soils rich in organic matter\n• Alfisols: Clay-rich horizon soils, fertile\n• Ultisols: Acidic, highly weathered soils\n• Oxisols: Highly weathered tropical soils\n• Vertisols: Cracking clay soils\n• Aridisols: Soils of arid regions\n• Spodosols: Acidic soils with iron accumulation\n• Histosols: Organic soils (peat)";
+
+"help.soils.color.title" = "Color Characteristics";
+"help.soils.color.content" = "• Red: Indicates presence of iron oxides, good aeration\n• Yellow: Presence of hydrated iron oxides\n• Gray: Reduction conditions, poor drainage\n• Black/Dark Brown: High organic matter content\n• White: Presence of carbonates, salts, or silica";
+
+"help.soils.factors.title" = "Influencing Factors";
+"help.soils.factors.content" = "• Organic matter\n• Present minerals\n• Moisture content\n• Oxidation degree\n• Biological activity";
+
+/* Horizons Section */
+"help.horizons.main.title" = "Main Horizons";
+"help.horizons.main.content" = "• O - Organic horizon: Decomposing plant remains\n• A - Surface mineral horizon: Rich in organic matter\n• E - Eluviation horizon: Loss of materials by leaching\n• B - Illuviation horizon: Accumulation of materials\n• C - Parent material: Slightly altered bedrock\n• R - Bedrock: Unaltered original material";
+
+"help.horizons.a.title" = "A Horizon";
+"help.horizons.a.content" = "• A1: Highest organic matter content\n• A2: Transition, less organic matter\n• A3: Transition to B horizon\n\nCharacteristics:\n• Dark color from organic matter\n• High biological activity\n• Good soil structure";
+
+"help.horizons.b.title" = "B Horizon";
+"help.horizons.b.content" = "• Bt: Clay accumulation\n• Bs: Sesquioxide accumulation\n• Bh: Humus accumulation\n• Bk: Carbonate accumulation\n\nCharacteristics:\n• Greater structural development\n• More intense colors\n• Lower organic content";
+
+"help.horizons.color.title" = "Color Importance";
+"help.horizons.color.content" = "Color is an important indicator of:\n• Organic matter content\n• Drainage conditions\n• Oxidation-reduction processes\n• Presence of specific minerals\n• Soil development history";
+
+/* ImageAnalysisView */
+"analysis.results.title" = "Analysis Results";
+"analysis.munsell.color" = "Munsell Color: %@";
+"analysis.classification" = "Classification: %@";
+"analysis.description" = "Description: %@";
+"analysis.save" = "Save Analysis";
+"analysis.more.info" = "More\nInfor-\nmation";
+"analysis.new.sample" = "New\nSam-\nple";
+"analysis.location" = "Location";
+"analysis.latitude" = "Latitude: %.6f°";
+"analysis.longitude" = "Longitude: %.6f°";
+"analysis.altitude" = "Altitude: %.1f m";
+"analysis.accuracy" = "Accuracy: %.1f m";
+"analysis.area.selected" = "Selected area: %d%% x %d%%";
+"analysis.drag.select" = "Drag to select an area\nor tap Analyze to process the entire image";
+"analysis.analyze.color" = "Analyze Color";
+"analysis.success" = "Success";
+"analysis.saved" = "Analysis saved successfully";
+"analysis.error" = "Error";
+"analysis.calibrate.now" = "Calibrate now";
+
+/* Selection Modes */
+"selection.mode.rectangle" = "Rectangle";
+"selection.mode.polygon" = "Polygon";
+"selection.polygon.vertices" = "Polygon with %d vertices";
+"selection.polygon.instruction" = "Tap to add polygon vertices";
+"selection.polygon.complete" = "Double tap to complete the polygon";
+
+/* Analysis */
+"analysis.button.analyze" = "Analyze Color";
+"analysis.analyzing" = "Analyzing...";
+
+/* Location */
+"location.title" = "Location";
+"location.marker" = "Location";
+
+/* Onboarding */
+"onboarding.button.previous" = "Previous";
+"onboarding.button.next" = "Next";
+"onboarding.button.start" = "Get Started";
+
+/* Onboarding Steps */
+"onboarding.step1.title" = "Welcome to SoilHue";
+"onboarding.step1.description" = "Discover the color and characteristics of your soil samples accurately and easily.";
+
+"onboarding.step2.title" = "Calibration";
+"onboarding.step2.description" = "Before starting, calibrate the camera using the color card. This will ensure accurate results.";
+
+"onboarding.step3.title" = "Sample Capture";
+"onboarding.step3.description" = "Take photos of your soil samples or select existing images from your gallery.";
+
+"onboarding.step4.title" = "Ready to Start!";
+"onboarding.step4.description" = "You're now ready to analyze your soil samples. Shall we begin?";
+
+/* SoilSampleDetailView */
+"sample.details.title" = "Sample Details";
+"sample.analyze" = "Analyze Sample";
+"sample.analyzing" = "Analyzing...";
+"sample.munsell.title" = "Munsell Color";
+"sample.not.analyzed" = "Not analyzed";
+"sample.classification.title" = "Soil Classification";
+"sample.description.title" = "Description";
+"sample.location.title" = "Location";
+"sample.latitude.format" = "Latitude: %.6f";
+"sample.longitude.format" = "Longitude: %.6f";
+"sample.date.title" = "Sampling Date";
+
+/* Preview Data */
+"preview.soil.classification" = "Clay soil";
+"preview.soil.description" = "Soil with high clay content, dark brown color";
+
+/* Analysis Results */
+"analysis.results.title" = "Analysis Results";
+"analysis.munsell.color" = "Munsell Color";
+"analysis.classification" = "Classification";
+"analysis.description" = "Description";
+"analysis.save" = "Save Analysis";
+"analysis.more.info" = "More Information";
+"analysis.new.sample" = "New Sample";
+"analysis.notes" = "Notes";
+"analysis.tags" = "Tags";
+"analysis.tags.placeholder" = "Separated by commas";
+"analysis.save.title" = "Save Analysis";
+
+/* Common */
+"error.title" = "Error";
+"ok" = "OK";
+"cancel" = "Cancel";
+"save" = "Save";
+
+/* Calibration Card */
+"calibration.card.title" = "Basic Calibration Card";
+"calibration.card.instructions.title" = "Usage Instructions:";
+"calibration.card.instructions.print" = "1. Print this card on a quality printer";
+"calibration.card.instructions.colors" = "2. Ensure colors are printed correctly";
+"calibration.card.instructions.placement" = "3. Place the card on a flat surface";
+"calibration.card.instructions.lighting" = "4. Avoid shadows and reflections";
+"calibration.card.instructions.parallel" = "5. Keep the card parallel to the camera when taking the photo";
+"calibration.card.note" = "Note: This basic card provides approximate calibration.";
+"calibration.card.recommendation" = "For professional results, using the X-Rite ColorChecker Classic is recommended.";
+
+/* Calibration Service */
+"calibration.patch.dark.skin" = "Dark skin";
+"calibration.patch.light.skin" = "Light skin";
+"calibration.patch.blue.sky" = "Blue sky";
+"calibration.patch.foliage" = "Foliage";
+"calibration.patch.blue.flower" = "Blue flower";
+"calibration.patch.bluish.green" = "Bluish green";
+"calibration.patch.orange" = "Orange";
+"calibration.patch.purplish.blue" = "Purplish blue";
+"calibration.patch.moderate.red" = "Moderate red";
+"calibration.patch.purple" = "Purple";
+"calibration.patch.yellow.green" = "Yellow green";
+"calibration.patch.orange.yellow" = "Orange yellow";
+"calibration.patch.blue" = "Blue";
+"calibration.patch.green" = "Green";
+"calibration.patch.red" = "Red";
+"calibration.patch.yellow" = "Yellow";
+"calibration.patch.magenta" = "Magenta";
+"calibration.patch.cyan" = "Cyan";
+"calibration.patch.white" = "White";
+"calibration.patch.neutral.8" = "Neutral 8";
+"calibration.patch.neutral.6.5" = "Neutral 6.5";
+"calibration.patch.neutral.5" = "Neutral 5";
+"calibration.patch.neutral.3.5" = "Neutral 3.5";
+"calibration.patch.black" = "Black";
+
+"calibration.error.image.processing" = "Could not process the image";
+"calibration.error.insufficient.patches" = "Could not detect enough color patches";
+
+"calibration.log.start" = "Starting calibration processing...";
+"calibration.log.dimensions" = "Image dimensions: %.0fx%.0f";
+"calibration.log.patch" = "Processing patch %@:";
+"calibration.log.reference" = "  Reference: R=%.3f, G=%.3f, B=%.3f";
+"calibration.log.measured" = "  Measured: R=%.3f, G=%.3f, B=%.3f";
+"calibration.log.factors" = "  Factors: R=%.3f, G=%.3f, B=%.3f";
+"calibration.log.valid.patches" = "Total valid patches: %d";
+
+/* Calibration Validator */
+"calibration.quality.optimal" = "optimal";
+"calibration.quality.acceptable" = "acceptable";
+"calibration.quality.poor" = "poor";
+"calibration.validation.result" = "Calibration validation:\n- Quality: %@\n- Average error: %@\n- Maximum error: %@\n- Problematic colors: %@\n- Device: %@";
+"calibration.validation.no.problems" = "none";
+
+/* Camera Service */
+"camera.error.permission.denied" = "No camera access. Please check permissions in Settings.";
+"camera.error.capture" = "Error capturing photo.";
+"camera.error.invalid.device" = "Could not access device camera.";
+"camera.error.configuration" = "Error configuring camera.";
+"camera.error.session.not.running" = "Camera session is not active.";
+"camera.error.resolution.not.supported" = "Selected resolution is not supported by this device.";
+"camera.error.invalid.resolution" = "Could not set desired resolution.";
+"camera.error.no.permission" = "No permission to access camera.";
+"camera.error.setup.failed" = "Error setting up camera.";
+
+/* Color Analysis Service */
+"color.analysis.error.not.calibrated" = "Camera is not calibrated. Please calibrate before analyzing images.";
+
+/* Export Service */
+"export.error.create.file" = "Failed to create export file";
+"export.error.write.data" = "Error writing data";
+"export.error.invalid.format" = "Invalid export format";
+"export.error.no.data" = "No data to export";
+"export.csv.header" = "ID,Date,Munsell Notation,Classification,Description,Calibrated,Correction Factors,Latitude,Longitude,Altitude,Address,Notes,Tags";
+"export.not.available" = "N/A";
+
+/* Common */
+"common.yes" = "Yes";
+"common.no" = "No";
+
+/* Location Service */
+"location.error.permission.denied" = "Location access is disabled. Please enable it in Settings.";
+"location.error.invalid.device" = "Could not access device GPS.";
+"location.error.invalid.location" = "Could not get current location.";
+"location.error.timeout" = "Timeout while getting location.";
+"location.error.unknown" = "Unknown error while getting location.";
+
+/* Storage Service */
+"storage.error.save.image" = "Failed to save image";
+"storage.error.save.analysis" = "Failed to save analysis";
+"storage.error.load.analysis" = "Failed to load analysis";
+"storage.error.analysis.not.found" = "Analysis not found";
+"storage.error.icloud.not.available" = "iCloud is not available";
+"storage.error.invalid.directory" = "Invalid storage directory";
+"storage.error.directory.creation" = "Failed to create storage directory";
+"storage.error.file.operation" = "File operation error: %@";
+
+/* Soil Colors */
+"soil.color.black" = "Black";
+"soil.color.very.dark.gray" = "Very Dark Gray";
+"soil.color.very.dark.brown" = "Very Dark Brown";
+"soil.color.dark.brown" = "Dark Brown";
+"soil.color.brown" = "Brown";
+"soil.color.light.brown" = "Light Brown";
+"soil.color.yellowish.brown" = "Yellowish Brown";
+"soil.color.reddish.brown" = "Reddish Brown";
+"soil.color.red" = "Red";
+"soil.color.light.yellowish.brown" = "Light Yellowish Brown";
+"soil.color.pale.yellow" = "Pale Yellow";
+"soil.color.gray" = "Gray";
+"soil.color.light.gray" = "Light Gray";
+"soil.color.white" = "White";
+"soil.color.light.brownish.gray" = "Light Brownish Gray";
+"soil.color.pale.brown" = "Pale Brown";
+
+/* Soil Classifications */
+"soil.classification.histosoles" = "Histosols";
+"soil.classification.mollisoles" = "Mollisols";
+"soil.classification.alfisoles" = "Alfisols";
+"soil.classification.oxisoles" = "Oxisols";
+"soil.classification.vertisoles" = "Vertisols";
+"soil.classification.espodosoles" = "Spodosols";
+"soil.classification.aridisoles" = "Aridisols";
+"soil.classification.entisoles" = "Entisols";
+"soil.classification.inceptisoles" = "Inceptisols";
+"soil.classification.ultisoles" = "Ultisols";
+
+/* Soil Descriptions */
+"soil.description.histosoles" = "Organic soil with high organic matter content, typical of peat soils and O horizons.";
+"soil.description.mollisoles" = "Dark and fertile soil, rich in organic matter, typical of grasslands and A horizons.";
+"soil.description.alfisoles" = "Soil with clay horizon, fertile, typical of forest regions and Bt horizons.";
+"soil.description.oxisoles" = "Highly weathered soil from tropical regions, with high content of iron and aluminum oxides.";
+"soil.description.vertisoles" = "Clay soil that cracks, with high content of expansive clay minerals.";
+"soil.description.espodosoles" = "Acidic soil with accumulation of iron and aluminum, typical of humid forest regions.";
+"soil.description.aridisoles" = "Soil from arid regions, with accumulation of salts and carbonates in the subsoil.";
+"soil.description.entisoles" = "Young soil with little horizon development, typical of recent alluvial deposits.";
+"soil.description.inceptisoles" = "Slightly developed soil with incipient horizons, typical of mountainous regions.";
+"soil.description.ultisoles" = "Acidic, highly weathered soil with clay horizon, typical of humid regions.";
+
+/* Debug Messages */
+"debug.location.decoding" = "DEBUG: Decoding location - lat: %f, lon: %f";
+"debug.location.not.found" = "DEBUG: No location information found in JSON";
+"debug.location.encoding" = "DEBUG: Encoding location - lat: %f, lon: %f";
+"debug.location.none" = "DEBUG: No location to encode";

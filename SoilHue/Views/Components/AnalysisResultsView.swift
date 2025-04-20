@@ -34,16 +34,25 @@ struct AnalysisResultsView: View {
     var body: some View {
         VStack(spacing: 20) {
             // Título
-            Text("Resultados del Análisis")
+            Text(NSLocalizedString("analysis.results.title", comment: "Analysis results title"))
                 .font(.title2)
                 .fontWeight(.bold)
                 .padding(.top)
             
             // Información del análisis
             VStack(alignment: .leading, spacing: 15) {
-                ResultInfoRow(title: "Color Munsell", value: munsellNotation)
-                ResultInfoRow(title: "Clasificación", value: soilClassification)
-                ResultInfoRow(title: "Descripción", value: soilDescription)
+                ResultInfoRow(
+                    title: NSLocalizedString("analysis.munsell.color", comment: "Munsell color"),
+                    value: munsellNotation
+                )
+                ResultInfoRow(
+                    title: NSLocalizedString("analysis.classification", comment: "Soil classification"),
+                    value: soilClassification
+                )
+                ResultInfoRow(
+                    title: NSLocalizedString("analysis.description", comment: "Soil description"),
+                    value: soilDescription
+                )
             }
             .padding(.horizontal)
             
@@ -55,7 +64,7 @@ struct AnalysisResultsView: View {
                 Button(action: { showSaveDialog = true }) {
                     HStack {
                         Image(systemName: "square.and.arrow.down.fill")
-                        Text("Guardar Análisis")
+                        Text(NSLocalizedString("analysis.save", comment: "Save analysis button"))
                     }
                     .frame(maxWidth: .infinity)
                     .padding()
@@ -72,7 +81,7 @@ struct AnalysisResultsView: View {
                     }) {
                         HStack {
                             Image(systemName: "book.fill")
-                            Text("Más Información")
+                            Text(NSLocalizedString("analysis.more.info", comment: "More information button"))
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
@@ -84,7 +93,7 @@ struct AnalysisResultsView: View {
                     Button(action: onNewSample) {
                         HStack {
                             Image(systemName: "camera.fill")
-                            Text("Nueva Muestra")
+                            Text(NSLocalizedString("analysis.new.sample", comment: "New sample button"))
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
@@ -104,8 +113,8 @@ struct AnalysisResultsView: View {
         .sheet(isPresented: $showSaveDialog) {
             SaveAnalysisSheet(isPresented: $showSaveDialog, onSave: saveAnalysis)
         }
-        .alert("Error", isPresented: $showError) {
-            Button("OK", role: .cancel) { }
+        .alert(NSLocalizedString("error.title", comment: "Error alert title"), isPresented: $showError) {
+            Button(NSLocalizedString("ok", comment: "OK button"), role: .cancel) { }
         } message: {
             Text(errorMessage)
         }
@@ -171,25 +180,25 @@ struct SaveAnalysisSheet: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Notas")) {
+                Section(header: Text(NSLocalizedString("analysis.notes", comment: "Notes section header"))) {
                     TextEditor(text: $notes)
                         .frame(height: 100)
                 }
                 
-                Section(header: Text("Etiquetas")) {
-                    TextField("Separadas por comas", text: $tags)
+                Section(header: Text(NSLocalizedString("analysis.tags", comment: "Tags section header"))) {
+                    TextField(NSLocalizedString("analysis.tags.placeholder", comment: "Tags placeholder"), text: $tags)
                 }
             }
-            .navigationTitle("Guardar Análisis")
+            .navigationTitle(NSLocalizedString("analysis.save.title", comment: "Save analysis sheet title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancelar") {
+                    Button(NSLocalizedString("cancel", comment: "Cancel button")) {
                         isPresented = false
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Guardar") {
+                    Button(NSLocalizedString("save", comment: "Save button")) {
                         onSave(notes, tags)
                     }
                 }

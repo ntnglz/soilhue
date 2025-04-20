@@ -31,12 +31,12 @@ struct OnboardingView: View {
                 
                 // Título y descripción
                 VStack(spacing: 16) {
-                    Text(model.tutorialSteps[model.currentStep].title)
+                    Text(NSLocalizedString("onboarding.step\(model.currentStep + 1).title", comment: "Onboarding step title"))
                         .font(.title2)
                         .fontWeight(.bold)
                         .multilineTextAlignment(.center)
                     
-                    Text(model.tutorialSteps[model.currentStep].description)
+                    Text(NSLocalizedString("onboarding.step\(model.currentStep + 1).description", comment: "Onboarding step description"))
                         .font(.body)
                         .multilineTextAlignment(.center)
                         .foregroundColor(.secondary)
@@ -61,13 +61,13 @@ struct OnboardingView: View {
                 HStack(spacing: 20) {
                     if model.currentStep > 0 {
                         Button(action: model.previousStep) {
-                            Text("Anterior")
+                            Text(NSLocalizedString("onboarding.button.previous", comment: "Previous button"))
                                 .foregroundColor(.secondary)
                         }
                     }
                     
                     Button(action: model.nextStep) {
-                        Text(model.currentStep == model.tutorialSteps.count - 1 ? "Comenzar" : "Siguiente")
+                        Text(NSLocalizedString(model.currentStep == model.tutorialSteps.count - 1 ? "onboarding.button.start" : "onboarding.button.next", comment: "Next/Start button"))
                             .fontWeight(.semibold)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)

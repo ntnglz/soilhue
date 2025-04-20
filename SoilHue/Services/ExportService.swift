@@ -14,13 +14,13 @@ class ExportService: ObservableObject {
         var errorDescription: String? {
             switch self {
             case .failedToCreateFile:
-                return "No se pudo crear el archivo de exportación"
+                return NSLocalizedString("export.error.create.file", comment: "Failed to create export file error message")
             case .failedToWriteData:
-                return "Error al escribir los datos"
+                return NSLocalizedString("export.error.write.data", comment: "Failed to write data error message")
             case .invalidFormat:
-                return "Formato de exportación no válido"
+                return NSLocalizedString("export.error.invalid.format", comment: "Invalid export format error message")
             case .noDataToExport:
-                return "No hay datos para exportar"
+                return NSLocalizedString("export.error.no.data", comment: "No data to export error message")
             }
         }
     }
@@ -85,7 +85,7 @@ class ExportService: ObservableObject {
     
     /// Exporta los análisis a formato CSV
     private func exportToCSV(_ analyses: [SoilAnalysis], to url: URL) async throws -> URL {
-        var csvString = "ID,Fecha,Notación Munsell,Clasificación,Descripción,Calibrado,Factores de Corrección,Latitud,Longitud,Altitud,Dirección,Notas,Etiquetas\n"
+        var csvString = NSLocalizedString("export.csv.header", comment: "CSV export header row") + "\n"
         
         let geocoder = CLGeocoder()
         
@@ -126,10 +126,12 @@ class ExportService: ObservableObject {
             let descriptionString = analysis.soilDescription ?? ""
             
             // Preparar información de calibración
-            let calibratedString = analysis.calibrationInfo?.wasCalibrated == true ? "Sí" : "No"
+            let calibratedString = analysis.calibrationInfo?.wasCalibrated == true ? 
+                NSLocalizedString("common.yes", comment: "Yes") : 
+                NSLocalizedString("common.no", comment: "No")
             
             // Preparar factores de corrección
-            var correctionFactorsString = "N/A"
+            var correctionFactorsString = NSLocalizedString("export.not.available", comment: "Not available text")
             if let calibrationInfo = analysis.calibrationInfo {
                 correctionFactorsString = String(format: "%.3f,%.3f,%.3f",
                     calibrationInfo.correctionFactors.red,

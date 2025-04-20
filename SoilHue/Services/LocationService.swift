@@ -67,7 +67,7 @@ extension LocationService: CLLocationManagerDelegate {
                 self.error = NSError(
                     domain: "LocationService",
                     code: 1,
-                    userInfo: [NSLocalizedDescriptionKey: "El acceso a la ubicación está desactivado. Por favor, actívalo en Ajustes."]
+                    userInfo: [NSLocalizedDescriptionKey: NSLocalizedString("location.error.permission.denied", comment: "Location permission denied error message")]
                 )
             }
         }

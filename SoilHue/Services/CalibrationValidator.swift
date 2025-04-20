@@ -37,11 +37,11 @@ class CalibrationValidator {
         var description: String {
             switch self {
             case .optimal:
-                return "óptima"
+                return NSLocalizedString("calibration.quality.optimal", comment: "Optimal calibration quality")
             case .acceptable:
-                return "aceptable"
+                return NSLocalizedString("calibration.quality.acceptable", comment: "Acceptable calibration quality")
             case .poor:
-                return "insuficiente"
+                return NSLocalizedString("calibration.quality.poor", comment: "Poor calibration quality")
             }
         }
     }
@@ -55,14 +55,13 @@ class CalibrationValidator {
         let deviceInfo: DeviceInfo
         
         var description: String {
-            """
-            Validación de calibración:
-            - Calidad: \(quality.description)
-            - Error promedio: \(String(format: "%.2f%%", averageError * 100))
-            - Error máximo: \(String(format: "%.2f%%", maxError * 100))
-            - Colores problemáticos: \(problematicColors.isEmpty ? "ninguno" : problematicColors.joined(separator: ", "))
-            - Dispositivo: \(deviceInfo.model) iOS \(deviceInfo.systemVersion)
-            """
+            String(format: NSLocalizedString("calibration.validation.result", comment: "Calibration validation result format"),
+                quality.description,
+                String(format: "%.2f%%", averageError * 100),
+                String(format: "%.2f%%", maxError * 100),
+                problematicColors.isEmpty ? NSLocalizedString("calibration.validation.no.problems", comment: "No problematic colors") : problematicColors.joined(separator: ", "),
+                "\(deviceInfo.model) iOS \(deviceInfo.systemVersion)"
+            )
         }
     }
     

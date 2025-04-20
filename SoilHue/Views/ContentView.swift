@@ -75,59 +75,130 @@ struct ContentView: View {
     @State private var showCalibration = false
     @State private var showSettings = false
     @State private var showExport = false
+    @State private var showError = false
+    @State private var errorMessage: String?
     
     var mainContent: some View {
         VStack {
-            if let image = selectedImage {
+            if selectedImage == nil {
+                VStack(spacing: 20) {
+                    // Logo y título
+                    VStack(spacing: 15) {
+                        Image(systemName: "leaf.circle.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 80, height: 80)
+                            .foregroundColor(.green)
+                        
+                        Text(NSLocalizedString("welcome.title", comment: "Welcome message"))
+                            .font(.system(size: 32, weight: .bold))
+                            .multilineTextAlignment(.center)
+                        
+                        Text(NSLocalizedString("welcome.description", comment: "App description"))
+                            .font(.title3)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.bottom, 10)
+                    }
+                    .padding(.top, 40)
+                    
+                    // Características principales
+                    HStack(spacing: 25) {
+                        FeatureItem(
+                            icon: "camera.viewfinder",
+                            title: NSLocalizedString("feature.capture.title", comment: "Precise capture feature")
+                        )
+                        FeatureItem(
+                            icon: "eyedropper.halffull",
+                            title: NSLocalizedString("feature.analysis.title", comment: "Munsell analysis feature")
+                        )
+                        FeatureItem(
+                            icon: "square.stack.3d.up",
+                            title: NSLocalizedString("feature.classification.title", comment: "Soil classification feature")
+                        )
+                    }
+                    .padding(.horizontal, 30)
+                    .padding(.vertical, 20)
+                    
+                    Spacer(minLength: 30)
+                    
+                    // Botones de acción
+                    VStack(spacing: 15) {
+                        Button(action: { isCameraActive = true }) {
+                            HStack {
+                                Image(systemName: "camera.fill")
+                                    .font(.title2)
+                                Text(NSLocalizedString("button.camera", comment: "Camera button"))
+                                    .font(.headline)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(15)
+                            .shadow(radius: 2)
+                        }
+                        
+                        Button(action: { showImagePicker = true }) {
+                            HStack {
+                                Image(systemName: "photo.on.rectangle.angled")
+                                    .font(.title2)
+                                Text(NSLocalizedString("button.gallery", comment: "Gallery button"))
+                                    .font(.headline)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue.opacity(0.1))
+                            .foregroundColor(.blue)
+                            .cornerRadius(15)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .stroke(Color.blue, lineWidth: 1)
+                            )
+                        }
+                        
+                        Button(action: { showCalibration = true }) {
+                            HStack {
+                                Image(systemName: "camera.aperture")
+                                    .font(.title2)
+                                Text(NSLocalizedString("button.calibrate", comment: "Calibrate button"))
+                                    .font(.headline)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.orange)
+                            .foregroundColor(.white)
+                            .cornerRadius(15)
+                        }
+                    }
+                    .padding(.horizontal, 30)
+                    
+                    // Botón de ayuda
+                    Button(action: { /* TODO: Implementar ayuda */ }) {
+                        HStack {
+                            Image(systemName: "questionmark.circle")
+                            Text(NSLocalizedString("button.help", comment: "Help button"))
+                        }
+                        .foregroundColor(.secondary)
+                    }
+                    .padding(.vertical, 20)
+                }
+            } else {
                 ImageAnalysisView(
                     viewModel: viewModel,
                     colorAnalysisService: colorAnalysisService,
-                    image: image,
+                    image: selectedImage!,
                     selectionMode: $selectionMode,
                     onNewSample: {
                         selectedImage = nil
                     }
                 )
-            } else {
-                WelcomeView(
-                    isCameraActive: $isCameraActive,
-                    selectedItem: $selectedItem,
-                    showCalibration: $showCalibration
-                )
             }
         }
-    }
-    
-    /// Contenido principal de la vista.
-    var body: some View {
-        NavigationView {
-            mainContent
-                .navigationTitle("SoilHue")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        HStack(spacing: 16) {
-                            if selectedImage != nil {
-                                Button(action: { showExport = true }) {
-                                    Image(systemName: "square.and.arrow.up")
-                                }
-                            }
-                            
-                            Button(action: { showSettings = true }) {
-                                Image(systemName: "gear")
-                            }
-                        }
-                    }
-                }
-        }
-        .onAppear {
-            // Solicitar permisos de ubicación al iniciar
-            locationService.requestAuthorization()
-        }
-        .onChange(of: selectedItem) { item in
-            if let item = item {
-                loadTransferable(from: item)
-            }
+        .sheet(isPresented: $showImagePicker) {
+            ImagePicker(image: $selectedImage)
         }
         .sheet(isPresented: $isCameraActive) {
             CameraCaptureView(
@@ -157,6 +228,48 @@ struct ContentView: View {
         .fullScreenCover(isPresented: .constant(!onboardingModel.hasSeenOnboarding)) {
             OnboardingView(model: onboardingModel)
         }
+        .alert(NSLocalizedString("alert.error.title", comment: "Error alert title"), 
+               isPresented: $showError,
+               presenting: errorMessage) { _ in
+            Button(NSLocalizedString("button.ok", comment: "OK button")) {}
+        } message: { message in
+            Text(message)
+        }
+    }
+    
+    /// Contenido principal de la vista.
+    var body: some View {
+        NavigationView {
+            mainContent
+                .navigationTitle(NSLocalizedString("app.name", comment: "App name"))
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        HStack(spacing: 16) {
+                            if selectedImage != nil {
+                                Button(action: { showExport = true }) {
+                                    Image(systemName: "square.and.arrow.up")
+                                        .accessibilityLabel(NSLocalizedString("button.export", comment: "Export button"))
+                                }
+                            }
+                            
+                            Button(action: { showSettings = true }) {
+                                Image(systemName: "gear")
+                                    .accessibilityLabel(NSLocalizedString("button.settings", comment: "Settings button"))
+                            }
+                        }
+                    }
+                }
+        }
+        .onAppear {
+            // Solicitar permisos de ubicación al iniciar
+            locationService.requestAuthorization()
+        }
+        .onChange(of: selectedItem) { item in
+            if let item = item {
+                loadTransferable(from: item)
+            }
+        }
     }
     
     private func loadTransferable(from item: PhotosPickerItem) {
@@ -174,3 +287,5 @@ struct ContentView: View {
         .environmentObject(SettingsModel())
         .environmentObject(CalibrationService())
 }
+
+

@@ -11,7 +11,7 @@ enum CalibrationError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .notCalibrated:
-            return "La cámara no está calibrada. Por favor, realice la calibración antes de analizar imágenes."
+            return NSLocalizedString("color.analysis.error.not.calibrated", comment: "Camera not calibrated error message")
         }
     }
 }
