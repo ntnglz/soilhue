@@ -1,4 +1,5 @@
 import SwiftUI
+import MapKit
 
 struct ImageAnalysisView: View {
     let image: UIImage
@@ -16,48 +17,137 @@ struct ImageAnalysisView: View {
     @State private var errorMessage: String? = nil
     @State private var showError = false
     @State private var showCalibration = false
+    @State private var showHelp = false
+    @State private var scrollProxy: ScrollViewProxy? = nil
+    @State private var mapRegion = MKCoordinateRegion(
+        center: CLLocationCoordinate2D(latitude: 0, longitude: 0),
+        span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+    )
     
     var body: some View {
-        VStack {
-            AnalysisButtonView(
-                isAnalyzing: $isAnalyzing,
-                isEnabled: isAnalysisEnabled,
-                onAnalyze: analyze
-            )
-            .padding(.vertical)
-            
-            SelectionModePickerView(selectionMode: $selectionMode)
-            
-            ImageSelectionAreaView(
-                image: image,
-                selectionMode: selectionMode,
-                selectionRect: $selectionRect,
-                polygonPoints: $polygonPoints
-            )
-            
-            if let sample = viewModel.currentSample,
-               let munsellColor = sample.munsellColor,
-               !munsellColor.isEmpty {
-                AnalysisResultsView(
-                    image: image,
-                    munsellNotation: munsellColor,
-                    soilClassification: soilClassification,
-                    soilDescription: soilDescription,
-                    selectionArea: SelectionArea(
-                        type: selectionMode == .rectangle ? .rectangle : .polygon,
-                        coordinates: selectionMode == .rectangle ? 
-                            .rectangle(selectionRect ?? .zero) : 
-                            .polygon(polygonPoints ?? [])
-                    ),
-                    wasCalibrated: colorAnalysisService.isCalibrated,
-                    correctionFactors: colorAnalysisService.correctionFactors,
-                    onNewSample: onNewSample
-                )
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack(spacing: 16) {
+                    // Selector de modo
+                    SelectionModePickerView(selectionMode: $selectionMode)
+                        .padding(.horizontal)
+                    
+                    // Imagen y selección
+                    ImageSelectionAreaView(
+                        image: image,
+                        selectionMode: selectionMode,
+                        selectionRect: $selectionRect,
+                        polygonPoints: $polygonPoints
+                    )
+                    .frame(height: 300)
+                    
+                    // Mapa con localización
+                    if let sample = viewModel.currentSample,
+                       let location = sample.location {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Ubicación de la muestra")
+                                .font(.headline)
+                                .padding(.top, 8)
+                            
+                            LocationView(location: location, region: $mapRegion)
+                                .frame(height: 200)
+                                .cornerRadius(12)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
+                                )
+                        }
+                        .padding(.horizontal)
+                    }
+                    
+                    // Botón de análisis
+                    AnalysisButtonView(
+                        isAnalyzing: $isAnalyzing,
+                        isEnabled: isAnalysisEnabled,
+                        onAnalyze: analyze
+                    )
+                    .padding(.horizontal)
+                    
+                    // Resultados del análisis
+                    if let sample = viewModel.currentSample,
+                       let munsellColor = sample.munsellColor,
+                       !munsellColor.isEmpty {
+                        VStack(spacing: 16) {
+                            Text("Resultados del Análisis")
+                                .font(.title)
+                                .fontWeight(.bold)
+                            
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text("Color Munsell: \(munsellColor)")
+                                    .font(.title3)
+                                
+                                if let classification = sample.soilClassification {
+                                    Text("Clasificación: \(classification)")
+                                        .font(.title3)
+                                }
+                                
+                                if let description = sample.soilDescription {
+                                    Text("Descripción: \(description)")
+                                        .font(.body)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            HStack(spacing: 16) {
+                                Button(action: {
+                                    showHelp = true
+                                }) {
+                                    VStack {
+                                        Image(systemName: "book.fill")
+                                            .font(.title2)
+                                        Text("Más\nInfor-\nmación")
+                                            .multilineTextAlignment(.center)
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.blue.opacity(0.1))
+                                    .cornerRadius(12)
+                                    .foregroundColor(.blue)
+                                }
+                                
+                                Button(action: onNewSample) {
+                                    VStack {
+                                        Image(systemName: "camera.fill")
+                                            .font(.title2)
+                                        Text("Nueva\nMues-\ntra")
+                                            .multilineTextAlignment(.center)
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.blue)
+                                    .cornerRadius(12)
+                                    .foregroundColor(.white)
+                                }
+                            }
+                            .padding(.top, 8)
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color(.systemBackground))
+                        .cornerRadius(12)
+                        .shadow(radius: 2)
+                        .padding(.horizontal)
+                        .id("results")
+                    }
+                }
+                .padding(.vertical)
             }
+            .onAppear {
+                scrollProxy = proxy
+            }
+        }
+        .sheet(isPresented: $showHelp) {
+            HelpView(initialSection: 1)
         }
         .alert("Error", isPresented: $showError) {
             Button("Calibrar", role: .none) {
-                showCalibration = true
+                showCalibration = false
                 showError = false
             }
             Button("Cancelar", role: .cancel) { }
@@ -101,6 +191,11 @@ struct ImageAnalysisView: View {
                     viewModel.currentSample?.munsellColor = result.munsellNotation
                     viewModel.currentSample?.soilClassification = result.soilClassification
                     viewModel.currentSample?.soilDescription = result.soilDescription
+                    
+                    // Hacer scroll a los resultados con animación
+                    withAnimation {
+                        scrollProxy?.scrollTo("results", anchor: .top)
+                    }
                 }
             } catch let error as CalibrationError {
                 await MainActor.run {
