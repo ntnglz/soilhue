@@ -85,7 +85,7 @@ class ExportService: ObservableObject {
     
     /// Exporta los análisis a formato CSV
     private func exportToCSV(_ analyses: [SoilAnalysis], to url: URL) async throws -> URL {
-        var csvString = "ID,Fecha,Notación Munsell,Clasificación,Descripción,RGB Corregido,Calibrado,Factores de Corrección,Latitud,Longitud,Altitud,Dirección,Notas,Etiquetas\n"
+        var csvString = "ID,Fecha,Notación Munsell,Clasificación,Descripción,Calibrado,Factores de Corrección,Latitud,Longitud,Altitud,Dirección,Notas,Etiquetas\n"
         
         let geocoder = CLGeocoder()
         
@@ -124,7 +124,6 @@ class ExportService: ObservableObject {
             let munsellString = analysis.munsellColor ?? ""
             let classificationString = analysis.soilClassification ?? ""
             let descriptionString = analysis.soilDescription ?? ""
-            let rgbString = "N/A" // RGB Corregido - no disponible en la estructura actual
             
             // Preparar información de calibración
             let calibratedString = analysis.calibrationInfo?.wasCalibrated == true ? "Sí" : "No"
@@ -149,7 +148,6 @@ class ExportService: ObservableObject {
                 "\"\(munsellString)\"",
                 "\"\(classificationString)\"",
                 "\"\(descriptionString)\"",
-                "\"\(rgbString)\"",
                 "\"\(calibratedString)\"",
                 "\"\(correctionFactorsString)\""
             ]
