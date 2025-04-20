@@ -73,6 +73,13 @@ struct ContentView: View {
         .preferredColorScheme(colorScheme)
     }
     
+    /// Botón de configuración para el toolbar
+    private var settingsButton: some View {
+        Button(action: { showSettings = true }) {
+            Image(systemName: "gear")
+        }
+    }
+    
     /// Vista principal de la aplicación
     private var mainContent: some View {
         NavigationStack {
@@ -109,13 +116,7 @@ struct ContentView: View {
             .navigationTitle("SoilHue")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        showSettings = true
-                    } label: {
-                        Image(systemName: "gear")
-                    }
-                }
+                ToolbarItem(placement: .navigationBarTrailing, content: { settingsButton })
             }
             .sheet(isPresented: $showImagePicker) {
                 ImagePicker(image: $selectedImage)

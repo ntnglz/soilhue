@@ -12,6 +12,9 @@ struct CameraCaptureView: View {
     /// Si se debe mostrar la guía de calibración
     let showGuide: Bool
     
+    /// Environment para cerrar la vista
+    @Environment(\.dismiss) private var dismiss
+    
     /// Servicio de cámara
     @StateObject private var cameraService = CameraService()
     
@@ -74,6 +77,16 @@ struct CameraCaptureView: View {
         } message: {
             Text(errorMessage)
         }
+        .task {
+            do {
+                for try await image in try await cameraService.startSession() {
+                    previewImage = image
+                }
+            } catch {
+                errorMessage = error.localizedDescription
+                showError = true
+            }
+        }
     }
     
     /// Configura la cámara
@@ -81,15 +94,6 @@ struct CameraCaptureView: View {
         Task {
             do {
                 try await cameraService.setup(resolution: resolution)
-                try await cameraService.startSession()
-                
-                // Configurar el preview
-                if let previewLayer = try? await cameraService.previewLayer {
-                    await MainActor.run {
-                        // Configurar la vista previa
-                        previewLayer.frame = UIScreen.main.bounds
-                    }
-                }
             } catch {
                 await MainActor.run {
                     errorMessage = error.localizedDescription
@@ -106,6 +110,7 @@ struct CameraCaptureView: View {
                 let image = try await cameraService.capturePhoto()
                 await MainActor.run {
                     capturedImage = image
+                    dismiss()
                 }
             } catch {
                 await MainActor.run {

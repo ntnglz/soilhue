@@ -21,7 +21,13 @@ struct AnalysisResultsView: View {
     @State private var errorMessage = ""
     
     // Servicios
-    @StateObject private var storageService = StorageService()
+    @StateObject private var storageService: StorageService = {
+        do {
+            return try StorageService()
+        } catch {
+            fatalError("Error inicializando StorageService: \(error.localizedDescription)")
+        }
+    }()
     
     var body: some View {
         VStack(spacing: 20) {

@@ -12,6 +12,8 @@ class StorageService: ObservableObject {
         case analysisNotFound
         case iCloudNotAvailable
         case invalidDirectory
+        case directoryCreationFailed
+        case fileOperationFailed(String)
         
         var errorDescription: String? {
             switch self {
@@ -27,6 +29,10 @@ class StorageService: ObservableObject {
                 return "iCloud no está disponible"
             case .invalidDirectory:
                 return "Directorio de almacenamiento no válido"
+            case .directoryCreationFailed:
+                return "No se pudo crear el directorio de almacenamiento"
+            case .fileOperationFailed(let message):
+                return "Error en operación de archivo: \(message)"
             }
         }
     }
@@ -43,7 +49,7 @@ class StorageService: ObservableObject {
     }
     
     /// Inicializador
-    init(location: SaveLocation = .local) {
+    init(location: SaveLocation = .local) throws {
         self.currentLocation = location
         
         // Configurar URL base local
@@ -51,37 +57,74 @@ class StorageService: ObservableObject {
         self.localBaseURL = documentsDirectory.appendingPathComponent("Analyses")
         
         // Crear directorios si no existen
-        try? FileManager.default.createDirectory(at: localBaseURL, withIntermediateDirectories: true)
-        if let iCloudURL = iCloudBaseURL {
-            try? FileManager.default.createDirectory(at: iCloudURL, withIntermediateDirectories: true)
+        try createDirectoriesIfNeeded()
+    }
+    
+    /// Crea los directorios necesarios para el almacenamiento
+    private func createDirectoriesIfNeeded() throws {
+        do {
+            try FileManager.default.createDirectory(at: localBaseURL, withIntermediateDirectories: true)
+            
+            if let iCloudURL = iCloudBaseURL {
+                try FileManager.default.createDirectory(at: iCloudURL, withIntermediateDirectories: true)
+            }
+        } catch {
+            throw StorageError.directoryCreationFailed
         }
     }
     
+    /// Obtiene la URL base actual según la ubicación de almacenamiento
+    private func getCurrentBaseURL() throws -> URL {
+        if currentLocation == .iCloud {
+            guard let iCloudURL = iCloudBaseURL else {
+                throw StorageError.iCloudNotAvailable
+            }
+            return iCloudURL
+        }
+        return localBaseURL
+    }
+    
+    /// Verifica si un directorio existe
+    private func directoryExists(at url: URL) -> Bool {
+        var isDirectory: ObjCBool = false
+        return FileManager.default.fileExists(atPath: url.path, isDirectory: &isDirectory) && isDirectory.boolValue
+    }
+    
     /// Cambia la ubicación de almacenamiento
-    func changeLocation(_ newLocation: SaveLocation) {
+    func changeLocation(_ newLocation: SaveLocation) throws {
+        if newLocation == .iCloud && iCloudBaseURL == nil {
+            throw StorageError.iCloudNotAvailable
+        }
         currentLocation = newLocation
     }
     
     /// Guarda un nuevo análisis
     func saveAnalysis(_ analysis: SoilAnalysis, image: UIImage) async throws {
-        // Determinar URL base según la ubicación
-        let baseURL = currentLocation == .local ? localBaseURL : (iCloudBaseURL ?? localBaseURL)
+        let baseURL = try getCurrentBaseURL()
+        let analysisDirectory = baseURL.appendingPathComponent(analysis.id.uuidString)
         
         // Crear directorio para este análisis
-        let analysisDirectory = baseURL.appendingPathComponent(analysis.id.uuidString)
-        try FileManager.default.createDirectory(at: analysisDirectory, withIntermediateDirectories: true)
+        do {
+            try FileManager.default.createDirectory(at: analysisDirectory, withIntermediateDirectories: true)
+        } catch {
+            throw StorageError.directoryCreationFailed
+        }
         
         // Guardar la imagen
         let imageURL = analysisDirectory.appendingPathComponent("image.jpg")
         guard let imageData = image.jpegData(compressionQuality: 0.8) else {
             throw StorageError.failedToSaveImage
         }
-        try imageData.write(to: imageURL)
+        
+        do {
+            try imageData.write(to: imageURL)
+        } catch {
+            throw StorageError.fileOperationFailed("No se pudo escribir la imagen")
+        }
         
         // Crear y guardar el análisis
         var updatedAnalysis = analysis
         if let imageInfo = try? JSONDecoder().decode(ImageInfo.self, from: JSONEncoder().encode(analysis.imageInfo)) {
-            // Actualizar la URL de la imagen al path relativo
             let newImageInfo = ImageInfo(
                 imageURL: imageURL,
                 selectionArea: imageInfo.selectionArea,
@@ -99,8 +142,12 @@ class StorageService: ObservableObject {
         
         // Guardar los datos del análisis
         let analysisURL = analysisDirectory.appendingPathComponent("analysis.json")
-        let analysisData = try JSONEncoder().encode(updatedAnalysis)
-        try analysisData.write(to: analysisURL)
+        do {
+            let analysisData = try JSONEncoder().encode(updatedAnalysis)
+            try analysisData.write(to: analysisURL)
+        } catch {
+            throw StorageError.failedToSaveAnalysis
+        }
         
         // Si estamos en iCloud, forzar la sincronización
         if currentLocation == .iCloud {
@@ -110,23 +157,36 @@ class StorageService: ObservableObject {
     
     /// Carga todos los análisis almacenados
     func loadAllAnalyses() async throws -> [SoilAnalysis] {
-        let baseURL = currentLocation == .local ? localBaseURL : (iCloudBaseURL ?? localBaseURL)
+        let baseURL = try getCurrentBaseURL()
+        
+        guard directoryExists(at: baseURL) else {
+            return []
+        }
         
         // Obtener contenido del directorio
         let fileManager = FileManager.default
-        let contents = try fileManager.contentsOfDirectory(
-            at: baseURL,
-            includingPropertiesForKeys: [.isDirectoryKey],
-            options: .skipsHiddenFiles
-        )
+        let contents: [URL]
+        do {
+            contents = try fileManager.contentsOfDirectory(
+                at: baseURL,
+                includingPropertiesForKeys: [.isDirectoryKey],
+                options: .skipsHiddenFiles
+            )
+        } catch {
+            throw StorageError.fileOperationFailed("No se pudo leer el directorio")
+        }
         
         // Cargar cada análisis
         var analyses: [SoilAnalysis] = []
         for directory in contents {
             let analysisURL = directory.appendingPathComponent("analysis.json")
-            if let analysisData = try? Data(contentsOf: analysisURL),
-               let analysis = try? JSONDecoder().decode(SoilAnalysis.self, from: analysisData) {
+            do {
+                let analysisData = try Data(contentsOf: analysisURL)
+                let analysis = try JSONDecoder().decode(SoilAnalysis.self, from: analysisData)
                 analyses.append(analysis)
+            } catch {
+                // Ignorar análisis que no se pueden cargar
+                continue
             }
         }
         
@@ -135,10 +195,18 @@ class StorageService: ObservableObject {
     
     /// Elimina un análisis
     func deleteAnalysis(_ analysis: SoilAnalysis) async throws {
-        let baseURL = currentLocation == .local ? localBaseURL : (iCloudBaseURL ?? localBaseURL)
+        let baseURL = try getCurrentBaseURL()
         let analysisDirectory = baseURL.appendingPathComponent(analysis.id.uuidString)
         
-        try FileManager.default.removeItem(at: analysisDirectory)
+        guard directoryExists(at: analysisDirectory) else {
+            throw StorageError.analysisNotFound
+        }
+        
+        do {
+            try FileManager.default.removeItem(at: analysisDirectory)
+        } catch {
+            throw StorageError.fileOperationFailed("No se pudo eliminar el análisis")
+        }
         
         if currentLocation == .iCloud {
             try await syncWithiCloud()
@@ -165,7 +233,7 @@ class StorageService: ObservableObject {
         }
         
         if let error = coordinatorError {
-            throw error
+            throw StorageError.fileOperationFailed(error.localizedDescription)
         }
     }
 } 
