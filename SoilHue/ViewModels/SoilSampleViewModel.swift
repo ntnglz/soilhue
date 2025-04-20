@@ -9,6 +9,31 @@
 import SwiftUI
 import CoreLocation
 
+/// Errores que pueden ocurrir durante el manejo de muestras de suelo
+enum SampleError: LocalizedError {
+    /// No hay una muestra seleccionada
+    case noSampleSelected
+    /// Error al analizar la muestra
+    case analysisError
+    /// Error al guardar la muestra
+    case saveError
+    /// Error al cargar la muestra
+    case loadError
+    
+    var errorDescription: String? {
+        switch self {
+        case .noSampleSelected:
+            return "No hay una muestra seleccionada"
+        case .analysisError:
+            return "Error al analizar la muestra"
+        case .saveError:
+            return "Error al guardar la muestra"
+        case .loadError:
+            return "Error al cargar la muestra"
+        }
+    }
+}
+
 /// ViewModel que gestiona la lógica de negocio relacionada con las muestras de suelo.
 ///
 /// Este ViewModel mantiene una colección de muestras de suelo y proporciona métodos
@@ -27,6 +52,20 @@ class SoilSampleViewModel: ObservableObject {
     
     /// Servicio para analizar el color de las imágenes.
     private let colorAnalysisService = ColorAnalysisService()
+    
+    /// Servicio para almacenar los análisis
+    private let storageService: StorageService
+    
+    /// Servicio de calibración
+    private let calibrationService = CalibrationService()
+    
+    init() {
+        do {
+            self.storageService = try StorageService()
+        } catch {
+            fatalError("Error inicializando StorageService: \(error.localizedDescription)")
+        }
+    }
     
     /// Añade una nueva muestra de suelo a la colección.
     ///
@@ -129,6 +168,43 @@ class SoilSampleViewModel: ObservableObject {
         
         return result
     }
+    
+    /// Guarda una muestra de suelo con notas y etiquetas.
+    ///
+    /// - Parameters:
+    ///   - notes: Notas adicionales sobre la muestra.
+    ///   - tags: Etiquetas para categorizar la muestra.
+    func saveSample(notes: String, tags: [String]) async throws {
+        guard let sample = currentSample else {
+            throw SampleError.noSampleSelected
+        }
+        
+        let analysis = SoilAnalysis(
+            id: UUID(),
+            timestamp: Date(),
+            imageData: sample.image.jpegData(compressionQuality: 0.8) ?? Data(),
+            notes: notes,
+            tags: tags,
+            locationInfo: sample.location,
+            munsellColor: sample.munsellColor,
+            soilClassification: sample.soilClassification,
+            soilDescription: sample.soilDescription,
+            calibrationInfo: CalibrationInfo(
+                wasCalibrated: colorAnalysisService.isCalibrated,
+                correctionFactors: colorAnalysisService.correctionFactors,
+                lastCalibrationDate: calibrationService.lastCalibrationDate ?? Date()
+            ),
+            environmentalConditions: EnvironmentalConditions(
+                temperature: nil,  // TODO: Implementar obtención de temperatura
+                humidity: nil,     // TODO: Implementar obtención de humedad
+                lightConditions: nil,  // TODO: Implementar detección de condiciones de luz
+                weatherConditions: nil  // TODO: Implementar detección de condiciones climáticas
+            )
+        )
+        
+        try await storageService.saveAnalysis(analysis, image: sample.image)
+    }
+    
 }
 
 /// Estructura que representa el resultado del análisis de una muestra de suelo.

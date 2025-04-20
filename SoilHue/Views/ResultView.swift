@@ -15,8 +15,12 @@ struct ResultView: View {
     @State private var alertTitle = ""
     @State private var alertMessage = ""
     @State private var region: MKCoordinateRegion?
+    @State private var scrollProxy: ScrollViewProxy? = nil
+    @State private var analysisResult: (munsellNotation: String, soilClassification: String, soilDescription: String)?
+    @State private var isAnalyzing = false
     
     @StateObject private var storageService: StorageService
+    @StateObject private var colorAnalysisService = ColorAnalysisService()
     @Environment(\.dismiss) private var dismiss
     
     init(image: UIImage, location: CLLocation?, rgbValues: (red: Double, green: Double, blue: Double), timestamp: Date) {
@@ -41,70 +45,87 @@ struct ResultView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack(spacing: 20) {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFit()
-                        .cornerRadius(12)
-                        .shadow(radius: 5)
-                        .padding(.horizontal)
-                    
-                    ResultInfoView(rgbValues: rgbValues)
-                    
-                    if let location = location, let region = region {
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text("Ubicación de la muestra")
-                                .font(.headline)
-                                .padding(.horizontal)
-                            
-                            if #available(iOS 17.0, *) {
-                                Map(position: .constant(MapCameraPosition.region(region))) {
-                                    Marker("Ubicación de la muestra", coordinate: location.coordinate)
-                                        .tint(.red)
-                                }
-                                .frame(height: 200)
-                                .cornerRadius(12)
-                                .padding(.horizontal)
-                            } else {
-                                Map(coordinateRegion: .constant(region), annotationItems: [LocationPin(coordinate: location.coordinate)]) { pin in
-                                    MapMarker(coordinate: pin.coordinate, tint: .red)
-                                }
-                                .frame(height: 200)
-                                .cornerRadius(12)
-                                .padding(.horizontal)
-                            }
-                            
-                            LocationDetailsView(location: location)
-                        }
-                    }
-                    
-                    VStack(spacing: 15) {
-                        Button(action: {
-                            showingSaveDialog = true
-                        }) {
-                            Label("Guardar análisis", systemImage: "square.and.arrow.down")
-                                .frame(maxWidth: .infinity)
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack(spacing: 20) {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFit()
+                            .cornerRadius(12)
+                            .shadow(radius: 5)
+                            .padding(.horizontal)
+                        
+                        if isAnalyzing {
+                            ProgressView("Analizando muestra...")
                                 .padding()
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
+                        } else if let result = analysisResult {
+                            ResultInfoView(
+                                munsellNotation: result.munsellNotation,
+                                soilClassification: result.soilClassification,
+                                soilDescription: result.soilDescription,
+                                rgbValues: rgbValues
+                            )
+                            .id("results")
                         }
                         
-                        Button(action: {
-                            dismiss()
-                        }) {
-                            Label("Nueva muestra", systemImage: "camera")
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.secondary.opacity(0.2))
-                                .foregroundColor(.primary)
-                                .cornerRadius(10)
+                        if let location = location, let region = region {
+                            VStack(alignment: .leading, spacing: 10) {
+                                Text("Ubicación de la muestra")
+                                    .font(.headline)
+                                    .padding(.horizontal)
+                                
+                                if #available(iOS 17.0, *) {
+                                    Map(position: .constant(MapCameraPosition.region(region))) {
+                                        Marker("Ubicación de la muestra", coordinate: location.coordinate)
+                                            .tint(.red)
+                                    }
+                                    .frame(height: 200)
+                                    .cornerRadius(12)
+                                    .padding(.horizontal)
+                                } else {
+                                    Map(coordinateRegion: .constant(region), annotationItems: [LocationPin(coordinate: location.coordinate)]) { pin in
+                                        MapMarker(coordinate: pin.coordinate, tint: .red)
+                                    }
+                                    .frame(height: 200)
+                                    .cornerRadius(12)
+                                    .padding(.horizontal)
+                                }
+                                
+                                LocationDetailsView(location: location)
+                            }
                         }
+                        
+                        VStack(spacing: 15) {
+                            Button(action: {
+                                showingSaveDialog = true
+                            }) {
+                                Label("Guardar análisis", systemImage: "square.and.arrow.down")
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.blue)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                            }
+                            
+                            Button(action: {
+                                dismiss()
+                            }) {
+                                Label("Nueva muestra", systemImage: "camera")
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.secondary.opacity(0.2))
+                                    .foregroundColor(.primary)
+                                    .cornerRadius(10)
+                            }
+                        }
+                        .padding(.horizontal)
                     }
-                    .padding(.horizontal)
+                    .padding(.vertical)
                 }
-                .padding(.vertical)
+                .onAppear {
+                    scrollProxy = proxy
+                    analyzeImage()
+                }
             }
             .navigationTitle("Resultados")
             .navigationBarTitleDisplayMode(.inline)
@@ -123,55 +144,52 @@ struct ResultView: View {
         }
     }
     
-    private func saveAnalysis() async {
-        print("DEBUG: Iniciando saveAnalysis")
-        print("DEBUG: Location recibido: \(String(describing: location))")
-        if let loc = location {
-            print("DEBUG: Coordenadas - lat: \(loc.coordinate.latitude), lon: \(loc.coordinate.longitude)")
-            print("DEBUG: Altitud: \(loc.altitude), Precisión H: \(loc.horizontalAccuracy), Precisión V: \(loc.verticalAccuracy)")
-        }
+    private func analyzeImage() {
+        isAnalyzing = true
         
+        Task {
+            do {
+                let result = try await colorAnalysisService.analyzeImage(image)
+                await MainActor.run {
+                    analysisResult = result
+                    isAnalyzing = false
+                    
+                    // Hacer scroll a los resultados con una pequeña animación
+                    withAnimation(.easeOut(duration: 0.5).delay(0.3)) {
+                        scrollProxy?.scrollTo("results", anchor: .center)
+                    }
+                }
+            } catch {
+                await MainActor.run {
+                    isAnalyzing = false
+                    showAlert(title: "Error", message: error.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    private func saveAnalysis() async {
         do {
-            let locationInfo = location.map { LocationInfo(from: $0) }
-            print("DEBUG: LocationInfo creado: \(String(describing: locationInfo))")
-            if let info = locationInfo {
-                print("DEBUG: LocationInfo detalles - lat: \(info.latitude), lon: \(info.longitude)")
+            guard let result = analysisResult else {
+                throw NSError(domain: "SoilHue", code: -1, userInfo: [NSLocalizedDescriptionKey: "No hay resultados de análisis disponibles"])
             }
             
             let analysis = SoilAnalysis(
-                colorInfo: ColorInfo(
-                    munsellNotation: "10YR 4/3", // TODO: Obtener valor real
-                    soilClassification: "Mollisoles", // TODO: Obtener valor real
-                    soilDescription: "Suelo oscuro y fértil, con contenido moderado en materia orgánica", // TODO: Obtener valor real
-                    correctedRGB: RGBValues(
-                        red: rgbValues.red,
-                        green: rgbValues.green,
-                        blue: rgbValues.blue
-                    )
-                ),
-                imageInfo: ImageInfo(
-                    imageURL: URL(fileURLWithPath: ""), // Se actualizará en el storage
-                    selectionArea: SelectionArea(
-                        type: .rectangle,
-                        coordinates: .rectangle(CGRect(x: 0, y: 0, width: 1, height: 1))
-                    ),
-                    resolution: ImageResolution(
-                        width: Int(image.size.width),
-                        height: Int(image.size.height),
-                        quality: .high
-                    )
-                ),
+                id: UUID(),
+                timestamp: Date(),
+                imageData: image.jpegData(compressionQuality: 0.8) ?? Data(),
+                notes: notes,
+                tags: tags.split(separator: ",").map(String.init),
+                locationInfo: location,
+                munsellColor: result.munsellNotation,
+                soilClassification: result.soilClassification,
+                soilDescription: result.soilDescription,
                 calibrationInfo: CalibrationInfo(
-                    wasCalibrated: true, // TODO: Obtener valor real
-                    correctionFactors: CorrectionFactors(red: 1, green: 1, blue: 1), // TODO: Obtener valor real
+                    wasCalibrated: colorAnalysisService.isCalibrated,
+                    correctionFactors: colorAnalysisService.correctionFactors,
                     lastCalibrationDate: Date()
                 ),
-                metadata: AnalysisMetadata(
-                    location: locationInfo,
-                    notes: notes.isEmpty ? nil : notes,
-                    tags: tags.split(separator: ",").map(String.init),
-                    environmentalConditions: nil // TODO: Implementar condiciones
-                )
+                environmentalConditions: nil // TODO: Implementar condiciones
             )
             
             try await storageService.saveAnalysis(analysis, image: image)
@@ -283,10 +301,25 @@ struct LocationDetailsView: View {
 }
 
 struct ResultInfoView: View {
+    let munsellNotation: String
+    let soilClassification: String
+    let soilDescription: String
     let rgbValues: (red: Double, green: Double, blue: Double)
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
+            Text("Munsell Notation:")
+                .font(.headline)
+            Text(munsellNotation)
+            
+            Text("Clasificación del suelo:")
+                .font(.headline)
+            Text(soilClassification)
+            
+            Text("Descripción del suelo:")
+                .font(.headline)
+            Text(soilDescription)
+            
             Text("Valores RGB:")
                 .font(.headline)
             

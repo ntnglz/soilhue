@@ -10,34 +10,136 @@ struct SoilAnalysis: Identifiable, Codable {
     /// Fecha y hora del análisis
     let timestamp: Date
     
-    /// Información del color y clasificación
-    let colorInfo: ColorInfo
+    /// Datos de la imagen analizada
+    let imageData: Data
     
-    /// Información de la imagen
-    let imageInfo: ImageInfo
+    /// Notas del usuario
+    let notes: String
+    
+    /// Etiquetas definidas por el usuario
+    let tags: [String]
+    
+    /// Información de ubicación
+    let locationInfo: CLLocation?
+    
+    /// Información del color y clasificación
+    var munsellColor: String?
+    var soilClassification: String?
+    var soilDescription: String?
     
     /// Información de calibración
-    let calibrationInfo: CalibrationInfo
+    var calibrationInfo: CalibrationInfo?
     
-    /// Metadatos adicionales
-    let metadata: AnalysisMetadata
+    /// Condiciones ambientales
+    var environmentalConditions: EnvironmentalConditions?
     
     /// Inicializador por defecto
     init(
         id: UUID = UUID(),
         timestamp: Date = Date(),
-        colorInfo: ColorInfo,
-        imageInfo: ImageInfo,
-        calibrationInfo: CalibrationInfo,
-        metadata: AnalysisMetadata
+        imageData: Data,
+        notes: String,
+        tags: [String],
+        locationInfo: CLLocation?,
+        munsellColor: String?,
+        soilClassification: String?,
+        soilDescription: String?,
+        calibrationInfo: CalibrationInfo?,
+        environmentalConditions: EnvironmentalConditions?
     ) {
         self.id = id
         self.timestamp = timestamp
-        self.colorInfo = colorInfo
-        self.imageInfo = imageInfo
+        self.imageData = imageData
+        self.notes = notes
+        self.tags = tags
+        self.locationInfo = locationInfo
+        self.munsellColor = munsellColor
+        self.soilClassification = soilClassification
+        self.soilDescription = soilDescription
         self.calibrationInfo = calibrationInfo
-        self.metadata = metadata
+        self.environmentalConditions = environmentalConditions
     }
+    
+    // MARK: - Codable Implementation
+    
+    private enum CodingKeys: String, CodingKey {
+        case id, timestamp, imageData, notes, tags
+        case red, green, blue
+        case locationInfo
+        case munsellColor, soilClassification, soilDescription
+        case calibrationInfo, environmentalConditions
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        id = try container.decode(UUID.self, forKey: .id)
+        timestamp = try container.decode(Date.self, forKey: .timestamp)
+        imageData = try container.decode(Data.self, forKey: .imageData)
+        notes = try container.decode(String.self, forKey: .notes)
+        tags = try container.decode([String].self, forKey: .tags)
+        
+        // Decode location if present
+        if let locationData = try container.decodeIfPresent(LocationData.self, forKey: .locationInfo) {
+            locationInfo = CLLocation(
+                coordinate: CLLocationCoordinate2D(
+                    latitude: locationData.latitude,
+                    longitude: locationData.longitude
+                ),
+                altitude: locationData.altitude,
+                horizontalAccuracy: locationData.horizontalAccuracy,
+                verticalAccuracy: locationData.verticalAccuracy,
+                timestamp: locationData.timestamp
+            )
+        } else {
+            locationInfo = nil
+        }
+        
+        munsellColor = try container.decodeIfPresent(String.self, forKey: .munsellColor)
+        soilClassification = try container.decodeIfPresent(String.self, forKey: .soilClassification)
+        soilDescription = try container.decodeIfPresent(String.self, forKey: .soilDescription)
+        calibrationInfo = try container.decodeIfPresent(CalibrationInfo.self, forKey: .calibrationInfo)
+        environmentalConditions = try container.decodeIfPresent(EnvironmentalConditions.self, forKey: .environmentalConditions)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(id, forKey: .id)
+        try container.encode(timestamp, forKey: .timestamp)
+        try container.encode(imageData, forKey: .imageData)
+        try container.encode(notes, forKey: .notes)
+        try container.encode(tags, forKey: .tags)
+        
+        // Encode location if present
+        if let location = locationInfo {
+            let locationData = LocationData(
+                latitude: location.coordinate.latitude,
+                longitude: location.coordinate.longitude,
+                altitude: location.altitude,
+                horizontalAccuracy: location.horizontalAccuracy,
+                verticalAccuracy: location.verticalAccuracy,
+                timestamp: location.timestamp
+            )
+            try container.encode(locationData, forKey: .locationInfo)
+        }
+        
+        try container.encodeIfPresent(munsellColor, forKey: .munsellColor)
+        try container.encodeIfPresent(soilClassification, forKey: .soilClassification)
+        try container.encodeIfPresent(soilDescription, forKey: .soilDescription)
+        try container.encodeIfPresent(calibrationInfo, forKey: .calibrationInfo)
+        try container.encodeIfPresent(environmentalConditions, forKey: .environmentalConditions)
+    }
+}
+
+// MARK: - Location Data Structure
+private struct LocationData: Codable {
+    let latitude: CLLocationDegrees
+    let longitude: CLLocationDegrees
+    let altitude: CLLocationDistance
+    let horizontalAccuracy: CLLocationAccuracy
+    let verticalAccuracy: CLLocationAccuracy
+    let timestamp: Date
 }
 
 // MARK: - Estructuras de Soporte
@@ -165,20 +267,35 @@ struct ImageResolution: Codable {
 
 /// Condiciones ambientales durante el análisis
 struct EnvironmentalConditions: Codable {
-    let lightingCondition: LightingCondition
-    let weatherCondition: WeatherCondition?
-    
-    enum LightingCondition: String, Codable {
-        case sunlight
-        case shade
-        case artificial
-        case unknown
-    }
-    
-    enum WeatherCondition: String, Codable {
-        case clear
-        case cloudy
-        case rainy
-        case unknown
+    let temperature: Double?
+    let humidity: Double?
+    let lightConditions: String?
+    let weatherConditions: String?
+}
+
+extension SoilAnalysis {
+    static var preview: SoilAnalysis {
+        SoilAnalysis(
+            id: UUID(),
+            timestamp: Date(),
+            imageData: Data(),
+            notes: "Sample soil analysis",
+            tags: ["clay", "organic"],
+            locationInfo: nil,
+            munsellColor: "10YR 4/6",
+            soilClassification: "Clay Loam",
+            soilDescription: "Dark brown clay loam with good organic content",
+            calibrationInfo: CalibrationInfo(
+                wasCalibrated: true,
+                correctionFactors: CorrectionFactors(red: 1.0, green: 1.0, blue: 1.0),
+                lastCalibrationDate: Date()
+            ),
+            environmentalConditions: EnvironmentalConditions(
+                temperature: 25.0,
+                humidity: 65.0,
+                lightConditions: "Bright daylight",
+                weatherConditions: "Clear sky"
+            )
+        )
     }
 } 

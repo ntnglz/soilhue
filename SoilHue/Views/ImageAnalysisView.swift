@@ -2,23 +2,24 @@ import SwiftUI
 import MapKit
 
 struct ImageAnalysisView: View {
-    let image: UIImage
-    @Binding var selectionMode: SelectionMode
     @ObservedObject var viewModel: SoilSampleViewModel
     @ObservedObject var colorAnalysisService: ColorAnalysisService
+    let image: UIImage
+    @Binding var selectionMode: SelectionMode
     let onNewSample: () -> Void
     
     @State private var selectionRect: CGRect?
-    @State private var polygonPoints: [CGPoint]?
-    @State private var isAnalyzing = false
-    @State private var munsellNotation: String = ""
-    @State private var soilClassification: String = ""
-    @State private var soilDescription: String = ""
     @State private var errorMessage: String? = nil
     @State private var showError = false
     @State private var showCalibration = false
     @State private var showHelp = false
     @State private var scrollProxy: ScrollViewProxy? = nil
+    @State private var showingSaveDialog = false
+    @State private var notes: String = ""
+    @State private var tags: String = ""
+    
+    @State private var polygonPoints: [CGPoint]?
+    @State private var isAnalyzing = false
     @State private var mapRegion = MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 0, longitude: 0),
         span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
@@ -94,35 +95,48 @@ struct ImageAnalysisView: View {
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
                             
-                            HStack(spacing: 16) {
+                            VStack(spacing: 15) {
                                 Button(action: {
-                                    showHelp = true
+                                    showingSaveDialog = true
                                 }) {
-                                    VStack {
-                                        Image(systemName: "book.fill")
-                                            .font(.title2)
-                                        Text("Más\nInfor-\nmación")
-                                            .multilineTextAlignment(.center)
-                                    }
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color.blue.opacity(0.1))
-                                    .cornerRadius(12)
-                                    .foregroundColor(.blue)
+                                    Label("Guardar análisis", systemImage: "square.and.arrow.down")
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                        .background(Color.blue)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(10)
                                 }
                                 
-                                Button(action: onNewSample) {
-                                    VStack {
-                                        Image(systemName: "camera.fill")
-                                            .font(.title2)
-                                        Text("Nueva\nMues-\ntra")
-                                            .multilineTextAlignment(.center)
+                                HStack(spacing: 16) {
+                                    Button(action: {
+                                        showHelp = true
+                                    }) {
+                                        VStack {
+                                            Image(systemName: "book.fill")
+                                                .font(.title2)
+                                            Text("Más\nInfor-\nmación")
+                                                .multilineTextAlignment(.center)
+                                        }
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                        .background(Color.blue.opacity(0.1))
+                                        .cornerRadius(12)
+                                        .foregroundColor(.blue)
                                     }
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color.blue)
-                                    .cornerRadius(12)
-                                    .foregroundColor(.white)
+                                    
+                                    Button(action: onNewSample) {
+                                        VStack {
+                                            Image(systemName: "camera.fill")
+                                                .font(.title2)
+                                            Text("Nueva\nMues-\ntra")
+                                                .multilineTextAlignment(.center)
+                                        }
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                        .background(Color.blue)
+                                        .cornerRadius(12)
+                                        .foregroundColor(.white)
+                                    }
                                 }
                             }
                             .padding(.top, 8)
@@ -136,7 +150,6 @@ struct ImageAnalysisView: View {
                         .id("results")
                     }
                 }
-                .padding(.vertical)
             }
             .onAppear {
                 scrollProxy = proxy
@@ -145,14 +158,21 @@ struct ImageAnalysisView: View {
         .sheet(isPresented: $showHelp) {
             HelpView(initialSection: 1)
         }
+        .sheet(isPresented: $showingSaveDialog) {
+            SaveAnalysisView(
+                notes: $notes,
+                tags: $tags,
+                onSave: {
+                    Task {
+                        await saveAnalysis()
+                    }
+                }
+            )
+        }
         .alert("Error", isPresented: $showError) {
-            Button("Calibrar", role: .none) {
-                showCalibration = false
-                showError = false
-            }
-            Button("Cancelar", role: .cancel) { }
+            Button("OK", role: .cancel) { }
         } message: {
-            Text(errorMessage ?? "Error desconocido")
+            Text(errorMessage ?? "")
         }
         .sheet(isPresented: $showCalibration) {
             CalibrationView()
@@ -160,9 +180,14 @@ struct ImageAnalysisView: View {
     }
     
     private var isAnalysisEnabled: Bool {
-        !isAnalyzing && 
-        ((selectionMode == .rectangle && selectionRect != nil) ||
-         (selectionMode == .polygon && (polygonPoints?.count ?? 0) >= 3))
+        switch selectionMode {
+        case .rectangle:
+            return selectionRect != nil
+        case .polygon:
+            return polygonPoints?.count ?? 0 >= 3
+        case .full:
+            return true
+        }
     }
     
     private func analyze() {
@@ -170,44 +195,63 @@ struct ImageAnalysisView: View {
             isAnalyzing = true
             defer { isAnalyzing = false }
             
-            // Crear una nueva muestra si no existe
-            if viewModel.currentSample == nil {
-                viewModel.addSample(image: image)
-            }
-            
             do {
-                let result = if selectionMode == .rectangle {
-                    try await colorAnalysisService.analyzeImage(image, region: selectionRect)
-                } else {
-                    try await colorAnalysisService.analyzeImage(image, polygonPoints: polygonPoints)
+                // Asegurarse de que hay una muestra actual
+                if viewModel.currentSample == nil {
+                    viewModel.addSample(image: image)
                 }
                 
-                await MainActor.run {
-                    munsellNotation = result.munsellNotation
-                    soilClassification = result.soilClassification
-                    soilDescription = result.soilDescription
-                    
-                    // Actualizar la muestra actual
-                    viewModel.currentSample?.munsellColor = result.munsellNotation
-                    viewModel.currentSample?.soilClassification = result.soilClassification
-                    viewModel.currentSample?.soilDescription = result.soilDescription
-                    
-                    // Hacer scroll a los resultados con animación
+                guard let sample = viewModel.currentSample else { return }
+                
+                switch selectionMode {
+                case .rectangle:
+                    guard let rect = selectionRect else { return }
+                    try await viewModel.analyzeSampleRegion(sample, region: rect)
+                case .polygon:
+                    guard let points = polygonPoints, points.count >= 3 else { return }
+                    try await viewModel.analyzeSamplePolygon(sample, polygonPoints: points)
+                case .full:
+                    try await viewModel.analyzeSample(sample)
+                }
+                
+                // Scroll to results after analysis
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     withAnimation {
                         scrollProxy?.scrollTo("results", anchor: .top)
                     }
                 }
-            } catch let error as CalibrationError {
-                await MainActor.run {
-                    errorMessage = error.localizedDescription
-                    showError = true
-                }
             } catch {
-                await MainActor.run {
-                    errorMessage = "Error al analizar la imagen: \(error.localizedDescription)"
-                    showError = true
-                }
+                errorMessage = error.localizedDescription
+                showError = true
             }
         }
     }
+    
+    private func saveAnalysis() async {
+        do {
+            try await viewModel.saveSample(notes: notes, tags: tags.split(separator: ",").map(String.init))
+            await MainActor.run {
+                showingSaveDialog = false
+                errorMessage = "Análisis guardado correctamente"
+                showError = true
+            }
+            print("DEBUG: Análisis guardado correctamente")
+        } catch {
+            await MainActor.run {
+                errorMessage = error.localizedDescription
+                showError = true
+            }
+            print("DEBUG: Error al guardar análisis: \(error.localizedDescription)")
+        }
+    }
+}
+
+#Preview {
+    ImageAnalysisView(
+        viewModel: SoilSampleViewModel(),
+        colorAnalysisService: ColorAnalysisService(),
+        image: UIImage(),
+        selectionMode: .constant(.rectangle),
+        onNewSample: {}
+    )
 } 

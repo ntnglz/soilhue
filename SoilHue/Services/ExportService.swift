@@ -90,32 +90,19 @@ class ExportService: ObservableObject {
         let geocoder = CLGeocoder()
         
         for analysis in analyses {
-            print("DEBUG: Exportando análisis \(analysis.id) con localización: \(String(describing: analysis.metadata.location))")
+            print("DEBUG: Exportando análisis \(analysis.id) con localización: \(String(describing: analysis.locationInfo))")
             var locationColumns = ["","","",""] // [latitud, longitud, altitud, dirección]
             
-            if let location = analysis.metadata.location {
-                print("DEBUG: Procesando localización - lat: \(location.latitude), lon: \(location.longitude), alt: \(String(describing: location.altitude))")
-                locationColumns[0] = String(format: "%.6f", location.latitude)
-                locationColumns[1] = String(format: "%.6f", location.longitude)
-                if let altitude = location.altitude {
-                    locationColumns[2] = String(format: "%.1f", altitude)
-                }
+            if let location = analysis.locationInfo {
+                print("DEBUG: Procesando localización - lat: \(location.coordinate.latitude), lon: \(location.coordinate.longitude), alt: \(String(describing: location.altitude))")
+                locationColumns[0] = String(format: "%.6f", location.coordinate.latitude)
+                locationColumns[1] = String(format: "%.6f", location.coordinate.longitude)
+                locationColumns[2] = String(format: "%.1f", location.altitude)
                 
                 // Intentar obtener la dirección
-                let loc = CLLocation(
-                    coordinate: CLLocationCoordinate2D(
-                        latitude: location.latitude,
-                        longitude: location.longitude
-                    ),
-                    altitude: location.altitude ?? 0,
-                    horizontalAccuracy: 0,
-                    verticalAccuracy: 0,
-                    timestamp: location.timestamp
-                )
-                
                 if !Task.isCancelled {
                     do {
-                        let placemarks = try await geocoder.reverseGeocodeLocation(loc)
+                        let placemarks = try await geocoder.reverseGeocodeLocation(location)
                         if let placemark = placemarks.first {
                             let components = [
                                 placemark.thoroughfare,
@@ -131,29 +118,50 @@ class ExportService: ObservableObject {
                 }
             }
             
-            let row = [
-                analysis.id.uuidString,
-                ISO8601DateFormatter().string(from: analysis.timestamp),
-                analysis.colorInfo.munsellNotation,
-                analysis.colorInfo.soilClassification,
-                analysis.colorInfo.soilDescription,
-                String(format: "%.2f,%.2f,%.2f", 
-                    analysis.colorInfo.correctedRGB.red,
-                    analysis.colorInfo.correctedRGB.green,
-                    analysis.colorInfo.correctedRGB.blue),
-                analysis.calibrationInfo.wasCalibrated ? "Sí" : "No",
-                String(format: "%.3f,%.3f,%.3f",
-                    analysis.calibrationInfo.correctionFactors.red,
-                    analysis.calibrationInfo.correctionFactors.green,
-                    analysis.calibrationInfo.correctionFactors.blue)
-            ]
-            .map { "\"\($0)\"" }
-            + locationColumns.map { "\"\($0)\"" }
-            + [
-                "\"\(analysis.metadata.notes ?? "")\"",
-                "\"\(analysis.metadata.tags.joined(separator: ";"))\""
+            // Preparar los datos básicos
+            let idString = analysis.id.uuidString
+            let dateString = ISO8601DateFormatter().string(from: analysis.timestamp)
+            let munsellString = analysis.munsellColor ?? ""
+            let classificationString = analysis.soilClassification ?? ""
+            let descriptionString = analysis.soilDescription ?? ""
+            let rgbString = "N/A" // RGB Corregido - no disponible en la estructura actual
+            
+            // Preparar información de calibración
+            let calibratedString = analysis.calibrationInfo?.wasCalibrated == true ? "Sí" : "No"
+            
+            // Preparar factores de corrección
+            var correctionFactorsString = "N/A"
+            if let calibrationInfo = analysis.calibrationInfo {
+                correctionFactorsString = String(format: "%.3f,%.3f,%.3f",
+                    calibrationInfo.correctionFactors.red,
+                    calibrationInfo.correctionFactors.green,
+                    calibrationInfo.correctionFactors.blue)
+            }
+            
+            // Preparar notas y etiquetas
+            let notesString = analysis.notes
+            let tagsString = analysis.tags.joined(separator: ";")
+            
+            // Construir la fila CSV
+            let basicColumns = [
+                "\"\(idString)\"",
+                "\"\(dateString)\"",
+                "\"\(munsellString)\"",
+                "\"\(classificationString)\"",
+                "\"\(descriptionString)\"",
+                "\"\(rgbString)\"",
+                "\"\(calibratedString)\"",
+                "\"\(correctionFactorsString)\""
             ]
             
+            let locationColumnsQuoted = locationColumns.map { "\"\($0)\"" }
+            
+            let metadataColumns = [
+                "\"\(notesString)\"",
+                "\"\(tagsString)\""
+            ]
+            
+            let row = basicColumns + locationColumnsQuoted + metadataColumns
             csvString.append(row.joined(separator: ",") + "\n")
         }
         

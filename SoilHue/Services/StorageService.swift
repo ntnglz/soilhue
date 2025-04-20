@@ -103,58 +103,52 @@ class StorageService: ObservableObject {
         let baseURL = try getCurrentBaseURL()
         let analysisDirectory = baseURL.appendingPathComponent(analysis.id.uuidString)
         
+        print("DEBUG: Intentando guardar análisis en: \(analysisDirectory)")
+        
         // Crear directorio para este análisis
         do {
             try FileManager.default.createDirectory(at: analysisDirectory, withIntermediateDirectories: true)
+            print("DEBUG: Directorio creado correctamente")
         } catch {
+            print("DEBUG: Error al crear directorio: \(error)")
             throw StorageError.directoryCreationFailed
         }
         
         // Guardar la imagen
         let imageURL = analysisDirectory.appendingPathComponent("image.jpg")
         guard let imageData = image.jpegData(compressionQuality: 0.8) else {
+            print("DEBUG: Error al convertir imagen a JPEG")
             throw StorageError.failedToSaveImage
         }
         
         do {
             try imageData.write(to: imageURL)
+            print("DEBUG: Imagen guardada correctamente en: \(imageURL)")
         } catch {
+            print("DEBUG: Error al escribir imagen: \(error)")
             throw StorageError.fileOperationFailed("No se pudo escribir la imagen")
-        }
-        
-        // Crear y guardar el análisis
-        var updatedAnalysis = analysis
-        if let imageInfo = try? JSONDecoder().decode(ImageInfo.self, from: JSONEncoder().encode(analysis.imageInfo)) {
-            let newImageInfo = ImageInfo(
-                imageURL: imageURL,
-                selectionArea: imageInfo.selectionArea,
-                resolution: imageInfo.resolution
-            )
-            updatedAnalysis = SoilAnalysis(
-                id: analysis.id,
-                timestamp: analysis.timestamp,
-                colorInfo: analysis.colorInfo,
-                imageInfo: newImageInfo,
-                calibrationInfo: analysis.calibrationInfo,
-                metadata: analysis.metadata
-            )
         }
         
         // Guardar los datos del análisis
         let analysisURL = analysisDirectory.appendingPathComponent("analysis.json")
         do {
             let encoder = JSONEncoder()
-            encoder.outputFormatting = [.prettyPrinted]
-            let analysisData = try encoder.encode(updatedAnalysis)
-            try analysisData.write(to: analysisURL)
+            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+            encoder.dateEncodingStrategy = .iso8601
+            let data = try encoder.encode(analysis)
+            try data.write(to: analysisURL)
+            print("DEBUG: Análisis JSON guardado correctamente en: \(analysisURL)")
         } catch {
-            throw StorageError.failedToSaveAnalysis
+            print("DEBUG: Error al escribir análisis JSON: \(error)")
+            throw StorageError.fileOperationFailed("No se pudo escribir el análisis")
         }
         
-        // Si estamos en iCloud, forzar la sincronización
+        // Sincronizar con iCloud si es necesario
         if currentLocation == .iCloud {
             try await syncWithiCloud()
         }
+        
+        print("DEBUG: Análisis guardado completamente")
     }
     
     /// Carga todos los análisis almacenados
@@ -162,6 +156,7 @@ class StorageService: ObservableObject {
         let baseURL = try getCurrentBaseURL()
         
         guard directoryExists(at: baseURL) else {
+            print("DEBUG: El directorio base no existe: \(baseURL)")
             return []
         }
         
@@ -176,26 +171,34 @@ class StorageService: ObservableObject {
                 includingPropertiesForKeys: [.isDirectoryKey],
                 options: .skipsHiddenFiles
             )
+            print("DEBUG: Encontrados \(contents.count) elementos en el directorio")
         } catch {
+            print("DEBUG: Error al leer contenido del directorio: \(error)")
             throw StorageError.fileOperationFailed("No se pudo leer el directorio")
         }
         
         // Cargar cada análisis
         var analyses: [SoilAnalysis] = []
         for directory in contents {
+            print("DEBUG: Procesando directorio: \(directory)")
             let analysisURL = directory.appendingPathComponent("analysis.json")
             do {
                 let analysisData = try Data(contentsOf: analysisURL)
-                let analysis = try JSONDecoder().decode(SoilAnalysis.self, from: analysisData)
-                print("DEBUG: Análisis cargado con localización: \(String(describing: analysis.metadata.location))")
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                let analysis = try decoder.decode(SoilAnalysis.self, from: analysisData)
                 analyses.append(analysis)
+                print("DEBUG: Análisis cargado correctamente: \(analysis.id)")
             } catch {
+                print("DEBUG: Error al cargar análisis en \(analysisURL): \(error)")
                 // Ignorar análisis que no se pueden cargar
                 continue
             }
         }
         
-        return analyses.sorted { $0.timestamp > $1.timestamp }
+        let sortedAnalyses = analyses.sorted { $0.timestamp > $1.timestamp }
+        print("DEBUG: Total de análisis cargados: \(sortedAnalyses.count)")
+        return sortedAnalyses
     }
     
     /// Elimina un análisis

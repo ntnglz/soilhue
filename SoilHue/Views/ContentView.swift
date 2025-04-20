@@ -12,6 +12,7 @@ import PhotosUI
 enum SelectionMode {
     case rectangle
     case polygon
+    case full
 }
 
 /// Vista principal de la aplicación SoilHue.
@@ -102,10 +103,10 @@ struct ContentView: View {
                         VStack(spacing: 0) {
                             if let image = selectedImage {
                                 ImageAnalysisView(
-                                    image: image,
-                                    selectionMode: $selectionMode,
                                     viewModel: viewModel,
                                     colorAnalysisService: colorAnalysisService,
+                                    image: image,
+                                    selectionMode: $selectionMode,
                                     onNewSample: resetState
                                 )
                                 .frame(maxHeight: .infinity)

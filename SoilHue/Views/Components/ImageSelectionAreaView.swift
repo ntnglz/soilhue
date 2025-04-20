@@ -8,7 +8,8 @@ struct ImageSelectionAreaView: View {
     
     var body: some View {
         VStack {
-            if selectionMode == .rectangle {
+            switch selectionMode {
+            case .rectangle:
                 ColorSelectionView(image: image, selectionRect: $selectionRect)
                     .frame(height: 300)
                     .cornerRadius(12)
@@ -19,7 +20,7 @@ struct ImageSelectionAreaView: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
-            } else {
+            case .polygon:
                 PolygonSelectionView(image: image, polygonPoints: $polygonPoints)
                     .frame(height: 300)
                     .cornerRadius(12)
@@ -30,6 +31,17 @@ struct ImageSelectionAreaView: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
+            case .full:
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 300)
+                    .cornerRadius(12)
+                    .padding()
+                
+                Text("Se analizará la imagen completa")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
         }
     }

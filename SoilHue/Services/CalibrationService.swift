@@ -28,6 +28,9 @@ class CalibrationService: ObservableObject {
     /// Factores de corrección para cada canal de color
     @Published var correctionFactors: CorrectionFactors = CorrectionFactors(red: 1.0, green: 1.0, blue: 1.0)
     
+    /// Fecha de la última calibración
+    @Published var lastCalibrationDate: Date?
+    
     /// Indica si la cámara está calibrada
     var isCalibrated: Bool {
         if case .calibrated = calibrationState {
@@ -62,10 +65,12 @@ class CalibrationService: ObservableObject {
                 green: defaults.double(forKey: "calibrationGreenFactor"),
                 blue: defaults.double(forKey: "calibrationBlueFactor")
             )
+            lastCalibrationDate = defaults.object(forKey: "lastCalibrationDate") as? Date
             calibrationState = .calibrated
             notifyObservers()
         } else {
             calibrationState = .notCalibrated
+            lastCalibrationDate = nil
             notifyObservers()
         }
     }
@@ -291,9 +296,9 @@ class CalibrationService: ObservableObject {
         defaults.set(correctionFactors.green, forKey: "calibrationGreenFactor")
         defaults.set(correctionFactors.blue, forKey: "calibrationBlueFactor")
         defaults.set(true, forKey: "isCalibrated")
+        defaults.set(Date(), forKey: "lastCalibrationDate")
+        lastCalibrationDate = Date()
     }
-    
-
     
     /// Reinicia la calibración
     func resetCalibration() {

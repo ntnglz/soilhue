@@ -118,32 +118,21 @@ struct AnalysisResultsView: View {
                 
                 // Crear el análisis
                 let analysis = SoilAnalysis(
-                    colorInfo: ColorInfo(
-                        munsellNotation: munsellNotation,
-                        soilClassification: soilClassification,
-                        soilDescription: soilDescription,
-                        correctedRGB: RGBValues(red: 0, green: 0, blue: 0) // TODO: Obtener valores reales
-                    ),
-                    imageInfo: ImageInfo(
-                        imageURL: URL(fileURLWithPath: ""), // Se actualizará en el storage
-                        selectionArea: selectionArea,
-                        resolution: ImageResolution(
-                            width: Int(image.size.width),
-                            height: Int(image.size.height),
-                            quality: .high
-                        )
-                    ),
+                    id: UUID(),
+                    timestamp: Date(),
+                    imageData: image.jpegData(compressionQuality: 0.8) ?? Data(),
+                    notes: notes,
+                    tags: tags.split(separator: ",").map(String.init),
+                    locationInfo: location,
+                    munsellColor: munsellNotation,
+                    soilClassification: soilClassification,
+                    soilDescription: soilDescription,
                     calibrationInfo: CalibrationInfo(
                         wasCalibrated: wasCalibrated,
                         correctionFactors: correctionFactors,
                         lastCalibrationDate: Date()
                     ),
-                    metadata: AnalysisMetadata(
-                        location: locationInfo,
-                        notes: notes.isEmpty ? nil : notes,
-                        tags: tags.split(separator: ",").map(String.init),
-                        environmentalConditions: nil // TODO: Implementar condiciones
-                    )
+                    environmentalConditions: nil // TODO: Implementar condiciones
                 )
                 
                 // Guardar el análisis
