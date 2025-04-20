@@ -53,6 +53,7 @@ struct ContentView: View {
     @State private var selectionMode: SelectionMode = .rectangle
     @State private var showCalibration = false
     @State private var showSettings = false
+    @State private var showExport = false
     
     /// Contenido principal de la vista.
     var body: some View {
@@ -77,6 +78,13 @@ struct ContentView: View {
     private var settingsButton: some View {
         Button(action: { showSettings = true }) {
             Image(systemName: "gear")
+        }
+    }
+    
+    /// Botón de exportación para el toolbar
+    private var exportButton: some View {
+        Button(action: { showExport = true }) {
+            Image(systemName: "square.and.arrow.up")
         }
     }
     
@@ -116,7 +124,12 @@ struct ContentView: View {
             .navigationTitle("SoilHue")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing, content: { settingsButton })
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    HStack {
+                        exportButton
+                        settingsButton
+                    }
+                }
             }
             .sheet(isPresented: $showImagePicker) {
                 ImagePicker(image: $selectedImage)
@@ -135,6 +148,9 @@ struct ContentView: View {
             }
             .sheet(isPresented: $showSettings) {
                 SettingsView(model: settingsModel)
+            }
+            .sheet(isPresented: $showExport) {
+                ExportView()
             }
         }
     }
