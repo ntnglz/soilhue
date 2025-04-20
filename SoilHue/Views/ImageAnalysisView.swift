@@ -214,14 +214,8 @@ struct ImageAnalysisView: View {
     }
     
     private var isAnalysisEnabled: Bool {
-        switch selectionMode {
-        case .rectangle:
-            return selectionRect != nil
-        case .polygon:
-            return polygonPoints?.count ?? 0 >= 3
-        case .full:
-            return true
-        }
+        // Siempre permitir el análisis
+        return true
     }
     
     private func analyze() {
@@ -232,17 +226,23 @@ struct ImageAnalysisView: View {
             do {
                 guard let sample = viewModel.currentSample else { return }
                 
-                // Realizar el análisis según el modo de selección
+                // Realizar el análisis según el modo de selección y si hay área seleccionada
                 let result: SoilAnalysisResult
                 switch selectionMode {
                 case .rectangle:
-                    guard let rect = selectionRect else { return }
-                    result = try await viewModel.analyzeSampleRegion(sample, region: rect)
+                    if let rect = selectionRect {
+                        result = try await viewModel.analyzeSampleRegion(sample, region: rect)
+                    } else {
+                        // Si no hay selección, analizar la imagen completa
+                        result = try await viewModel.analyzeSample(sample)
+                    }
                 case .polygon:
-                    guard let points = polygonPoints, points.count >= 3 else { return }
-                    result = try await viewModel.analyzeSamplePolygon(sample, polygonPoints: points)
-                case .full:
-                    result = try await viewModel.analyzeSample(sample)
+                    if let points = polygonPoints, points.count >= 3 {
+                        result = try await viewModel.analyzeSamplePolygon(sample, polygonPoints: points)
+                    } else {
+                        // Si no hay selección válida, analizar la imagen completa
+                        result = try await viewModel.analyzeSample(sample)
+                    }
                 }
                 
                 // Actualizar la muestra actual con los resultados

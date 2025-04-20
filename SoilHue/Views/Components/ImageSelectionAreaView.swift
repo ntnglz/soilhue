@@ -19,6 +19,10 @@ struct ImageSelectionAreaView: View {
                     Text("Área seleccionada: \(Int(rect.width * 100))% x \(Int(rect.height * 100))%")
                         .font(.caption)
                         .foregroundColor(.secondary)
+                } else {
+                    Text("Arrastra para seleccionar un área o pulsa Analizar para procesar la imagen completa")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
             case .polygon:
                 PolygonSelectionView(image: image, polygonPoints: $polygonPoints)
@@ -30,18 +34,11 @@ struct ImageSelectionAreaView: View {
                     Text("Polígono con \(points.count) vértices")
                         .font(.caption)
                         .foregroundColor(.secondary)
+                } else {
+                    Text("Toca para crear un polígono o pulsa Analizar para procesar la imagen completa")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
-            case .full:
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 300)
-                    .cornerRadius(12)
-                    .padding()
-                
-                Text("Se analizará la imagen completa")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
             }
         }
     }

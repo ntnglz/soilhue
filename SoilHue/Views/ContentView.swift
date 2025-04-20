@@ -12,7 +12,6 @@ import PhotosUI
 enum SelectionMode {
     case rectangle
     case polygon
-    case full
 }
 
 /// Vista principal de la aplicación SoilHue.
