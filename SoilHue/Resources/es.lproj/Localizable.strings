@@ -424,81 +424,64 @@
 "help.section.calibration" = "Calibración";
 "help.section.analysis" = "Análisis";
 "help.section.data" = "Datos";
-"help.section.troubleshooting" = "Problemas";
+"help.section.troubleshooting" = "Solución de Problemas";
+"help.section.munsell" = "Sistema Munsell";
+"help.section.soils" = "Tipos de Suelo";
+"help.section.horizons" = "Horizontes del Suelo";
 
-/* Introduction Section */
-"help.intro.title" = "Bienvenido a SoilHue";
-"help.intro.description" = "SoilHue es una aplicación diseñada para analizar el color del suelo utilizando el sistema Munsell, un estándar internacional para la descripción del color.";
-"help.intro.feature.capture" = "Captura o selecciona imágenes de muestras de suelo";
-"help.intro.feature.calibration" = "Calibra la cámara para obtener colores precisos";
-"help.intro.feature.analysis" = "Analiza áreas específicas de la muestra";
-"help.intro.feature.export" = "Guarda y exporta los resultados";
+/* Munsell System Section */
+"help.munsell.title" = "Sistema de Color Munsell";
+"help.munsell.description" = "El sistema Munsell es un estándar internacional para la descripción del color, ampliamente utilizado en la ciencia del suelo.";
+"help.munsell.components.title" = "Componentes del Color";
+"help.munsell.component.hue" = "Matiz: El color base (ej: 10YR, 5Y)";
+"help.munsell.component.value" = "Valor: La luminosidad (0-10)";
+"help.munsell.component.chroma" = "Croma: La saturación (1-18)";
+"help.munsell.notation.title" = "Formato de Notación";
+"help.munsell.notation.example" = "Ejemplo: 10YR 6/4 significa:\n• Matiz: 10YR (Amarillo-Rojo)\n• Valor: 6 (Luminosidad media)\n• Croma: 4 (Saturación media)";
+"help.munsell.importance.title" = "Importancia en la Ciencia del Suelo";
+"help.munsell.importance.text" = "• Descripción estandarizada del color\n• Indica propiedades del suelo\n• Ayuda en la clasificación del suelo\n• Útil para el mapeo de suelos";
 
-/* Calibration Section */
-"help.calibration.process.title" = "Proceso de Calibración";
-"help.calibration.step.1" = "Accede a la calibración desde el botón 'Calibrar Cámara'";
-"help.calibration.step.2" = "Utiliza la tarjeta de calibración básica incluida o una tarjeta ColorChecker";
-"help.calibration.step.3" = "Alinea la tarjeta con las guías en pantalla";
-"help.calibration.step.4" = "Mantén la tarjeta paralela a la cámara";
-"help.calibration.step.5" = "Asegúrate de tener buena iluminación";
-"help.calibration.step.6" = "Toma la foto cuando las guías estén alineadas";
+/* Soil Types Section */
+"help.soils.title" = "Clasificación de Suelos";
+"help.soils.description" = "Los tipos de suelo se clasifican según sus propiedades, incluyendo color, textura y composición.";
+"help.soils.histosols.title" = "Histosoles";
+"help.soils.histosols.description" = "Suelos orgánicos con alto contenido de materia orgánica, típicos de suelos de turba.";
+"help.soils.mollisols.title" = "Mollisoles";
+"help.soils.mollisols.description" = "Suelos oscuros y fértiles ricos en materia orgánica, típicos de praderas.";
+"help.soils.alfisols.title" = "Alfisoles";
+"help.soils.alfisols.description" = "Suelos con horizonte arcilloso, fértiles, típicos de regiones forestales.";
+"help.soils.oxisols.title" = "Oxisoles";
+"help.soils.oxisols.description" = "Suelos muy meteorizados de regiones tropicales, ricos en óxidos de hierro.";
+"help.soils.vertisols.title" = "Vertisoles";
+"help.soils.vertisols.description" = "Suelos arcillosos que se agrietan, con alto contenido de minerales arcillosos expansivos.";
+"help.soils.spodosols.title" = "Espodosoles";
+"help.soils.spodosols.description" = "Suelos ácidos con acumulación de hierro y aluminio, típicos de bosques húmedos.";
+"help.soils.aridisols.title" = "Aridisoles";
+"help.soils.aridisols.description" = "Suelos de regiones áridas, con acumulación de sales y carbonatos en el subsuelo.";
+"help.soils.entisols.title" = "Entisoles";
+"help.soils.entisols.description" = "Suelos jóvenes con poco desarrollo de horizontes, típicos de depósitos recientes.";
+"help.soils.inceptisols.title" = "Inceptisoles";
+"help.soils.inceptisols.description" = "Suelos ligeramente desarrollados con horizontes incipientes, típicos de regiones montañosas.";
+"help.soils.ultisols.title" = "Ultisoles";
+"help.soils.ultisols.description" = "Suelos ácidos, muy meteorizados con horizonte arcilloso, típicos de regiones húmedas.";
 
-"help.calibration.limitations.title" = "Limitaciones de la Calibración";
-"help.calibration.limitation.basic" = "La tarjeta básica proporciona una calibración aproximada";
-"help.calibration.limitation.professional" = "Para resultados profesionales, se recomienda usar X-Rite ColorChecker";
-"help.calibration.limitation.lighting" = "La precisión puede variar según las condiciones de iluminación";
-"help.calibration.limitation.recalibration" = "Se recomienda recalibrar si cambian las condiciones de luz";
-
-/* Analysis Section */
-"help.analysis.capture.title" = "Captura de Muestras";
-"help.analysis.step.1" = "Selecciona 'Nueva Muestra' o 'Galería'";
-"help.analysis.step.2" = "Asegúrate de que la cámara esté calibrada";
-"help.analysis.step.3" = "Captura la imagen o selecciona una existente";
-"help.analysis.step.4" = "Selecciona el área a analizar usando el modo rectángulo o polígono";
-
-"help.analysis.practices.title" = "Mejores Prácticas";
-"help.analysis.practice.light" = "Usa luz natural difusa cuando sea posible";
-"help.analysis.practice.shadows" = "Evita sombras y reflejos directos";
-"help.analysis.practice.clean" = "Mantén la muestra de suelo limpia y seca";
-"help.analysis.practice.surface" = "Usa una superficie plana";
-"help.analysis.practice.calibration" = "Calibra la cámara bajo las mismas condiciones de luz";
-
-/* Data Section */
-"help.data.save.title" = "Guardar Análisis";
-"help.data.save.step.1" = "Pulsa 'Guardar Análisis' tras el análisis";
-"help.data.save.step.2" = "Añade notas y etiquetas (opcional)";
-"help.data.save.step.3" = "La ubicación se guarda automáticamente";
-
-"help.data.export.title" = "Exportar Datos";
-"help.data.export.step.1" = "Accede a la sección de exportación";
-"help.data.export.step.2" = "Selecciona el formato deseado";
-"help.data.export.step.3" = "Comparte o guarda el archivo";
-
-/* Troubleshooting Section */
-"help.troubleshooting.problems.title" = "Problemas Comunes";
-"help.troubleshooting.calibration" = "Calibración no detectada: recalibra la cámara";
-"help.troubleshooting.results" = "Resultados inconsistentes: verifica la iluminación";
-"help.troubleshooting.camera" = "Error de cámara: revisa los permisos";
-
-"help.contact.title" = "Contacto y Soporte";
-
-/* Calibration Status */
-"calibration.status.notCalibrated.title" = "No calibrado";
-"calibration.status.notCalibrated.message" = "La cámara necesita ser calibrada para obtener resultados precisos. Por favor, calibre la cámara antes de continuar.";
-
-"calibration.status.calibrating.title" = "Calibrando";
-"calibration.status.calibrating.message" = "Por favor, mantenga la tarjeta de calibración en el marco y espere a que se complete el proceso.";
-
-"calibration.status.calibrated.title" = "Calibrado";
-"calibration.status.calibrated.message" = "La cámara está calibrada y lista para analizar muestras de suelo.";
-
-"calibration.status.error.title" = "Error de calibración";
-
-/* Calibration View */
-"calibration.title" = "Calibración";
-"calibration.recalibrate" = "Recalibrar";
-"button.done" = "Listo";
-"calibration.message" = "La cámara está calibrada y lista para analizar muestras de suelo.";
+/* Soil Horizons Section */
+"help.horizons.title" = "Horizontes del Suelo";
+"help.horizons.description" = "Los horizontes del suelo son capas distintas en el perfil del suelo, cada una con características únicas.";
+"help.horizons.o.title" = "Horizonte O";
+"help.horizons.o.description" = "Horizonte orgánico: Restos vegetales en descomposición, alto en materia orgánica.";
+"help.horizons.a.title" = "Horizonte A";
+"help.horizons.a.description" = "Horizonte mineral superficial: Rico en materia orgánica, de color oscuro.";
+"help.horizons.e.title" = "Horizonte E";
+"help.horizons.e.description" = "Horizonte de eluviación: Pérdida de materiales por lixiviación, de color más claro.";
+"help.horizons.b.title" = "Horizonte B";
+"help.horizons.b.description" = "Horizonte de iluviación: Acumulación de materiales, frecuentemente rico en arcilla.";
+"help.horizons.c.title" = "Horizonte C";
+"help.horizons.c.description" = "Material parental: Roca madre o sedimento ligeramente alterado.";
+"help.horizons.r.title" = "Horizonte R";
+"help.horizons.r.description" = "Roca madre: Material original inalterado.";
+"help.horizons.importance.title" = "Importancia de los Horizontes";
+"help.horizons.importance.text" = "• Indican el desarrollo del suelo\n• Reflejan condiciones ambientales\n• Ayudan en la clasificación del suelo\n• Guían decisiones de uso del suelo";
 
 // Mensajes de servicio
 "service.error.generic" = "Ha ocurrido un error. Por favor, inténtelo de nuevo.";

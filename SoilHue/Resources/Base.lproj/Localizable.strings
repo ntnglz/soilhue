@@ -317,4 +317,68 @@
 "service.error.invalid.data" = "Invalid data format.";
 "service.error.not.found" = "Resource not found.";
 "service.error.timeout" = "Operation timed out.";
-"service.error.busy" = "Service is busy. Please try again later."; 
+"service.error.busy" = "Service is busy. Please try again later.";
+
+/* Help View Sections */
+"help.section.intro" = "Introduction";
+"help.section.calibration" = "Calibration";
+"help.section.analysis" = "Analysis";
+"help.section.data" = "Data";
+"help.section.troubleshooting" = "Troubleshooting";
+"help.section.munsell" = "Munsell System";
+"help.section.soils" = "Soil Types";
+"help.section.horizons" = "Soil Horizons";
+
+/* Munsell System Section */
+"help.munsell.title" = "Munsell Color System";
+"help.munsell.description" = "The Munsell system is an international standard for color description, widely used in soil science.";
+"help.munsell.components.title" = "Color Components";
+"help.munsell.component.hue" = "Hue: The base color (e.g., 10YR, 5Y)";
+"help.munsell.component.value" = "Value: The lightness (0-10)";
+"help.munsell.component.chroma" = "Chroma: The saturation (1-18)";
+"help.munsell.notation.title" = "Notation Format";
+"help.munsell.notation.example" = "Example: 10YR 6/4 means:\n• Hue: 10YR (Yellow-Red)\n• Value: 6 (Medium lightness)\n• Chroma: 4 (Medium saturation)";
+"help.munsell.importance.title" = "Importance in Soil Science";
+"help.munsell.importance.text" = "• Standardized color description\n• Indicates soil properties\n• Helps in soil classification\n• Useful for soil mapping";
+
+/* Soil Types Section */
+"help.soils.title" = "Soil Classification";
+"help.soils.description" = "Soil types are classified based on their properties, including color, texture, and composition.";
+"help.soils.histosols.title" = "Histosols";
+"help.soils.histosols.description" = "Organic soils with high organic matter content, typical of peat soils.";
+"help.soils.mollisols.title" = "Mollisols";
+"help.soils.mollisols.description" = "Dark, fertile soils rich in organic matter, typical of prairies.";
+"help.soils.alfisols.title" = "Alfisols";
+"help.soils.alfisols.description" = "Soils with clay horizon, fertile, typical of forest regions.";
+"help.soils.oxisols.title" = "Oxisols";
+"help.soils.oxisols.description" = "Highly weathered soils from tropical regions, high in iron oxides.";
+"help.soils.vertisols.title" = "Vertisols";
+"help.soils.vertisols.description" = "Clay soils that crack, with high content of expansive clay minerals.";
+"help.soils.spodosols.title" = "Spodosols";
+"help.soils.spodosols.description" = "Acidic soils with iron and aluminum accumulation, typical of humid forests.";
+"help.soils.aridisols.title" = "Aridisols";
+"help.soils.aridisols.description" = "Soils from arid regions, with salt and carbonate accumulation.";
+"help.soils.entisols.title" = "Entisols";
+"help.soils.entisols.description" = "Young soils with little horizon development, typical of recent deposits.";
+"help.soils.inceptisols.title" = "Inceptisols";
+"help.soils.inceptisols.description" = "Slightly developed soils with incipient horizons, typical of mountains.";
+"help.soils.ultisols.title" = "Ultisols";
+"help.soils.ultisols.description" = "Acidic, highly weathered soils with clay horizon, typical of humid regions.";
+
+/* Soil Horizons Section */
+"help.horizons.title" = "Soil Horizons";
+"help.horizons.description" = "Soil horizons are distinct layers in the soil profile, each with unique characteristics.";
+"help.horizons.o.title" = "O Horizon";
+"help.horizons.o.description" = "Organic horizon: Decomposing plant remains, high in organic matter.";
+"help.horizons.a.title" = "A Horizon";
+"help.horizons.a.description" = "Surface mineral horizon: Rich in organic matter, dark colored.";
+"help.horizons.e.title" = "E Horizon";
+"help.horizons.e.description" = "Eluviation horizon: Loss of materials by leaching, lighter colored.";
+"help.horizons.b.title" = "B Horizon";
+"help.horizons.b.description" = "Illuviation horizon: Accumulation of materials, often clay-rich.";
+"help.horizons.c.title" = "C Horizon";
+"help.horizons.c.description" = "Parent material: Slightly altered bedrock or sediment.";
+"help.horizons.r.title" = "R Horizon";
+"help.horizons.r.description" = "Bedrock: Unaltered original material.";
+"help.horizons.importance.title" = "Importance of Horizons";
+"help.horizons.importance.text" = "• Indicate soil development\n• Reflect environmental conditions\n• Help in soil classification\n• Guide land use decisions"; 

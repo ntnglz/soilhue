@@ -12,18 +12,28 @@ struct HelpView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    Picker(NSLocalizedString("help.section", comment: "Section picker title"), selection: $selectedSection) {
-                        Text(NSLocalizedString("help.section.intro", comment: "Introduction section")).tag(0)
-                        Text(NSLocalizedString("help.section.calibration", comment: "Calibration section")).tag(1)
-                        Text(NSLocalizedString("help.section.analysis", comment: "Analysis section")).tag(2)
-                        Text(NSLocalizedString("help.section.data", comment: "Data section")).tag(3)
-                        Text(NSLocalizedString("help.section.troubleshooting", comment: "Troubleshooting section")).tag(4)
+            List {
+                Section {
+                    ForEach(0..<8) { index in
+                        Button(action: {
+                            selectedSection = index
+                        }) {
+                            HStack {
+                                Text(sectionTitle(for: index))
+                                    .foregroundColor(selectedSection == index ? .accentColor : .primary)
+                                Spacer()
+                                if selectedSection == index {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(.accentColor)
+                                }
+                            }
+                        }
                     }
-                    .pickerStyle(SegmentedPickerStyle())
-                    .padding(.horizontal)
-                    
+                } header: {
+                    Text(NSLocalizedString("help.section", comment: "Section picker title"))
+                }
+                
+                Section {
                     switch selectedSection {
                     case 0:
                         IntroductionSection()
@@ -34,13 +44,19 @@ struct HelpView: View {
                     case 3:
                         DataSection()
                     case 4:
+                        MunsellSection()
+                    case 5:
+                        SoilTypesSection()
+                    case 6:
+                        SoilHorizonsSection()
+                    case 7:
                         TroubleshootingSection()
                     default:
                         IntroductionSection()
                     }
                 }
-                .padding()
             }
+            .listStyle(InsetGroupedListStyle())
             .navigationTitle(NSLocalizedString("help.title", comment: "Help view title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -50,6 +66,29 @@ struct HelpView: View {
                     }
                 }
             }
+        }
+    }
+    
+    private func sectionTitle(for index: Int) -> String {
+        switch index {
+        case 0:
+            return NSLocalizedString("help.section.intro", comment: "Introduction section")
+        case 1:
+            return NSLocalizedString("help.section.calibration", comment: "Calibration section")
+        case 2:
+            return NSLocalizedString("help.section.analysis", comment: "Analysis section")
+        case 3:
+            return NSLocalizedString("help.section.data", comment: "Data section")
+        case 4:
+            return NSLocalizedString("help.section.munsell", comment: "Munsell section")
+        case 5:
+            return NSLocalizedString("help.section.soils", comment: "Soil types section")
+        case 6:
+            return NSLocalizedString("help.section.horizons", comment: "Soil horizons section")
+        case 7:
+            return NSLocalizedString("help.section.troubleshooting", comment: "Troubleshooting section")
+        default:
+            return ""
         }
     }
 }
@@ -191,6 +230,106 @@ struct DataSection: View {
                     }
                 }
                 .padding(.vertical)
+            }
+        }
+    }
+}
+
+struct MunsellSection: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text(NSLocalizedString("help.munsell.title", comment: "Munsell system title"))
+                .font(.title2)
+                .bold()
+            
+            Text(NSLocalizedString("help.munsell.description", comment: "Munsell system description"))
+                .fixedSize(horizontal: false, vertical: true)
+            
+            // Componentes del color
+            GroupBox(label: Text(NSLocalizedString("help.munsell.components.title", comment: "Color components title")).bold()) {
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach([
+                        "help.munsell.component.hue",
+                        "help.munsell.component.value",
+                        "help.munsell.component.chroma"
+                    ], id: \.self) { key in
+                        HStack(alignment: .top) {
+                            Image(systemName: "circle.fill")
+                                .foregroundColor(.blue)
+                            Text(NSLocalizedString(key, comment: "Color component"))
+                        }
+                    }
+                }
+                .padding(.vertical)
+            }
+            
+            // Notación
+            GroupBox(label: Text(NSLocalizedString("help.munsell.notation.title", comment: "Notation title")).bold()) {
+                Text(NSLocalizedString("help.munsell.notation.example", comment: "Notation example"))
+                    .padding(.vertical)
+            }
+            
+            // Importancia
+            GroupBox(label: Text(NSLocalizedString("help.munsell.importance.title", comment: "Importance title")).bold()) {
+                Text(NSLocalizedString("help.munsell.importance.text", comment: "Importance text"))
+                    .padding(.vertical)
+            }
+        }
+    }
+}
+
+struct SoilTypesSection: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text(NSLocalizedString("help.soils.title", comment: "Soil types title"))
+                .font(.title2)
+                .bold()
+            
+            Text(NSLocalizedString("help.soils.description", comment: "Soil types description"))
+                .fixedSize(horizontal: false, vertical: true)
+            
+            ScrollView {
+                VStack(spacing: 16) {
+                    ForEach([
+                        "histosols", "mollisols", "alfisols", "oxisols",
+                        "vertisols", "spodosols", "aridisols", "entisols",
+                        "inceptisols", "ultisols"
+                    ], id: \.self) { soilType in
+                        GroupBox(label: Text(NSLocalizedString("help.soils.\(soilType).title", comment: "Soil type title")).bold()) {
+                            Text(NSLocalizedString("help.soils.\(soilType).description", comment: "Soil type description"))
+                                .padding(.vertical)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct SoilHorizonsSection: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text(NSLocalizedString("help.horizons.title", comment: "Soil horizons title"))
+                .font(.title2)
+                .bold()
+            
+            Text(NSLocalizedString("help.horizons.description", comment: "Soil horizons description"))
+                .fixedSize(horizontal: false, vertical: true)
+            
+            ScrollView {
+                VStack(spacing: 16) {
+                    ForEach(["o", "a", "e", "b", "c", "r"], id: \.self) { horizon in
+                        GroupBox(label: Text(NSLocalizedString("help.horizons.\(horizon).title", comment: "Horizon title")).bold()) {
+                            Text(NSLocalizedString("help.horizons.\(horizon).description", comment: "Horizon description"))
+                                .padding(.vertical)
+                        }
+                    }
+                    
+                    GroupBox(label: Text(NSLocalizedString("help.horizons.importance.title", comment: "Importance title")).bold()) {
+                        Text(NSLocalizedString("help.horizons.importance.text", comment: "Importance text"))
+                            .padding(.vertical)
+                    }
+                }
             }
         }
     }

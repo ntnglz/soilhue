@@ -76,7 +76,7 @@ struct AnalysisResultsView: View {
                 // Botones secundarios
                 HStack(spacing: 12) {
                     Button(action: { 
-                        selectedHelpSection = 1
+                        selectedHelpSection = 5
                         showHelp = true 
                     }) {
                         HStack {
