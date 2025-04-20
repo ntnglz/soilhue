@@ -58,12 +58,22 @@ struct ResultView: View {
                                 .font(.headline)
                                 .padding(.horizontal)
                             
-                            Map(coordinateRegion: .constant(region), annotationItems: [LocationPin(coordinate: location.coordinate)]) { pin in
-                                MapMarker(coordinate: pin.coordinate, tint: .red)
+                            if #available(iOS 17.0, *) {
+                                Map(position: .constant(MapCameraPosition.region(region))) {
+                                    Marker("Ubicación de la muestra", coordinate: location.coordinate)
+                                        .tint(.red)
+                                }
+                                .frame(height: 200)
+                                .cornerRadius(12)
+                                .padding(.horizontal)
+                            } else {
+                                Map(coordinateRegion: .constant(region), annotationItems: [LocationPin(coordinate: location.coordinate)]) { pin in
+                                    MapMarker(coordinate: pin.coordinate, tint: .red)
+                                }
+                                .frame(height: 200)
+                                .cornerRadius(12)
+                                .padding(.horizontal)
                             }
-                            .frame(height: 200)
-                            .cornerRadius(12)
-                            .padding(.horizontal)
                             
                             LocationDetailsView(location: location)
                         }

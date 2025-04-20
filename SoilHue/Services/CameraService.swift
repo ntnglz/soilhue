@@ -115,8 +115,6 @@ class CameraService: NSObject, ObservableObject {
             preset = .hd1280x720
         case .high:
             preset = .hd1920x1080
-        default:
-            throw CameraError.resolutionNotSupported
         }
         
         guard session.canSetSessionPreset(preset) else {
@@ -269,7 +267,8 @@ class CameraService: NSObject, ObservableObject {
         }
         
         func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-            if let error = error {
+            if error != nil {
+                print("Error al capturar foto: \(error?.localizedDescription ?? "Error desconocido")")
                 completion(.failure(.captureError))
                 return
             }
@@ -287,7 +286,7 @@ class CameraService: NSObject, ObservableObject {
 
 // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
 extension CameraService: AVCaptureVideoDataOutputSampleBufferDelegate {
-    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+    nonisolated func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         guard let imageBuffer = sampleBuffer.imageBuffer else { return }
         
         let ciImage = CIImage(cvImageBuffer: imageBuffer)
@@ -296,7 +295,7 @@ extension CameraService: AVCaptureVideoDataOutputSampleBufferDelegate {
         let image = UIImage(cgImage: cgImage)
         
         Task { @MainActor in
-            streamContinuation?.yield(image)
+            self.streamContinuation?.yield(image)
         }
     }
 }

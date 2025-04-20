@@ -120,9 +120,7 @@ struct CameraCaptureView: View {
         } message: {
             Text(alertMessage)
         }
-        .onChange(of: locationService.authorizationStatus) { _ in
-            updateLocationStatus()
-        }
+        .modifier(LocationStatusChangeModifier(locationService: locationService, updateStatus: updateLocationStatus))
     }
     
     private func updateLocationStatus() {
@@ -168,6 +166,24 @@ struct CameraCaptureView: View {
         alertTitle = title
         alertMessage = message
         showingAlert = true
+    }
+    
+    // Modifier para manejar los cambios de estado de localización
+    private struct LocationStatusChangeModifier: ViewModifier {
+        let locationService: LocationService
+        let updateStatus: () -> Void
+        
+        func body(content: Content) -> some View {
+            if #available(iOS 17.0, *) {
+                content.onChange(of: locationService.authorizationStatus) { _, _ in
+                    updateStatus()
+                }
+            } else {
+                content.onChange(of: locationService.authorizationStatus) { _ in
+                    updateStatus()
+                }
+            }
+        }
     }
 }
 

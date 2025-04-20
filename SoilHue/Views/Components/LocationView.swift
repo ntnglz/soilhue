@@ -14,11 +14,21 @@ struct LocationView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            Map(coordinateRegion: .constant(MKCoordinateRegion(
-                center: location.coordinate,
-                span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-            )), annotationItems: [LocationAnnotation(location: location)]) { annotation in
-                MapMarker(coordinate: annotation.coordinate, tint: .red)
+            if #available(iOS 17.0, *) {
+                Map(position: .constant(MapCameraPosition.region(MKCoordinateRegion(
+                    center: location.coordinate,
+                    span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                )))) {
+                    Marker("Ubicación", coordinate: location.coordinate)
+                        .tint(.red)
+                }
+            } else {
+                Map(coordinateRegion: .constant(MKCoordinateRegion(
+                    center: location.coordinate,
+                    span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                )), annotationItems: [LocationAnnotation(location: location)]) { annotation in
+                    MapMarker(coordinate: annotation.coordinate, tint: .red)
+                }
             }
             
             VStack(alignment: .leading, spacing: 4) {

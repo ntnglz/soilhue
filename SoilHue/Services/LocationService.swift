@@ -59,37 +59,43 @@ class LocationService: NSObject, ObservableObject {
 
 // MARK: - CLLocationManagerDelegate
 extension LocationService: CLLocationManagerDelegate {
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        authorizationStatus = manager.authorizationStatus
-        
-        if manager.authorizationStatus == .denied {
-            error = NSError(
-                domain: "LocationService",
-                code: 1,
-                userInfo: [NSLocalizedDescriptionKey: "El acceso a la ubicación está desactivado. Por favor, actívalo en Ajustes."]
-            )
+    nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        Task { @MainActor in
+            self.authorizationStatus = manager.authorizationStatus
+            
+            if manager.authorizationStatus == .denied {
+                self.error = NSError(
+                    domain: "LocationService",
+                    code: 1,
+                    userInfo: [NSLocalizedDescriptionKey: "El acceso a la ubicación está desactivado. Por favor, actívalo en Ajustes."]
+                )
+            }
         }
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         
-        currentLocation = location
-        
-        if let continuation = locationContinuation {
-            locationContinuation = nil
-            continuation.resume(returning: location)
-            stopUpdatingLocation()
+        Task { @MainActor in
+            self.currentLocation = location
+            
+            if let continuation = self.locationContinuation {
+                self.locationContinuation = nil
+                continuation.resume(returning: location)
+                self.stopUpdatingLocation()
+            }
         }
     }
     
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        self.error = error
-        
-        if let continuation = locationContinuation {
-            locationContinuation = nil
-            continuation.resume(throwing: error)
-            stopUpdatingLocation()
+    nonisolated func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        Task { @MainActor in
+            self.error = error
+            
+            if let continuation = self.locationContinuation {
+                self.locationContinuation = nil
+                continuation.resume(throwing: error)
+                self.stopUpdatingLocation()
+            }
         }
     }
 } 
