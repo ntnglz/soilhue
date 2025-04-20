@@ -20,9 +20,12 @@ struct ImageSelectionAreaView: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                 } else {
-                    Text("Arrastra para seleccionar un área o pulsa Analizar para procesar la imagen completa")
+                    Text("Arrastra para seleccionar un área\no pulsa Analizar para procesar la imagen completa")
                         .font(.caption)
                         .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.horizontal)
                 }
             case .polygon:
                 PolygonSelectionView(image: image, polygonPoints: $polygonPoints)
@@ -35,9 +38,12 @@ struct ImageSelectionAreaView: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                 } else {
-                    Text("Toca para crear un polígono o pulsa Analizar para procesar la imagen completa")
+                    Text("Toca para crear un polígono\no pulsa Analizar para procesar la imagen completa")
                         .font(.caption)
                         .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.horizontal)
                 }
             }
         }

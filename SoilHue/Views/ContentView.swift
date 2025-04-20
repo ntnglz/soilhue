@@ -104,17 +104,17 @@ struct ContentView: View {
             mainContent
                 .navigationTitle("SoilHue")
                 .navigationBarTitleDisplayMode(.inline)
-                .toolbar(id: "mainToolbar") {
-                    ToolbarItem(id: "settingsButton", placement: .primaryAction) {
-                        Button(action: { showSettings = true }) {
-                            Image(systemName: "gear")
-                        }
-                    }
-                    
-                    if selectedImage != nil {
-                        ToolbarItem(id: "exportButton", placement: .primaryAction) {
-                            Button(action: { showExport = true }) {
-                                Image(systemName: "square.and.arrow.up")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        HStack(spacing: 16) {
+                            if selectedImage != nil {
+                                Button(action: { showExport = true }) {
+                                    Image(systemName: "square.and.arrow.up")
+                                }
+                            }
+                            
+                            Button(action: { showSettings = true }) {
+                                Image(systemName: "gear")
                             }
                         }
                     }
