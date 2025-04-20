@@ -64,8 +64,7 @@ struct SoilAnalysis: Identifiable, Codable {
     
     private enum CodingKeys: String, CodingKey {
         case id, timestamp, imageData, notes, tags
-        case red, green, blue
-        case locationInfo
+        case locationData = "locationInfo"
         case munsellColor, soilClassification, soilDescription
         case calibrationInfo, environmentalConditions
     }
@@ -80,7 +79,8 @@ struct SoilAnalysis: Identifiable, Codable {
         tags = try container.decode([String].self, forKey: .tags)
         
         // Decode location if present
-        if let locationData = try container.decodeIfPresent(LocationData.self, forKey: .locationInfo) {
+        if let locationData = try container.decodeIfPresent(LocationData.self, forKey: .locationData) {
+            print("DEBUG: Decodificando localización - lat: \(locationData.latitude), lon: \(locationData.longitude)")
             locationInfo = CLLocation(
                 coordinate: CLLocationCoordinate2D(
                     latitude: locationData.latitude,
@@ -93,6 +93,7 @@ struct SoilAnalysis: Identifiable, Codable {
             )
         } else {
             locationInfo = nil
+            print("DEBUG: No se encontró información de localización en el JSON")
         }
         
         munsellColor = try container.decodeIfPresent(String.self, forKey: .munsellColor)
@@ -113,15 +114,11 @@ struct SoilAnalysis: Identifiable, Codable {
         
         // Encode location if present
         if let location = locationInfo {
-            let locationData = LocationData(
-                latitude: location.coordinate.latitude,
-                longitude: location.coordinate.longitude,
-                altitude: location.altitude,
-                horizontalAccuracy: location.horizontalAccuracy,
-                verticalAccuracy: location.verticalAccuracy,
-                timestamp: location.timestamp
-            )
-            try container.encode(locationData, forKey: .locationInfo)
+            print("DEBUG: Codificando localización - lat: \(location.coordinate.latitude), lon: \(location.coordinate.longitude)")
+            let locationData = LocationData(from: location)
+            try container.encode(locationData, forKey: .locationData)
+        } else {
+            print("DEBUG: No hay localización para codificar")
         }
         
         try container.encodeIfPresent(munsellColor, forKey: .munsellColor)
@@ -133,13 +130,22 @@ struct SoilAnalysis: Identifiable, Codable {
 }
 
 // MARK: - Location Data Structure
-private struct LocationData: Codable {
+struct LocationData: Codable {
     let latitude: CLLocationDegrees
     let longitude: CLLocationDegrees
     let altitude: CLLocationDistance
     let horizontalAccuracy: CLLocationAccuracy
     let verticalAccuracy: CLLocationAccuracy
     let timestamp: Date
+    
+    init(from location: CLLocation) {
+        self.latitude = location.coordinate.latitude
+        self.longitude = location.coordinate.longitude
+        self.altitude = location.altitude
+        self.horizontalAccuracy = location.horizontalAccuracy
+        self.verticalAccuracy = location.verticalAccuracy
+        self.timestamp = location.timestamp
+    }
 }
 
 // MARK: - Estructuras de Soporte

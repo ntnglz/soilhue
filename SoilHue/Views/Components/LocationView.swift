@@ -5,30 +5,35 @@ import CoreLocation
 /// Vista que muestra un mapa y detalles de una ubicación
 struct LocationView: View {
     let location: CLLocation
-    @Binding var region: MKCoordinateRegion
+    @State private var region: MKCoordinateRegion
     
-    init(location: CLLocation, region: Binding<MKCoordinateRegion>) {
+    init(location: CLLocation) {
         self.location = location
-        self._region = region
+        print("DEBUG: LocationView - Inicializando con ubicación: \(location.coordinate)")
+        _region = State(initialValue: MKCoordinateRegion(
+            center: location.coordinate,
+            span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+        ))
     }
     
     var body: some View {
         VStack(spacing: 0) {
             if #available(iOS 17.0, *) {
-                Map(position: .constant(MapCameraPosition.region(MKCoordinateRegion(
-                    center: location.coordinate,
-                    span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-                )))) {
+                Map {
                     Marker("Ubicación", coordinate: location.coordinate)
                         .tint(.red)
                 }
-            } else {
-                Map(coordinateRegion: .constant(MKCoordinateRegion(
-                    center: location.coordinate,
-                    span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-                )), annotationItems: [LocationAnnotation(location: location)]) { annotation in
-                    MapMarker(coordinate: annotation.coordinate, tint: .red)
+                .mapStyle(.standard)
+                .mapControls {
+                    MapCompass()
+                    MapScaleView()
                 }
+                .frame(height: 200)
+            } else {
+                Map(coordinateRegion: $region, annotationItems: [location]) { location in
+                    MapMarker(coordinate: location.coordinate, tint: .red)
+                }
+                .frame(height: 200)
             }
             
             VStack(alignment: .leading, spacing: 4) {
@@ -70,10 +75,11 @@ struct LocationView: View {
             .padding(8)
             .background(.ultraThinMaterial)
         }
-        .onAppear {
-            DispatchQueue.main.async {
+        .onChange(of: location) { newLocation in
+            print("DEBUG: LocationView - Actualizando región para nueva ubicación: \(newLocation.coordinate)")
+            withAnimation {
                 region = MKCoordinateRegion(
-                    center: location.coordinate,
+                    center: newLocation.coordinate,
                     span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
                 )
             }
@@ -81,13 +87,9 @@ struct LocationView: View {
     }
 }
 
-/// Modelo para representar una anotación en el mapa
-private struct LocationAnnotation: Identifiable {
-    let id = UUID()
-    let location: CLLocation
-    
-    var coordinate: CLLocationCoordinate2D {
-        location.coordinate
+extension CLLocation: Identifiable {
+    public var id: String {
+        "\(coordinate.latitude),\(coordinate.longitude)"
     }
 }
 
@@ -99,11 +101,7 @@ private struct LocationAnnotation: Identifiable {
             horizontalAccuracy: 10,
             verticalAccuracy: 10,
             timestamp: Date()
-        ),
-        region: .constant(MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
-            span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-        ))
+        )
     )
     .frame(height: 200)
     .cornerRadius(12)

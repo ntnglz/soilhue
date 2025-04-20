@@ -137,7 +137,7 @@ struct ContentView: View {
                     get: { viewModel.currentSample?.location },
                     set: { location in
                         if viewModel.currentSample == nil {
-                            viewModel.addSample(image: selectedImage ?? UIImage())
+                            viewModel.addSample(image: selectedImage ?? UIImage(), location: location)
                         }
                         viewModel.currentSample?.location = location
                     }

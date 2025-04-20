@@ -45,7 +45,16 @@ class SoilSampleViewModel: ObservableObject {
     @Published var samples: [SoilSample] = []
     
     /// Muestra de suelo actualmente seleccionada o en proceso de análisis.
-    @Published var currentSample: SoilSample?
+    @Published var currentSample: SoilSample? {
+        didSet {
+            print("DEBUG: SoilSampleViewModel - currentSample actualizado")
+            if let locationInfo = currentSample?.location {
+                print("DEBUG: SoilSampleViewModel - Ubicación disponible: \(locationInfo.coordinate)")
+            } else {
+                print("DEBUG: SoilSampleViewModel - No hay ubicación disponible")
+            }
+        }
+    }
     
     /// Resultado del análisis actual
     @Published var analysisResult: SoilAnalysisResult?
@@ -72,10 +81,15 @@ class SoilSampleViewModel: ObservableObject {
     /// - Parameters:
     ///   - image: Imagen capturada de la muestra de suelo.
     ///   - location: Ubicación donde se capturó la muestra (opcional).
-    func addSample(image: UIImage, location: CLLocation? = nil) {
-        let sample = SoilSample(image: image, location: location)
-        samples.append(sample)
-        currentSample = sample
+    func addSample(image: UIImage, location: CLLocation?) {
+        print("DEBUG: SoilSampleViewModel - Añadiendo nueva muestra")
+        if let location = location {
+            print("DEBUG: SoilSampleViewModel - Con ubicación: \(location.coordinate)")
+        }
+        currentSample = SoilSample(
+            image: image,
+            location: location
+        )
     }
     
     /// Analiza una muestra de suelo utilizando el servicio de análisis de color.
