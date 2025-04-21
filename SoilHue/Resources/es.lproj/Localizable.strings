@@ -522,4 +522,54 @@
 "error.export.create.file" = "Error al crear el archivo de exportación";
 "error.export.write.data" = "Error al escribir los datos";
 "error.export.invalid.format" = "Formato de exportación no válido";
-"error.export.no.data" = "No hay datos para exportar"; 
+"error.export.no.data" = "No hay datos para exportar";
+
+/* Help View */
+"help.intro.title" = "Bienvenido a SoilHue";
+"help.intro.description" = "SoilHue es una aplicación diseñada para analizar el color del suelo usando el sistema Munsell, un estándar internacional para la descripción del color.";
+"help.intro.feature.capture" = "Captura o selecciona imágenes de muestras de suelo";
+"help.intro.feature.calibration" = "Calibra la cámara para colores precisos";
+"help.intro.feature.analysis" = "Analiza áreas específicas de la muestra";
+"help.intro.feature.export" = "Guarda y exporta resultados";
+
+"help.calibration.process.title" = "Proceso de Calibración";
+"help.calibration.step.1" = "Accede a la calibración desde el botón 'Calibrar Cámara'";
+"help.calibration.step.2" = "Usa la tarjeta de calibración básica incluida o un ColorChecker";
+"help.calibration.step.3" = "Alinea la tarjeta con las guías en pantalla";
+"help.calibration.step.4" = "Mantén la tarjeta paralela a la cámara";
+"help.calibration.step.5" = "Asegura buenas condiciones de iluminación";
+"help.calibration.step.6" = "Toma la foto cuando las guías estén alineadas";
+
+"help.calibration.limitations.title" = "Limitaciones de la Calibración";
+"help.calibration.limitation.basic" = "La tarjeta básica proporciona una calibración aproximada";
+"help.calibration.limitation.professional" = "Para resultados profesionales, se recomienda el X-Rite ColorChecker";
+"help.calibration.limitation.lighting" = "La precisión puede variar según las condiciones de iluminación";
+"help.calibration.limitation.recalibration" = "Se recomienda recalibrar si cambian las condiciones de iluminación";
+
+"help.analysis.capture.title" = "Captura de Muestra";
+"help.analysis.step.1" = "Selecciona 'Nueva Muestra' o 'Galería'";
+"help.analysis.step.2" = "Asegúrate de que la cámara esté calibrada";
+"help.analysis.step.3" = "Captura la imagen o selecciona una existente";
+"help.analysis.step.4" = "Selecciona el área a analizar usando modo rectángulo o polígono";
+
+"help.analysis.practices.title" = "Mejores Prácticas";
+"help.analysis.practice.light" = "Usa luz natural difusa cuando sea posible";
+"help.analysis.practice.shadows" = "Evita sombras y reflejos directos";
+"help.analysis.practice.clean" = "Mantén la muestra de suelo limpia y seca";
+"help.analysis.practice.surface" = "Usa una superficie plana";
+"help.analysis.practice.calibration" = "Calibra la cámara bajo las mismas condiciones de iluminación";
+
+"help.data.save.title" = "Guardar Análisis";
+"help.data.save.step.1" = "Presiona 'Guardar Análisis' después del análisis";
+"help.data.save.step.2" = "Añade notas y etiquetas (opcional)";
+"help.data.save.step.3" = "La ubicación se guarda automáticamente";
+
+"help.data.export.title" = "Exportar Datos";
+"help.data.export.step.1" = "Accede a la sección de exportación";
+"help.data.export.step.2" = "Selecciona el formato deseado";
+"help.data.export.step.3" = "Comparte o guarda el archivo";
+
+"help.troubleshooting.problems.title" = "Problemas Comunes";
+"help.troubleshooting.calibration" = "Calibración no detectada: recalibra la cámara";
+"help.troubleshooting.results" = "Resultados inconsistentes: verifica la iluminación";
+"help.troubleshooting.camera" = "Error de cámara: verifica los permisos"; 

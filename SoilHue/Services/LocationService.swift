@@ -19,6 +19,20 @@ class LocationService: NSObject, ObservableObject {
     /// Continuación para la ubicación
     private var locationContinuation: CheckedContinuation<CLLocation, Error>?
     
+    #if DEBUG
+    /// Coordenadas de Apple Park para modo DEBUG
+    private let appleParkLocation = CLLocation(
+        coordinate: CLLocationCoordinate2D(
+            latitude: 37.334722,
+            longitude: -122.008889
+        ),
+        altitude: 25.0, // Altura aproximada de Apple Park
+        horizontalAccuracy: 10.0,
+        verticalAccuracy: 10.0,
+        timestamp: Date()
+    )
+    #endif
+    
     override init() {
         super.init()
         locationManager.delegate = self
@@ -32,6 +46,10 @@ class LocationService: NSObject, ObservableObject {
     
     /// Obtiene la ubicación actual
     func getCurrentLocation() async throws -> CLLocation {
+        #if DEBUG
+        // En modo DEBUG, devolver siempre la ubicación de Apple Park
+        return appleParkLocation
+        #else
         // Si ya tenemos autorización y una ubicación reciente, la devolvemos
         if authorizationStatus == .authorizedWhenInUse || authorizationStatus == .authorizedAlways,
            let location = currentLocation,
@@ -49,6 +67,7 @@ class LocationService: NSObject, ObservableObject {
             locationContinuation = continuation
             locationManager.startUpdatingLocation()
         }
+        #endif
     }
     
     /// Detiene la actualización de ubicación
@@ -77,6 +96,16 @@ extension LocationService: CLLocationManagerDelegate {
         guard let location = locations.last else { return }
         
         Task { @MainActor in
+            #if DEBUG
+            // En modo DEBUG, ignoramos las actualizaciones de ubicación real
+            self.currentLocation = appleParkLocation
+            
+            if let continuation = self.locationContinuation {
+                self.locationContinuation = nil
+                continuation.resume(returning: appleParkLocation)
+                self.stopUpdatingLocation()
+            }
+            #else
             self.currentLocation = location
             
             if let continuation = self.locationContinuation {
@@ -84,6 +113,7 @@ extension LocationService: CLLocationManagerDelegate {
                 continuation.resume(returning: location)
                 self.stopUpdatingLocation()
             }
+            #endif
         }
     }
     

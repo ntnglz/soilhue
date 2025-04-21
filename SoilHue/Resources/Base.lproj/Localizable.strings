@@ -381,4 +381,54 @@
 "help.horizons.r.title" = "R Horizon";
 "help.horizons.r.description" = "Bedrock: Unaltered original material.";
 "help.horizons.importance.title" = "Importance of Horizons";
-"help.horizons.importance.text" = "• Indicate soil development\n• Reflect environmental conditions\n• Help in soil classification\n• Guide land use decisions"; 
+"help.horizons.importance.text" = "• Indicate soil development\n• Reflect environmental conditions\n• Help in soil classification\n• Guide land use decisions";
+
+/* Help View */
+"help.intro.title" = "Welcome to SoilHue";
+"help.intro.description" = "SoilHue is an app designed to analyze soil color using the Munsell system, an international standard for color description.";
+"help.intro.feature.capture" = "Capture or select soil sample images";
+"help.intro.feature.calibration" = "Calibrate the camera for accurate colors";
+"help.intro.feature.analysis" = "Analyze specific areas of the sample";
+"help.intro.feature.export" = "Save and export results";
+
+"help.calibration.process.title" = "Calibration Process";
+"help.calibration.step.1" = "Access calibration from the 'Calibrate Camera' button";
+"help.calibration.step.2" = "Use the included basic calibration card or a ColorChecker";
+"help.calibration.step.3" = "Align the card with the on-screen guides";
+"help.calibration.step.4" = "Keep the card parallel to the camera";
+"help.calibration.step.5" = "Ensure good lighting conditions";
+"help.calibration.step.6" = "Take the photo when guides are aligned";
+
+"help.calibration.limitations.title" = "Calibration Limitations";
+"help.calibration.limitation.basic" = "The basic card provides approximate calibration";
+"help.calibration.limitation.professional" = "For professional results, X-Rite ColorChecker is recommended";
+"help.calibration.limitation.lighting" = "Accuracy may vary depending on lighting conditions";
+"help.calibration.limitation.recalibration" = "Recalibration is recommended if lighting conditions change";
+
+"help.analysis.capture.title" = "Sample Capture";
+"help.analysis.step.1" = "Select 'New Sample' or 'Gallery'";
+"help.analysis.step.2" = "Make sure the camera is calibrated";
+"help.analysis.step.3" = "Capture the image or select an existing one";
+"help.analysis.step.4" = "Select the area to analyze using rectangle or polygon mode";
+
+"help.analysis.practices.title" = "Best Practices";
+"help.analysis.practice.light" = "Use diffused natural light when possible";
+"help.analysis.practice.shadows" = "Avoid shadows and direct reflections";
+"help.analysis.practice.clean" = "Keep the soil sample clean and dry";
+"help.analysis.practice.surface" = "Use a flat surface";
+"help.analysis.practice.calibration" = "Calibrate the camera under the same lighting conditions";
+
+"help.data.save.title" = "Save Analysis";
+"help.data.save.step.1" = "Press 'Save Analysis' after analysis";
+"help.data.save.step.2" = "Add notes and tags (optional)";
+"help.data.save.step.3" = "Location is saved automatically";
+
+"help.data.export.title" = "Export Data";
+"help.data.export.step.1" = "Access the export section";
+"help.data.export.step.2" = "Select desired format";
+"help.data.export.step.3" = "Share or save the file";
+
+"help.troubleshooting.problems.title" = "Common Problems";
+"help.troubleshooting.calibration" = "Calibration not detected: recalibrate camera";
+"help.troubleshooting.results" = "Inconsistent results: verify lighting";
+"help.troubleshooting.camera" = "Camera error: check permissions"; 
