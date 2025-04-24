@@ -1,8 +1,8 @@
 # Configuración App Store - SoilHue
 
 ## Categorías
-- **Categoría Principal**: Utilities (Utilidades)
-- **Categoría Secundaria**: Education (Educación)
+- **Categoría Principal**: Education (Educación)
+- **Categoría Secundaria**: Utilities (Utilidades)
 
 ## Clasificación de Edad
 - **Clasificación**: 4+ (Todos los públicos)

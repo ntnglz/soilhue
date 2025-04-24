@@ -31,124 +31,126 @@ struct ImageAnalysisView: View {
     @State private var showSuccess = false
     
     var body: some View {
-        ScrollViewReader { proxy in
-            ScrollView {
-                VStack(spacing: 24) {
-                    // Selector de modo
-                    SelectionModePickerView(selectionMode: $selectionMode)
-                        .padding(.horizontal)
-                    
-                    // Imagen y selección
-                    ImageSelectionAreaView(
-                        image: image,
-                        selectionMode: selectionMode,
-                        selectionRect: $selectionRect,
-                        polygonPoints: $polygonPoints
-                    )
-                    .frame(height: 300)
-                    .padding(.bottom, 40) // Espacio extra para la leyenda
-                    
-                    // Botón de análisis
-                    AnalysisButtonView(
-                        isAnalyzing: $isAnalyzing,
-                        isEnabled: isAnalysisEnabled,
-                        onAnalyze: analyze
-                    )
-                    .padding(.horizontal)
-                    
-                    if let locationInfo = viewModel.currentSample?.location {
-                        Section(NSLocalizedString("analysis.location", comment: "Location section title")) {
-                            LocationView(location: locationInfo)
-                                .frame(height: 100)
-                                .clipShape(RoundedRectangle(cornerRadius: 12))
-                                .padding(.horizontal)
-                            
-                            VStack(alignment: .leading, spacing: 4) {
-                                HStack {
-                                    Label(String(format: NSLocalizedString("analysis.latitude", comment: "Latitude format"), locationInfo.coordinate.latitude), systemImage: "location.north.fill")
-                                        .foregroundColor(.blue)
-                                    Spacer()
-                                    Label(String(format: NSLocalizedString("analysis.longitude", comment: "Longitude format"), locationInfo.coordinate.longitude), systemImage: "location.fill")
-                                        .foregroundColor(.blue)
-                                }
-                                
-                                HStack {
-                                    Label(String(format: NSLocalizedString("analysis.altitude", comment: "Altitude format"), locationInfo.altitude), systemImage: "arrow.up.forward")
-                                        .foregroundColor(.blue)
-                                    Spacer()
-                                    Label(String(format: NSLocalizedString("analysis.accuracy", comment: "Accuracy format"), locationInfo.horizontalAccuracy), systemImage: "scope")
-                                        .foregroundColor(.blue)
-                                }
-                            }
-                            .font(.caption)
+        NavigationStack {
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack(spacing: 24) {
+                        // Selector de modo
+                        SelectionModePickerView(selectionMode: $selectionMode)
                             .padding(.horizontal)
+                        
+                        // Imagen y selección
+                        ImageSelectionAreaView(
+                            image: image,
+                            selectionMode: selectionMode,
+                            selectionRect: $selectionRect,
+                            polygonPoints: $polygonPoints
+                        )
+                        .frame(height: 300)
+                        .padding(.bottom, 40) // Espacio extra para la leyenda
+                        
+                        // Botón de análisis
+                        AnalysisButtonView(
+                            isAnalyzing: $isAnalyzing,
+                            isEnabled: isAnalysisEnabled,
+                            onAnalyze: analyze
+                        )
+                        .padding(.horizontal)
+                        
+                        if let locationInfo = viewModel.currentSample?.location {
+                            Section(NSLocalizedString("analysis.location", comment: "Location section title")) {
+                                LocationView(location: locationInfo)
+                                    .frame(height: 100)
+                                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                                    .padding(.horizontal)
+                                
+                                VStack(alignment: .leading, spacing: 4) {
+                                    HStack {
+                                        Label(String(format: NSLocalizedString("analysis.latitude", comment: "Latitude format"), locationInfo.coordinate.latitude), systemImage: "location.north.fill")
+                                            .foregroundColor(.blue)
+                                        Spacer()
+                                        Label(String(format: NSLocalizedString("analysis.longitude", comment: "Longitude format"), locationInfo.coordinate.longitude), systemImage: "location.fill")
+                                            .foregroundColor(.blue)
+                                    }
+                                    
+                                    HStack {
+                                        Label(String(format: NSLocalizedString("analysis.altitude", comment: "Altitude format"), locationInfo.altitude), systemImage: "arrow.up.forward")
+                                            .foregroundColor(.blue)
+                                        Spacer()
+                                        Label(String(format: NSLocalizedString("analysis.accuracy", comment: "Accuracy format"), locationInfo.horizontalAccuracy), systemImage: "scope")
+                                            .foregroundColor(.blue)
+                                    }
+                                }
+                                .font(.caption)
+                                .padding(.horizontal)
+                            }
+                        }
+                        
+                        // Resultados del análisis
+                        if let sample = viewModel.currentSample,
+                           let munsellColor = sample.munsellColor,
+                           !munsellColor.isEmpty {
+                            AnalysisResultsView(
+                                image: sample.image,
+                                munsellNotation: munsellColor,
+                                soilClassification: sample.soilClassification ?? "",
+                                soilDescription: sample.soilDescription ?? "",
+                                selectionArea: SelectionArea(
+                                    type: .rectangle,
+                                    coordinates: .rectangle(CGRect(x: 0, y: 0, width: 1, height: 1))
+                                ),
+                                wasCalibrated: colorAnalysisService.isCalibrated,
+                                correctionFactors: colorAnalysisService.correctionFactors,
+                                location: sample.location,
+                                onNewSample: onNewSample
+                            )
+                            .transition(.opacity.combined(with: .move(edge: .bottom)))
+                            .id("results")
                         }
                     }
-                    
-                    // Resultados del análisis
+                    .padding(.vertical, 24)
+                }
+                .onAppear {
+                    scrollProxy = proxy
                     if let sample = viewModel.currentSample,
-                       let munsellColor = sample.munsellColor,
-                       !munsellColor.isEmpty {
-                        AnalysisResultsView(
-                            image: sample.image,
-                            munsellNotation: munsellColor,
-                            soilClassification: sample.soilClassification ?? "",
-                            soilDescription: sample.soilDescription ?? "",
-                            selectionArea: SelectionArea(
-                                type: .rectangle,
-                                coordinates: .rectangle(CGRect(x: 0, y: 0, width: 1, height: 1))
-                            ),
-                            wasCalibrated: colorAnalysisService.isCalibrated,
-                            correctionFactors: colorAnalysisService.correctionFactors,
-                            location: sample.location,
-                            onNewSample: onNewSample
+                       let location = sample.location {
+                        mapRegion = MKCoordinateRegion(
+                            center: location.coordinate,
+                            span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
                         )
-                        .transition(.opacity.combined(with: .move(edge: .bottom)))
-                        .id("results")
                     }
                 }
-                .padding(.vertical, 24)
             }
-            .onAppear {
-                scrollProxy = proxy
-                if let sample = viewModel.currentSample,
-                   let location = sample.location {
-                    mapRegion = MKCoordinateRegion(
-                        center: location.coordinate,
-                        span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-                    )
-                }
+            .sheet(isPresented: $showHelp) {
+                HelpView(initialSection: 1)
             }
-        }
-        .sheet(isPresented: $showHelp) {
-            HelpView(initialSection: 1)
-        }
-        .sheet(isPresented: $showingSaveDialog) {
-            SaveAnalysisView(
-                notes: $notes,
-                tags: $tags,
-                onSave: {
-                    Task {
-                        await saveAnalysis()
+            .sheet(isPresented: $showingSaveDialog) {
+                SaveAnalysisView(
+                    notes: $notes,
+                    tags: $tags,
+                    onSave: {
+                        Task {
+                            await saveAnalysis()
+                        }
                     }
-                }
-            )
-        }
-        .alert(NSLocalizedString("analysis.error", comment: "Error alert title"), isPresented: $showingErrorAlert) {
-            Button(NSLocalizedString("analysis.calibrate.now", comment: "Calibrate now button")) {
-                showCalibration = true
+                )
             }
-            Button("OK", role: .cancel) { }
-        } message: {
-            Text(errorMessage)
-        }
-        .alert(NSLocalizedString("analysis.success", comment: "Success alert title"), isPresented: $showingSaveAlert) {
-            Button("OK", role: .cancel) { }
-        } message: {
-            Text(NSLocalizedString("analysis.saved", comment: "Analysis saved message"))
-        }
-        .sheet(isPresented: $showCalibration) {
-            CalibrationView()
+            .alert(NSLocalizedString("analysis.error", comment: "Error alert title"), isPresented: $showingErrorAlert) {
+                Button(NSLocalizedString("analysis.calibrate.now", comment: "Calibrate now button")) {
+                    showCalibration = true
+                }
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(errorMessage)
+            }
+            .alert(NSLocalizedString("analysis.success", comment: "Success alert title"), isPresented: $showingSaveAlert) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(NSLocalizedString("analysis.saved", comment: "Analysis saved message"))
+            }
+            .sheet(isPresented: $showCalibration) {
+                CalibrationView()
+            }
         }
     }
     

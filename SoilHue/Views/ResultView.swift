@@ -44,7 +44,7 @@ struct ResultView: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollViewReader { proxy in
                 ScrollView {
                     VStack(spacing: 20) {

@@ -336,6 +336,7 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "SoilHue necesita acceso a tu ubicación para registrar dónde se tomaron las muestras de suelo";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "SoilHue necesita acceso a tu biblioteca de fotos para guardar y acceder a las imágenes de muestras de suelo";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -375,6 +376,7 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "SoilHue necesita acceso a tu ubicación para registrar dónde se tomaron las muestras de suelo";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "SoilHue necesita acceso a tu biblioteca de fotos para guardar y acceder a las imágenes de muestras de suelo";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",

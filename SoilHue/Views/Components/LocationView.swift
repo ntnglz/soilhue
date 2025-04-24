@@ -75,7 +75,7 @@ struct LocationView: View {
             .padding(8)
             .background(.ultraThinMaterial)
         }
-        .onChange(of: location) { newLocation in
+        .onChange(of: location) { oldLocation, newLocation in
             print("DEBUG: LocationView - Actualizando región para nueva ubicación: \(newLocation.coordinate)")
             withAnimation {
                 region = MKCoordinateRegion(

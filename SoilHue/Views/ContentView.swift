@@ -243,7 +243,7 @@ struct ContentView: View {
     
     /// Contenido principal de la vista.
     var body: some View {
-        NavigationView {
+        NavigationStack {
             mainContent
                 .navigationTitle(NSLocalizedString("app.name", comment: "App name"))
                 .navigationBarTitleDisplayMode(.inline)

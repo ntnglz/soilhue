@@ -339,7 +339,7 @@
 "help.munsell.notation.title" = "Notation Format";
 "help.munsell.notation.example" = "Example: 10YR 6/4 means:\n• Hue: 10YR (Yellow-Red)\n• Value: 6 (Medium lightness)\n• Chroma: 4 (Medium saturation)";
 "help.munsell.importance.title" = "Importance in Soil Science";
-"help.munsell.importance.text" = "• Standardized color description\n• Indicates soil properties\n• Helps in soil classification\n• Useful for soil mapping";
+"help.munsell.importance.text" = "• Standardized color description\n• Indicates soil properties\n• Aids in soil classification\n• Useful for soil mapping";
 
 /* Soil Types Section */
 "help.soils.title" = "Soil Classification";
@@ -347,23 +347,23 @@
 "help.soils.histosols.title" = "Histosols";
 "help.soils.histosols.description" = "Organic soils with high organic matter content, typical of peat soils.";
 "help.soils.mollisols.title" = "Mollisols";
-"help.soils.mollisols.description" = "Dark, fertile soils rich in organic matter, typical of prairies.";
+"help.soils.mollisols.description" = "Dark, fertile soils rich in organic matter, typical of grasslands.";
 "help.soils.alfisols.title" = "Alfisols";
-"help.soils.alfisols.description" = "Soils with clay horizon, fertile, typical of forest regions.";
+"help.soils.alfisols.description" = "Soils with clay-rich subsoil, fertile, typical of forest regions.";
 "help.soils.oxisols.title" = "Oxisols";
-"help.soils.oxisols.description" = "Highly weathered soils from tropical regions, high in iron oxides.";
+"help.soils.oxisols.description" = "Highly weathered tropical soils, rich in iron oxides.";
 "help.soils.vertisols.title" = "Vertisols";
-"help.soils.vertisols.description" = "Clay soils that crack, with high content of expansive clay minerals.";
+"help.soils.vertisols.description" = "Clayey soils that crack, with high content of expansive clay minerals.";
 "help.soils.spodosols.title" = "Spodosols";
-"help.soils.spodosols.description" = "Acidic soils with iron and aluminum accumulation, typical of humid forests.";
+"help.soils.spodosols.description" = "Acidic soils with accumulation of iron and aluminum, typical of moist forests.";
 "help.soils.aridisols.title" = "Aridisols";
-"help.soils.aridisols.description" = "Soils from arid regions, with salt and carbonate accumulation.";
+"help.soils.aridisols.description" = "Soils of arid regions, with accumulation of salts and carbonates in the subsoil.";
 "help.soils.entisols.title" = "Entisols";
 "help.soils.entisols.description" = "Young soils with little horizon development, typical of recent deposits.";
 "help.soils.inceptisols.title" = "Inceptisols";
-"help.soils.inceptisols.description" = "Slightly developed soils with incipient horizons, typical of mountains.";
+"help.soils.inceptisols.description" = "Slightly developed soils with incipient horizons, typical of mountainous regions.";
 "help.soils.ultisols.title" = "Ultisols";
-"help.soils.ultisols.description" = "Acidic, highly weathered soils with clay horizon, typical of humid regions.";
+"help.soils.ultisols.description" = "Acidic, highly weathered soils with clay-rich subsoil, typical of humid regions.";
 
 /* Soil Horizons Section */
 "help.horizons.title" = "Soil Horizons";
@@ -371,17 +371,17 @@
 "help.horizons.o.title" = "O Horizon";
 "help.horizons.o.description" = "Organic horizon: Decomposing plant remains, high in organic matter.";
 "help.horizons.a.title" = "A Horizon";
-"help.horizons.a.description" = "Surface mineral horizon: Rich in organic matter, dark colored.";
+"help.horizons.a.description" = "Mineral surface horizon: Rich in organic matter, dark in color.";
 "help.horizons.e.title" = "E Horizon";
-"help.horizons.e.description" = "Eluviation horizon: Loss of materials by leaching, lighter colored.";
+"help.horizons.e.description" = "Eluviation horizon: Loss of materials through leaching, lighter in color.";
 "help.horizons.b.title" = "B Horizon";
-"help.horizons.b.description" = "Illuviation horizon: Accumulation of materials, often clay-rich.";
+"help.horizons.b.description" = "Illuviation horizon: Accumulation of materials, often rich in clay.";
 "help.horizons.c.title" = "C Horizon";
-"help.horizons.c.description" = "Parent material: Slightly altered bedrock or sediment.";
+"help.horizons.c.description" = "Parent material: Slightly altered rock or sediment.";
 "help.horizons.r.title" = "R Horizon";
-"help.horizons.r.description" = "Bedrock: Unaltered original material.";
+"help.horizons.r.description" = "Bedrock: Unaltered parent material.";
 "help.horizons.importance.title" = "Importance of Horizons";
-"help.horizons.importance.text" = "• Indicate soil development\n• Reflect environmental conditions\n• Help in soil classification\n• Guide land use decisions";
+"help.horizons.importance.text" = "• Indicate soil development\n• Reflect environmental conditions\n• Aid in soil classification\n• Guide land use decisions";
 
 /* Help View */
 "help.intro.title" = "Welcome to SoilHue";
@@ -431,4 +431,17 @@
 "help.troubleshooting.problems.title" = "Common Problems";
 "help.troubleshooting.calibration" = "Calibration not detected: recalibrate camera";
 "help.troubleshooting.results" = "Inconsistent results: verify lighting";
-"help.troubleshooting.camera" = "Camera error: check permissions"; 
+"help.troubleshooting.camera" = "Camera error: check permissions";
+
+// Error messages
+"error.title" = "Error";
+"error.generic" = "An error occurred: %@";
+"error.camera.permission.denied" = "No camera access. Please enable access in Settings.";
+"error.camera.capture" = "Error capturing photo";
+"error.camera.invalid.device" = "Invalid camera device";
+"error.camera.configuration" = "Error configuring camera";
+"error.camera.session.not.running" = "Camera session is not running";
+"error.camera.resolution.not.supported" = "Camera resolution not supported";
+"error.camera.invalid.resolution" = "Invalid camera resolution";
+"error.camera.no.permission" = "No permission to use camera";
+"error.camera.setup.failed" = "Error setting up camera"; 

@@ -140,7 +140,7 @@
 "Please calibrate the camera before taking samples." = "Please calibrate the camera before taking samples.";
 "Calibration card not detected" = "Calibration card not detected";
 "Position the calibration card in the frame" = "Position the calibration card in the frame";
-"calibration.title" = "Calibration";
+"calibration.title" = "Camera Calibration";
 "calibration.recalibrate" = "Recalibrate";
 "button.done" = "Done";
 
@@ -367,7 +367,7 @@
 "camera.error.setup.failed" = "Error setting up camera.";
 
 /* Color Analysis Service */
-"color.analysis.error.not.calibrated" = "Camera is not calibrated. Please calibrate before analyzing images.";
+"color.analysis.error.not.calibrated" = "The camera is not calibrated. Please calibrate before analyzing images.";
 
 /* Export Service */
 "export.error.create.file" = "Failed to create export file";
@@ -567,8 +567,8 @@
 "help.contact.title" = "Contact & Support";
 
 /* Calibration Status */
-"calibration.status.notCalibrated.title" = "Not calibrated";
-"calibration.status.notCalibrated.message" = "The camera needs to be calibrated for accurate results. Please calibrate the camera before continuing.";
+"calibration.status.notCalibrated.title" = "Not Calibrated";
+"calibration.status.notCalibrated.message" = "The camera is not calibrated. Please perform calibration for accurate results.";
 
 "calibration.status.calibrating.title" = "Calibrating";
 "calibration.status.calibrating.message" = "Please keep the calibration card in the frame and wait for the process to complete.";
@@ -576,4 +576,4 @@
 "calibration.status.calibrated.title" = "Calibrated";
 "calibration.status.calibrated.message" = "The camera is calibrated and ready to analyze soil samples.";
 
-"calibration.status.error.title" = "Calibration error";
+"calibration.status.error.title" = "Calibration Error";

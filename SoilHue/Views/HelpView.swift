@@ -11,7 +11,7 @@ struct HelpView: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section {
                     ForEach(0..<8) { index in

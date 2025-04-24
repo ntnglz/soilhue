@@ -19,7 +19,7 @@ struct ExportView: View {
     @State private var showShareSheet = false
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 Section(header: Text(NSLocalizedString("Export Format", comment: "Export format section header"))) {
                     Picker(NSLocalizedString("Export Format", comment: "Export format picker"), selection: $selectedFormat) {

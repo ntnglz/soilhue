@@ -155,7 +155,7 @@
 "Sample saved successfully" = "Muestra guardada correctamente";
 "Failed to save sample" = "Error al guardar la muestra";
 "analysis.area.selected" = "Área seleccionada: %d%% x %d%%";
-"analysis.drag.select" = "Arrastra para seleccionar un área";
+"analysis.drag.select" = "Arrastra para seleccionar un área\no toca Analizar para procesar toda la imagen";
 
 // Exportación
 "Export Data" = "Exportar Datos";
@@ -327,7 +327,7 @@
 "calibration.service.patch.green" = "Parche verde";
 "calibration.service.patch.blue" = "Parche azul";
 
-"calibration.service.log.start" = "Iniciando calibración...";
+"calibration.service.log.start" = "Iniciando procesamiento de calibración...";
 "calibration.service.log.detect" = "Detectando tarjeta de calibración...";
 "calibration.service.log.analyze" = "Analizando parches de color...";
 "calibration.service.log.complete" = "Calibración completada";
@@ -572,4 +572,80 @@
 "help.troubleshooting.problems.title" = "Problemas Comunes";
 "help.troubleshooting.calibration" = "Calibración no detectada: recalibra la cámara";
 "help.troubleshooting.results" = "Resultados inconsistentes: verifica la iluminación";
-"help.troubleshooting.camera" = "Error de cámara: verifica los permisos"; 
+"help.troubleshooting.camera" = "Error de cámara: verifica los permisos";
+
+"calibration.title" = "Calibración de Cámara";
+"calibration.status.notCalibrated.title" = "No Calibrado";
+"calibration.status.notCalibrated.message" = "La cámara no está calibrada. Por favor, realice la calibración para obtener resultados precisos.";
+"calibration.status.calibrating.title" = "Calibrando";
+"calibration.status.calibrating.message" = "Por favor, mantenga la tarjeta de calibración en el marco y espere a que se complete el proceso.";
+"calibration.status.calibrated.title" = "Calibrado";
+"calibration.status.calibrated.message" = "La cámara está calibrada y lista para analizar muestras de suelo.";
+"calibration.status.error.title" = "Error de calibración";
+
+"calibration.patch.dark.skin" = "Piel oscura";
+"calibration.patch.light.skin" = "Piel clara";
+"calibration.patch.blue.sky" = "Cielo azul";
+"calibration.patch.foliage" = "Follaje";
+"calibration.patch.blue.flower" = "Flor azul";
+"calibration.patch.bluish.green" = "Verde azulado";
+"calibration.patch.orange" = "Naranja";
+"calibration.patch.purplish.blue" = "Azul violáceo";
+"calibration.patch.moderate.red" = "Rojo moderado";
+"calibration.patch.purple" = "Púrpura";
+"calibration.patch.yellow.green" = "Verde amarillento";
+"calibration.patch.orange.yellow" = "Amarillo anaranjado";
+"calibration.patch.blue" = "Azul";
+"calibration.patch.green" = "Verde";
+"calibration.patch.red" = "Rojo";
+"calibration.patch.yellow" = "Amarillo";
+"calibration.patch.magenta" = "Magenta";
+"calibration.patch.cyan" = "Cian";
+"calibration.patch.white" = "Blanco";
+"calibration.patch.neutral.8" = "Neutro 8";
+"calibration.patch.neutral.6.5" = "Neutro 6.5";
+"calibration.patch.neutral.5" = "Neutro 5";
+"calibration.patch.neutral.3.5" = "Neutro 3.5";
+"calibration.patch.black" = "Negro";
+
+"calibration.quality.optimal" = "óptima";
+"calibration.quality.acceptable" = "aceptable";
+"calibration.quality.poor" = "pobre";
+"calibration.validation.result" = "Validación de calibración:\n- Calidad: %@\n- Error promedio: %@\n- Error máximo: %@\n- Colores problemáticos: %@\n- Dispositivo: %@";
+"calibration.validation.no.problems" = "ninguno";
+
+"color.analysis.error.not.calibrated" = "La cámara no está calibrada. Por favor, calibre antes de analizar imágenes.";
+
+/* Analysis */
+"analysis.drag.select" = "Arrastra para seleccionar un área\no toca Analizar para procesar toda la imagen";
+"analysis.notes" = "Notas";
+"analysis.tags" = "Etiquetas";
+"analysis.tags.placeholder" = "Separadas por comas";
+"analysis.save.title" = "Guardar Análisis";
+
+/* Calibration */
+"calibration.recalibrate" = "Recalibrar";
+"calibration.error.image.processing" = "No se pudo procesar la imagen";
+"calibration.error.insufficient.patches" = "No se detectaron suficientes parches de color";
+
+"calibration.log.start" = "Iniciando procesamiento de calibración...";
+"calibration.log.dimensions" = "Dimensiones de la imagen: %.0fx%.0f";
+"calibration.log.patch" = "Procesando parche %@:";
+"calibration.log.reference" = "  Referencia: R=%.3f, G=%.3f, B=%.3f";
+"calibration.log.measured" = "  Medido: R=%.3f, G=%.3f, B=%.3f";
+"calibration.log.factors" = "  Factores: R=%.3f, G=%.3f, B=%.3f";
+"calibration.log.valid.patches" = "Total de parches válidos: %d";
+
+/* Export */
+"export.csv.header" = "ID,Fecha,Notación Munsell,Clasificación,Descripción,Calibrado,Factores de Corrección,Latitud,Longitud,Altitud,Dirección,Notas,Etiquetas";
+"export.not.available" = "N/D";
+
+/* Service Messages */
+"service.error.generic" = "Ha ocurrido un error. Por favor, inténtelo de nuevo.";
+"service.error.network" = "Error de red. Por favor, compruebe su conexión.";
+"service.error.permission" = "Permiso denegado. Por favor, revise la configuración.";
+"service.error.storage" = "Error de almacenamiento. Por favor, compruebe el espacio disponible.";
+"service.error.invalid.data" = "Formato de datos no válido.";
+"service.error.not.found" = "Recurso no encontrado.";
+"service.error.timeout" = "La operación ha excedido el tiempo límite.";
+"service.error.busy" = "El servicio está ocupado. Por favor, inténtelo más tarde."; 
