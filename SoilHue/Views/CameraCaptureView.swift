@@ -18,6 +18,7 @@ struct CameraCaptureView: View {
     
     /// Environment para cerrar la vista
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     /// Servicio de cámara
     @StateObject private var cameraService = CameraService()
@@ -39,63 +40,66 @@ struct CameraCaptureView: View {
     @State private var isLocationEnabled = false
     
     var body: some View {
-        ZStack {
-            // Vista de la cámara
-            if let preview = previewImage {
-                Image(uiImage: preview)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .ignoresSafeArea()
-            }
-            
-            // Guía de calibración
-            if showGuide {
-                CalibrationGuideView()
-            }
-            
-            // Controles de la cámara
-            VStack {
-                // Indicador de localización
-                HStack(spacing: 8) {
-                    Image(systemName: isLocationEnabled ? "location.fill" : "location.slash.fill")
-                        .foregroundColor(isLocationEnabled ? .green : .red)
-                    Text(isLocationEnabled ? 
-                         NSLocalizedString("location.status.enabled", comment: "Location enabled status") :
-                         NSLocalizedString("location.status.disabled", comment: "Location disabled status"))
-                        .font(.caption)
-                        .foregroundColor(.white)
+        GeometryReader { geometry in
+            ZStack {
+                // Vista de la cámara
+                if let preview = previewImage {
+                    Image(uiImage: preview)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        .ignoresSafeArea()
                 }
-                .padding(8)
-                .background(.black.opacity(0.6))
-                .cornerRadius(8)
-                .padding(.top, 44)
                 
-                Spacer()
+                // Guía de calibración
+                if showGuide {
+                    CalibrationGuideView()
+                }
                 
-                // Botón de captura
-                Button {
-                    Task {
-                        await capturePhoto()
+                // Controles de la cámara
+                VStack {
+                    // Indicador de localización
+                    HStack(spacing: 8) {
+                        Image(systemName: isLocationEnabled ? "location.fill" : "location.slash.fill")
+                            .foregroundColor(isLocationEnabled ? .green : .red)
+                        Text(isLocationEnabled ? 
+                             NSLocalizedString("location.status.enabled", comment: "Location enabled status") :
+                             NSLocalizedString("location.status.disabled", comment: "Location disabled status"))
+                            .font(.caption)
+                            .foregroundColor(.white)
                     }
-                } label: {
-                    Circle()
-                        .fill(.white)
-                        .frame(width: 80, height: 80)
-                        .overlay(
-                            Circle()
-                                .stroke(.black.opacity(0.8), lineWidth: 2)
-                        )
-                        .shadow(radius: 4)
+                    .padding(8)
+                    .background(.black.opacity(0.6))
+                    .cornerRadius(8)
+                    .padding(.top, horizontalSizeClass == .regular ? 88 : 44)
+                    
+                    Spacer()
+                    
+                    // Botón de captura
+                    Button {
+                        Task {
+                            await capturePhoto()
+                        }
+                    } label: {
+                        Circle()
+                            .fill(.white)
+                            .frame(width: horizontalSizeClass == .regular ? 100 : 80, height: horizontalSizeClass == .regular ? 100 : 80)
+                            .overlay(
+                                Circle()
+                                    .stroke(.black.opacity(0.8), lineWidth: 2)
+                            )
+                            .shadow(radius: 4)
+                    }
+                    .disabled(isCapturing)
+                    .padding(.bottom, horizontalSizeClass == .regular ? 60 : 30)
                 }
-                .disabled(isCapturing)
-                .padding(.bottom, 30)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
-            if isCapturing {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                    .scaleEffect(1.5)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                
+                if isCapturing {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .scaleEffect(1.5)
+                }
             }
         }
         .task {
