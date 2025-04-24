@@ -18,7 +18,7 @@ struct AnalysisResultsView: View {
     // Estado
     @State private var showHelp = false
     @State private var showSaveDialog = false
-    @State private var selectedHelpSection = 1
+    @State private var selectedHelpSection = 5
     @State private var showError = false
     @State private var errorMessage = ""
     
