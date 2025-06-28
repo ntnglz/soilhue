@@ -119,7 +119,9 @@
 
 /* Horizons Section */
 
+"help.horizons.a.title" = "Horizonte A";
 
+"help.horizons.b.title" = "Horizonte B";
 
 
 /* ImageAnalysisView */
@@ -298,10 +300,42 @@
 /* Soil Types Section */
 "help.soils.title" = "Clasificación de Suelos";
 "help.soils.description" = "Los tipos de suelo se clasifican según sus propiedades, incluyendo color, textura y composición.";
+"help.soils.histosols.title" = "Histosoles";
+"help.soils.histosols.description" = "Suelos orgánicos con alto contenido de materia orgánica, típicos de suelos de turba.";
+"help.soils.mollisols.title" = "Mollisoles";
+"help.soils.mollisols.description" = "Suelos oscuros y fértiles ricos en materia orgánica, típicos de praderas.";
+"help.soils.alfisols.title" = "Alfisoles";
+"help.soils.alfisols.description" = "Suelos con horizonte arcilloso, fértiles, típicos de regiones forestales.";
+"help.soils.oxisols.title" = "Oxisoles";
+"help.soils.oxisols.description" = "Suelos muy meteorizados de regiones tropicales, ricos en óxidos de hierro.";
+"help.soils.vertisols.title" = "Vertisoles";
+"help.soils.vertisols.description" = "Suelos arcillosos que se agrietan, con alto contenido de minerales arcillosos expansivos.";
+"help.soils.spodosols.title" = "Espodosoles";
+"help.soils.spodosols.description" = "Suelos ácidos con acumulación de hierro y aluminio, típicos de bosques húmedos.";
+"help.soils.aridisols.title" = "Aridisoles";
+"help.soils.aridisols.description" = "Suelos de regiones áridas, con acumulación de sales y carbonatos en el subsuelo.";
+"help.soils.entisols.title" = "Entisoles";
+"help.soils.entisols.description" = "Suelos jóvenes con poco desarrollo de horizontes, típicos de depósitos recientes.";
+"help.soils.inceptisols.title" = "Inceptisoles";
+"help.soils.inceptisols.description" = "Suelos ligeramente desarrollados con horizontes incipientes, típicos de regiones montañosas.";
+"help.soils.ultisols.title" = "Ultisoles";
+"help.soils.ultisols.description" = "Suelos ácidos, muy meteorizados con horizonte arcilloso, típicos de regiones húmedas.";
 
 /* Soil Horizons Section */
 "help.horizons.title" = "Horizontes del Suelo";
 "help.horizons.description" = "Los horizontes del suelo son capas distintas en el perfil del suelo, cada una con características únicas.";
+"help.horizons.o.title" = "Horizonte O";
+"help.horizons.o.description" = "Horizonte orgánico: Restos vegetales en descomposición, alto en materia orgánica.";
+"help.horizons.a.title" = "Horizonte A";
+"help.horizons.a.description" = "Horizonte mineral superficial: Rico en materia orgánica, de color oscuro.";
+"help.horizons.e.title" = "Horizonte E";
+"help.horizons.e.description" = "Horizonte de eluviación: Pérdida de materiales por lixiviación, de color más claro.";
+"help.horizons.b.title" = "Horizonte B";
+"help.horizons.b.description" = "Horizonte de iluviación: Acumulación de materiales, frecuentemente rico en arcilla.";
+"help.horizons.c.title" = "Horizonte C";
+"help.horizons.c.description" = "Material parental: Roca madre o sedimento ligeramente alterado.";
+"help.horizons.r.title" = "Horizonte R";
+"help.horizons.r.description" = "Roca madre: Material original inalterado.";
 "help.horizons.importance.title" = "Importancia de los Horizontes";
 "help.horizons.importance.text" = "• Indican el desarrollo del suelo\n• Reflejan condiciones ambientales\n• Ayudan en la clasificación del suelo\n• Guían decisiones de uso del suelo";
 
@@ -326,6 +360,12 @@
 "help.intro.feature.export" = "Guarda y exporta resultados";
 
 "help.calibration.process.title" = "Proceso de Calibración";
+"help.calibration.step.1" = "Accede a la calibración desde el botón 'Calibrar Cámara'";
+"help.calibration.step.2" = "Usa la tarjeta de calibración básica incluida o un ColorChecker";
+"help.calibration.step.3" = "Alinea la tarjeta con las guías en pantalla";
+"help.calibration.step.4" = "Mantén la tarjeta paralela a la cámara";
+"help.calibration.step.5" = "Asegura buenas condiciones de iluminación";
+"help.calibration.step.6" = "Toma la foto cuando las guías estén alineadas";
 
 "help.calibration.limitations.title" = "Limitaciones de la Calibración";
 "help.calibration.limitation.basic" = "La tarjeta básica proporciona una calibración aproximada";
@@ -334,6 +374,10 @@
 "help.calibration.limitation.recalibration" = "Se recomienda recalibrar si cambian las condiciones de iluminación";
 
 "help.analysis.capture.title" = "Captura de Muestra";
+"help.analysis.step.1" = "Selecciona 'Nueva Muestra' o 'Galería'";
+"help.analysis.step.2" = "Asegúrate de que la cámara esté calibrada";
+"help.analysis.step.3" = "Captura la imagen o selecciona una existente";
+"help.analysis.step.4" = "Selecciona el área a analizar usando modo rectángulo o polígono";
 
 "help.analysis.practices.title" = "Mejores Prácticas";
 "help.analysis.practice.light" = "Usa luz natural difusa cuando sea posible";
@@ -343,8 +387,14 @@
 "help.analysis.practice.calibration" = "Calibra la cámara bajo las mismas condiciones de iluminación";
 
 "help.data.save.title" = "Guardar Análisis";
+"help.data.save.step.1" = "Presiona 'Guardar Análisis' después del análisis";
+"help.data.save.step.2" = "Añade notas y etiquetas (opcional)";
+"help.data.save.step.3" = "La ubicación se guarda automáticamente";
 
 "help.data.export.title" = "Exportar Datos";
+"help.data.export.step.1" = "Accede a la sección de exportación";
+"help.data.export.step.2" = "Selecciona el formato deseado";
+"help.data.export.step.3" = "Comparte o guarda el archivo";
 
 "help.troubleshooting.problems.title" = "Problemas Comunes";
 "help.troubleshooting.calibration" = "Calibración no detectada: recalibra la cámara";
@@ -425,40 +475,42 @@
 "sample.error.analysis" = "Error al analizar la muestra";
 "sample.error.save" = "Error al guardar la muestra";
 "sample.error.load" = "Error al cargar la muestra"; 
-"button.done" = "Done";
-"camera.error.capture" = "Error capturing photo.";
-"camera.error.configuration" = "Error configuring camera.";
-"camera.error.invalid.device" = "Could not access device camera.";
-"camera.error.invalid.resolution" = "Could not set desired resolution.";
-"camera.error.no.permission" = "No permission to access camera.";
-"camera.error.permission.denied" = "No camera access. Please check permissions in Settings.";
-"camera.error.resolution.not.supported" = "Selected resolution is not supported by this device.";
-"camera.error.session.not.running" = "Camera session is not active.";
-"camera.error.setup.failed" = "Error setting up camera.";
+
+/* Claves añadidas para sincronización */
+"button.done" = "Hecho";
+"camera.error.capture" = "Error al capturar la foto.";
+"camera.error.configuration" = "Error al configurar la cámara.";
+"camera.error.invalid.device" = "No se pudo acceder a la cámara del dispositivo.";
+"camera.error.invalid.resolution" = "No se pudo establecer la resolución deseada.";
+"camera.error.no.permission" = "No hay permiso para acceder a la cámara.";
+"camera.error.permission.denied" = "No hay acceso a la cámara. Por favor, verifica los permisos en Ajustes.";
+"camera.error.resolution.not.supported" = "La resolución seleccionada no es compatible con este dispositivo.";
+"camera.error.session.not.running" = "La sesión de la cámara no está activa.";
+"camera.error.setup.failed" = "Error al configurar la cámara.";
 "common.no" = "No";
-"common.yes" = "Yes";
-"export.error.create.file" = "Failed to create export file";
-"export.error.invalid.format" = "Invalid export format";
-"export.error.no.data" = "No data to export";
-"export.error.write.data" = "Error writing data";
-"help.contact.title" = "Contact & Support";
-"location.error.permission.denied" = "Location access is disabled. Please enable it in Settings.";
-"soil.color.dark.brown" = "Dark Brown";
-"soil.color.light.brown" = "Light Brown";
-"soil.color.light.brownish.gray" = "Light Brownish Gray";
-"soil.color.light.gray" = "Light Gray";
-"soil.color.light.yellowish.brown" = "Light Yellowish Brown";
-"soil.color.pale.brown" = "Pale Brown";
-"soil.color.pale.yellow" = "Pale Yellow";
-"soil.color.reddish.brown" = "Reddish Brown";
-"soil.color.very.dark.brown" = "Very Dark Brown";
-"soil.color.very.dark.gray" = "Very Dark Gray";
-"soil.color.yellowish.brown" = "Yellowish Brown";
-"storage.error.analysis.not.found" = "Analysis not found";
-"storage.error.directory.creation" = "Failed to create storage directory";
-"storage.error.file.operation" = "File operation error: %@";
-"storage.error.icloud.not.available" = "iCloud is not available";
-"storage.error.invalid.directory" = "Invalid storage directory";
-"storage.error.load.analysis" = "Failed to load analysis";
-"storage.error.save.analysis" = "Failed to save analysis";
-"storage.error.save.image" = "Failed to save image";
+"common.yes" = "Sí";
+"export.error.create.file" = "Error al crear el archivo de exportación";
+"export.error.invalid.format" = "Formato de exportación no válido";
+"export.error.no.data" = "No hay datos para exportar";
+"export.error.write.data" = "Error al escribir los datos";
+"help.contact.title" = "Contacto y Soporte";
+"location.error.permission.denied" = "El acceso a la ubicación está deshabilitado. Por favor, habilítelo en Ajustes.";
+"soil.color.dark.brown" = "Marrón Oscuro";
+"soil.color.light.brown" = "Marrón Claro";
+"soil.color.light.brownish.gray" = "Gris Marronáceo Claro";
+"soil.color.light.gray" = "Gris Claro";
+"soil.color.light.yellowish.brown" = "Marrón Amarillento Claro";
+"soil.color.pale.brown" = "Marrón Pálido";
+"soil.color.pale.yellow" = "Amarillo Pálido";
+"soil.color.reddish.brown" = "Marrón Rojizo";
+"soil.color.very.dark.brown" = "Marrón Muy Oscuro";
+"soil.color.very.dark.gray" = "Gris Muy Oscuro";
+"soil.color.yellowish.brown" = "Marrón Amarillento";
+"storage.error.analysis.not.found" = "Análisis no encontrado";
+"storage.error.directory.creation" = "Error al crear el directorio de almacenamiento";
+"storage.error.file.operation" = "Error en operación de archivo: %@";
+"storage.error.icloud.not.available" = "iCloud no está disponible";
+"storage.error.invalid.directory" = "Directorio de almacenamiento no válido";
+"storage.error.load.analysis" = "Error al cargar el análisis";
+"storage.error.save.analysis" = "Error al guardar el análisis";
+"storage.error.save.image" = "Error al guardar la imagen";
