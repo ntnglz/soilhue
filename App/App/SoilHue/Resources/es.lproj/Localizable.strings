@@ -39,4 +39,112 @@
 "location.error.unknown" = "Error desconocido al obtener la ubicación.";
 "button.done" = "Hecho";
 "common.yes" = "Sí";
-"common.no" = "No"; 
+"common.no" = "No";
+
+/* Claves adicionales que faltaban */
+"error" = "Error";
+"export.error.create.file" = "Error al crear el archivo de exportación";
+"export.error.invalid.format" = "Formato de exportación no válido";
+"export.error.no.data" = "No hay datos para exportar";
+"export.error.write.data" = "Error al escribir los datos";
+
+/* Claves de análisis */
+"analysis.result.classification" = "Clasificación del resultado";
+"analysis.result.description" = "Descripción del resultado";
+"analysis.result.munsell" = "Munsell del resultado";
+"analysis.service.error.calculation" = "Error en el cálculo del análisis";
+"analysis.service.error.image" = "Error en el procesamiento de la imagen";
+"analysis.service.error.selection" = "Error en la selección del área";
+"analysis.status.analyzing" = "Analizando...";
+"analysis.status.complete" = "Completado";
+"analysis.status.failed" = "Fallido";
+
+/* Claves de calibración */
+"calibration.service.log.analyze" = "Analizando parches de calibración";
+"calibration.service.log.complete" = "Calibración completada";
+"calibration.service.log.detect" = "Detectando parches de color";
+"calibration.service.log.error" = "Error en la calibración";
+"calibration.service.log.start" = "Iniciando calibración";
+"calibration.service.patch.black" = "Parche negro";
+"calibration.service.patch.blue" = "Parche azul";
+"calibration.service.patch.gray" = "Parche gris";
+"calibration.service.patch.green" = "Parche verde";
+"calibration.service.patch.red" = "Parche rojo";
+"calibration.service.patch.white" = "Parche blanco";
+"calibration.service.validation.patches" = "Validando parches";
+"calibration.service.validation.size" = "Validando tamaño";
+"calibration.service.validation.values" = "Validando valores";
+
+/* Claves de cámara */
+"camera.service.error.access" = "Error al acceder a la cámara";
+"camera.service.error.capture" = "Error al capturar imagen";
+"camera.service.error.setup" = "Error al configurar la cámara";
+"camera.service.error.unavailable" = "Cámara no disponible";
+
+/* Claves de errores */
+"error.analysis.generic" = "Error genérico en el análisis";
+"error.analysis.no.sample" = "No hay muestra seleccionada";
+"error.analysis.not.calibrated" = "Cámara no calibrada";
+"error.camera.capture" = "Error al capturar foto";
+"error.camera.configuration" = "Error en configuración de cámara";
+"error.camera.invalid.device" = "Dispositivo de cámara no válido";
+"error.camera.invalid.resolution" = "Resolución de cámara no válida";
+"error.camera.no.permission" = "Sin permiso de cámara";
+"error.camera.permission.denied" = "Permiso de cámara denegado";
+"error.camera.resolution.not.supported" = "Resolución no soportada";
+"error.camera.session.not.running" = "Sesión de cámara no activa";
+"error.camera.setup.failed" = "Error al configurar cámara";
+"error.export.create.file" = "Error al crear archivo de exportación";
+"error.export.invalid.format" = "Formato de exportación inválido";
+"error.export.no.data" = "No hay datos para exportar";
+"error.export.write.data" = "Error al escribir datos";
+"error.storage.analysis.not.found" = "Análisis no encontrado en almacenamiento";
+"error.storage.directory.creation" = "Error al crear directorio de almacenamiento";
+"error.storage.file.operation" = "Error en operación de archivo";
+"error.storage.icloud.not.available" = "iCloud no disponible";
+"error.storage.invalid.directory" = "Directorio de almacenamiento inválido";
+"error.storage.load.analysis" = "Error al cargar análisis";
+"error.storage.save.analysis" = "Error al guardar análisis";
+"error.storage.save.image" = "Error al guardar imagen";
+
+/* Claves de exportación */
+"export.service.error.data" = "Error en datos de exportación";
+"export.service.error.file" = "Error en archivo de exportación";
+"export.service.error.write" = "Error al escribir exportación";
+
+/* Claves de ubicación */
+"location.service.error.access" = "Error al acceder a ubicación";
+"location.service.error.disabled" = "Servicios de ubicación deshabilitados";
+"location.service.error.timeout" = "Tiempo de espera agotado en ubicación";
+
+/* Claves de Munsell */
+"munsell.chroma" = "Croma";
+"munsell.format" = "Formato Munsell";
+"munsell.hue" = "Matiz";
+"munsell.value" = "Valor";
+
+/* Claves de servicio */
+"service.error.busy" = "Servicio ocupado";
+"service.error.invalid.data" = "Datos inválidos";
+"service.error.network" = "Error de red";
+"service.error.not.found" = "No encontrado";
+"service.error.permission" = "Error de permisos";
+"service.error.storage" = "Error de almacenamiento";
+"service.error.timeout" = "Tiempo de espera agotado";
+
+/* Claves de almacenamiento */
+"storage.service.error.delete" = "Error al eliminar datos";
+"storage.service.error.load" = "Error al cargar datos";
+"storage.service.error.save" = "Error al guardar datos";
+"storage.service.error.space" = "Espacio insuficiente";
+
+/* Claves de interfaz */
+"info" = "Información";
+"loading" = "Cargando...";
+"no" = "No";
+"please.wait" = "Por favor espere...";
+"processing" = "Procesando...";
+"success" = "Éxito";
+"try.again" = "Intentar de nuevo";
+"warning" = "Advertencia";
+"yes" = "Sí"; 
